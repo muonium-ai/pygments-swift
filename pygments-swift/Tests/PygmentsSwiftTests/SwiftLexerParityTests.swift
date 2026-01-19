@@ -31,7 +31,8 @@ final class SwiftLexerParityTests: XCTestCase {
         XCTAssertEqual(pyTokens.map { $0.value }.joined(), preprocessed)
         XCTAssertEqual(swiftTokens.map { $0.value }.joined(), preprocessed)
 
-        let strict = (ProcessInfo.processInfo.environment["PYGMENTS_STRICT_PARITY"] == "1")
+        let strictEnv = ProcessInfo.processInfo.environment["PYGMENTS_STRICT_PARITY"]
+        let strict = (strictEnv == nil) || (strictEnv == "1")
         if strict {
             // Strict: compare full (type, value) streams (ASCII-only input keeps indices aligned enough).
             let pyPairs = pyTokens.map { ($0.type, $0.value) }
