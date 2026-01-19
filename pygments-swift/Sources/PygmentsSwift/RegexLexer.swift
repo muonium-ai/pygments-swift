@@ -24,11 +24,23 @@ public enum StateTransition: Sendable, Hashable {
 public enum RuleAction: Sendable {
     case token(TokenType)
     case byGroups([TokenType?])
+
+    /// Process the matched substring using another lexer, emitting its tokens with an offset.
+    ///
+    /// Mirrors Pygments' `using(OtherLexer, state=...)` callback, but restricted to RegexLexer subclasses.
+    case using(RegexLexer.Type, stack: [String]?)
+
+    /// Process the matched substring using the current lexer's type.
+    case usingThis(stack: [String]?)
 }
 
 public enum TokenRuleDef: Sendable {
     case include(String)
     case rule(Rule)
+
+    /// A default transition rule (zero-length match) for a state.
+    /// Mirrors Pygments' `default(...)`.
+    case `default`(StateTransition)
 }
 
 public struct Rule: Sendable {
@@ -37,7 +49,10 @@ public struct Rule: Sendable {
     public let newState: StateTransition?
 
     public init(_ pattern: String, options: NSRegularExpression.Options = [], action: RuleAction?, newState: StateTransition? = nil) {
-        self.regex = try! NSRegularExpression(pattern: pattern, options: options)
+        // NSRegularExpression rejects an empty pattern, but we sometimes need
+        // a zero-length match for Pygments-like `default(...)` transitions.
+        let pat = pattern.isEmpty ? "(?:)" : pattern
+        self.regex = try! NSRegularExpression(pattern: pat, options: options)
         self.action = action
         self.newState = newState
     }
@@ -51,7 +66,7 @@ open class RegexLexer: LexerBase {
     /// If non-empty, this takes precedence over `tokens`.
     open var tokenDefs: [String: [TokenRuleDef]] { [:] }
 
-    public override init(options: LexerOptions = .init()) {
+    public required init(options: LexerOptions = .init()) {
         super.init(options: options)
     }
 
@@ -60,7 +75,16 @@ open class RegexLexer: LexerBase {
     }
 
     public func getTokensUnprocessed(_ text: String, stack: [String] = ["root"]) -> [Token] {
-        let processed = preprocess(text)
+        return lex(text, preprocessInput: true, stack: stack)
+    }
+
+    /// Like Pygments' `get_tokens_unprocessed`: does not apply `preprocess()`.
+    public func getTokensUnprocessedRaw(_ text: String, stack: [String] = ["root"]) -> [Token] {
+        return lex(text, preprocessInput: false, stack: stack)
+    }
+
+    private func lex(_ text: String, preprocessInput: Bool, stack: [String]) -> [Token] {
+        let processed = preprocessInput ? preprocess(text) : text
         let nsText = processed as NSString
         let end = nsText.length
 
@@ -82,6 +106,9 @@ open class RegexLexer: LexerBase {
 
             var matched = false
             for rule in currentRules() {
+                let priorPos = ctx.pos
+                let priorState = ctx.stack.last ?? "root"
+
                 let searchRange = NSRange(location: ctx.pos, length: end - ctx.pos)
                 guard let m = rule.regex.firstMatch(in: processed, options: [], range: searchRange) else {
                     continue
@@ -108,6 +135,23 @@ open class RegexLexer: LexerBase {
                             let value = nsText.substring(with: r)
                             out.append(Token(start: r.location, type: ttype, value: value))
                         }
+
+                    case .using(let otherType, let stackOverride):
+                        let sub = nsText.substring(with: m.range)
+                        let other = otherType.init(options: self.options)
+                        let subTokens = other.getTokensUnprocessedRaw(sub, stack: stackOverride ?? ["root"])
+                        for t in subTokens {
+                            out.append(Token(start: t.start + m.range.location, type: t.type, value: t.value))
+                        }
+
+                    case .usingThis(let stackOverride):
+                        let sub = nsText.substring(with: m.range)
+                        let sameType = type(of: self)
+                        let other = sameType.init(options: self.options)
+                        let subTokens = other.getTokensUnprocessedRaw(sub, stack: stackOverride ?? ["root"])
+                        for t in subTokens {
+                            out.append(Token(start: t.start + m.range.location, type: t.type, value: t.value))
+                        }
                     }
                 }
 
@@ -115,6 +159,18 @@ open class RegexLexer: LexerBase {
 
                 if let transition = rule.newState {
                     apply(transition, to: &ctx)
+                }
+
+                // Safety: if we matched a zero-length regex and neither position nor state changes,
+                // we'd loop forever. Advance by one code unit as an Error token.
+                let currentState = ctx.stack.last ?? "root"
+                if m.range.length == 0 && ctx.pos == priorPos && currentState == priorState {
+                    if priorPos < end {
+                        let r = NSRange(location: priorPos, length: 1)
+                        let value = nsText.substring(with: r)
+                        out.append(Token(start: priorPos, type: .error, value: value))
+                        ctx.pos = priorPos + 1
+                    }
                 }
 
                 break
@@ -192,6 +248,9 @@ open class RegexLexer: LexerBase {
                     rules.append(contentsOf: compileState(other))
                 case .rule(let rule):
                     rules.append(rule)
+                case .default(let transition):
+                    // Zero-length match; relies on state transition to make progress.
+                    rules.append(Rule("", action: nil, newState: transition))
                 }
             }
 

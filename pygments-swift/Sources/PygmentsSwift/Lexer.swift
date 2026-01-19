@@ -21,7 +21,7 @@ public protocol Lexer {
 open class LexerBase: Lexer {
     public let options: LexerOptions
 
-    public init(options: LexerOptions = .init()) {
+    public required init(options: LexerOptions = .init()) {
         self.options = options
     }
 
