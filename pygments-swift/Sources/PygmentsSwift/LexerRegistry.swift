@@ -14,6 +14,7 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case go
     case rust
     case kotlin
+    case ruby
 }
 
 public enum LexerRegistry {
@@ -45,6 +46,8 @@ public enum LexerRegistry {
             return RustLexer(options: options)
         case .kotlin:
             return KotlinLexer(options: options)
+        case .ruby:
+            return RubyLexer(options: options)
         }
     }
 
@@ -78,6 +81,8 @@ public enum LexerRegistry {
             return makeLexer(language: .rust, options: options)
         case "kotlin", "kt":
             return makeLexer(language: .kotlin, options: options)
+        case "ruby", "rb":
+            return makeLexer(language: .ruby, options: options)
         default:
             return nil
         }
@@ -113,6 +118,8 @@ public enum LexerRegistry {
             return makeLexer(language: .rust, options: options)
         case "kt", "kts":
             return makeLexer(language: .kotlin, options: options)
+        case "rb", "erb", "rake":
+            return makeLexer(language: .ruby, options: options)
         default:
             return nil
         }

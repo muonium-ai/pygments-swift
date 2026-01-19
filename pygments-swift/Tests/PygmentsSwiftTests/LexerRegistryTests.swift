@@ -16,6 +16,7 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "go"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "rust"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "kotlin"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "ruby"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -37,6 +38,8 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.rs"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "Main.kt"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "build.kts"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "app.rb"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "view.erb"))
         XCTAssertNil(LexerRegistry.makeLexer(filename: "README.md"))
     }
 }
