@@ -37,6 +37,8 @@ final class RegexLexerFeatureTests: XCTestCase {
             override var tokenDefs: [String: [TokenRuleDef]] {
                 [
                     "root": [
+                        .rule(Rule("\\n", action: .token(.whitespace))),
+                        .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
                         .rule(Rule("\\{", action: .token(.punctuation), newState: .ops([.push("inner")]))),
                         .rule(Rule("[a-zA-Z_]+", action: .token(.name))),
                     ],
@@ -61,6 +63,8 @@ final class RegexLexerFeatureTests: XCTestCase {
             override var tokenDefs: [String: [TokenRuleDef]] {
                 [
                     "root": [
+                        .rule(Rule("\\n", action: .token(.whitespace))),
+                        .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
                         .rule(Rule("\\{", action: .token(.punctuation), newState: .ops([.pushCombined(["inner", "close"])])))
                     ],
                     "inner": [
@@ -88,6 +92,8 @@ final class RegexLexerFeatureTests: XCTestCase {
             override var tokenDefs: [String: [TokenRuleDef]] {
                 [
                     "root": [
+                        .rule(Rule("\\n", action: .token(.whitespace))),
+                        .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
                         .rule(Rule("a", action: .token(.name)))
                     ]
                 ]
@@ -98,6 +104,8 @@ final class RegexLexerFeatureTests: XCTestCase {
             override var tokenDefs: [String: [TokenRuleDef]] {
                 [
                     "root": [
+                        .rule(Rule("\\n", action: .token(.whitespace))),
+                        .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
                         .rule(Rule("b", action: .token(.keyword))),
                         .inherit,
                         .rule(Rule("c", action: .token(.string)))
@@ -113,5 +121,32 @@ final class RegexLexerFeatureTests: XCTestCase {
         let nonWs = tokens.filter { !$0.type.isSubtype(of: .whitespace) && !$0.type.isSubtype(of: .text) }
         XCTAssertEqual(nonWs.map { $0.value }.joined(), "bac")
         XCTAssertEqual(nonWs.map { $0.type.description }, [TokenType.keyword.description, TokenType.name.description, TokenType.string.description])
+    }
+
+    func testNoMatchNewlineDoesNotResetState() {
+        final class NewlineStateLexer: RegexLexer {
+            override var tokenDefs: [String: [TokenRuleDef]] {
+                [
+                    "root": [
+                        .rule(Rule("\\{", action: .token(.punctuation), newState: .ops([.push("inner")]))),
+                        .rule(Rule("a", action: .token(.name))),
+                    ],
+                    "inner": [
+                        // Intentionally no rule for "\\n".
+                        .rule(Rule("a", action: .token(.keyword))),
+                    ]
+                ]
+            }
+        }
+
+        let lexer = NewlineStateLexer()
+        let tokens = lexer.getTokens("{\na")
+
+        // After '{' we are in inner. Newline is unmatched => Error, but state must remain inner.
+        // Therefore the 'a' after the newline should be tokenized by inner as Keyword, not by root as Name.
+        XCTAssertTrue(tokens.contains(where: { $0.type == .punctuation && $0.value == "{" }))
+        XCTAssertTrue(tokens.contains(where: { $0.type == .error && $0.value == "\n" }))
+        XCTAssertTrue(tokens.contains(where: { $0.type == .keyword && $0.value == "a" }))
+        XCTAssertFalse(tokens.contains(where: { $0.type == .name && $0.value == "a" }))
     }
 }

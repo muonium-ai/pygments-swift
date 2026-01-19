@@ -258,63 +258,14 @@ final class SwiftLexerParityTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private struct RefToken: Decodable {
-        let start: Int
-        let type: String
-        let value: String
-    }
+    private typealias RefToken = PythonPygmentsReference.RefToken
 
     private func findPython() -> String? {
-        // Prefer explicit override.
-        if let env = ProcessInfo.processInfo.environment["PYGMENTS_PYTHON"], !env.isEmpty {
-            return env
-        }
-        // Common default.
-        return "/usr/bin/python3"
+        PythonPygmentsReference.findPython()
     }
 
     private func runPythonReference(python: String, input: String, lexerName: String? = nil) throws -> [RefToken] {
-        let testFile = URL(fileURLWithPath: #filePath)
-        let testsDir = testFile.deletingLastPathComponent()
-        let pkgRoot = testsDir.deletingLastPathComponent().deletingLastPathComponent() // .../pygments-swift
-        let script = pkgRoot.appendingPathComponent("Tests/Support/pygments_swift_ref.py")
-
-        let master = pkgRoot.deletingLastPathComponent().appendingPathComponent("pygments-master")
-
-        let proc = Process()
-        proc.executableURL = URL(fileURLWithPath: python)
-        proc.arguments = [script.path]
-        proc.environment = ProcessInfo.processInfo.environment
-        proc.environment?["PYGMENTS_MASTER"] = master.path
-        if let lexerName, !lexerName.isEmpty {
-            proc.environment?["PYGMENTS_LEXER"] = lexerName
-        }
-
-        let stdinPipe = Pipe()
-        let stdoutPipe = Pipe()
-        let stderrPipe = Pipe()
-        proc.standardInput = stdinPipe
-        proc.standardOutput = stdoutPipe
-        proc.standardError = stderrPipe
-
-        try proc.run()
-
-        if let data = input.data(using: .utf8) {
-            stdinPipe.fileHandleForWriting.write(data)
-        }
-        stdinPipe.fileHandleForWriting.closeFile()
-
-        proc.waitUntilExit()
-
-        let outData = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
-        let errData = stderrPipe.fileHandleForReading.readDataToEndOfFile()
-
-        guard proc.terminationStatus == 0 else {
-            let err = String(data: errData, encoding: .utf8) ?? ""
-            throw XCTSkip("Python reference failed (status \(proc.terminationStatus)): \(err)")
-        }
-
-        let decoder = JSONDecoder()
-        return try decoder.decode([RefToken].self, from: outData)
+        let name = lexerName ?? "swift"
+        return try PythonPygmentsReference.run(input: input, lexerName: name)
     }
 }

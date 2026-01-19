@@ -218,14 +218,6 @@ open class RegexLexer: LexerBase {
             if matched { continue }
 
             // No rule matched at this position.
-            let ch = nsText.character(at: ctx.pos)
-            if ch == 10 { // '\n'
-                ctx.stack = ["root"]
-                out.append(Token(start: ctx.pos, startScalar: scalarIndex(forUTF16Offset: ctx.pos), type: .whitespace, value: "\n"))
-                ctx.pos += 1
-                continue
-            }
-
             // Emit error token for the single UTF-16 code unit.
             let r = NSRange(location: ctx.pos, length: 1)
             let value = nsText.substring(with: r)
