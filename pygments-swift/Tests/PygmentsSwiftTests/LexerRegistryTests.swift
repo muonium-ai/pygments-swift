@@ -12,6 +12,9 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "ts"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "c"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "cpp"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "csharp"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "go"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "rust"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -28,6 +31,9 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.h"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.cpp"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.hpp"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "Program.cs"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.go"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.rs"))
         XCTAssertNil(LexerRegistry.makeLexer(filename: "README.md"))
     }
 }

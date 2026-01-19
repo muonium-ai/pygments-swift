@@ -10,6 +10,9 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case typescript
     case c
     case cpp
+    case csharp
+    case go
+    case rust
 }
 
 public enum LexerRegistry {
@@ -33,6 +36,12 @@ public enum LexerRegistry {
             return CLexer(options: options)
         case .cpp:
             return CppLexer(options: options)
+        case .csharp:
+            return CSharpLexer(options: options)
+        case .go:
+            return GoLexer(options: options)
+        case .rust:
+            return RustLexer(options: options)
         }
     }
 
@@ -58,6 +67,12 @@ public enum LexerRegistry {
             return makeLexer(language: .c, options: options)
         case "c++", "cpp", "cplusplus", "cxx":
             return makeLexer(language: .cpp, options: options)
+        case "c#", "csharp", "cs":
+            return makeLexer(language: .csharp, options: options)
+        case "go", "golang":
+            return makeLexer(language: .go, options: options)
+        case "rust", "rs":
+            return makeLexer(language: .rust, options: options)
         default:
             return nil
         }
@@ -85,6 +100,12 @@ public enum LexerRegistry {
             return makeLexer(language: .c, options: options)
         case "cc", "cpp", "cxx", "hh", "hpp", "hxx":
             return makeLexer(language: .cpp, options: options)
+        case "cs":
+            return makeLexer(language: .csharp, options: options)
+        case "go":
+            return makeLexer(language: .go, options: options)
+        case "rs":
+            return makeLexer(language: .rust, options: options)
         default:
             return nil
         }

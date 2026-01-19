@@ -15,9 +15,9 @@ Goal: highlight source code for ~10 widely used programming languages.
 - [x] TypeScript (pragmatic lexer; not yet full Pygments parity)
 - [x] C (pragmatic lexer; not yet full Pygments parity)
 - [x] C++ (pragmatic lexer; not yet full Pygments parity)
-- [ ] C#
-- [ ] Go
-- [ ] Rust
+- [x] C# (pragmatic lexer; not yet full Pygments parity)
+- [x] Go (pragmatic lexer; not yet full Pygments parity)
+- [x] Rust (pragmatic lexer; not yet full Pygments parity)
 
 Non-language formats already supported:
 - [x] JSON
@@ -48,6 +48,9 @@ Non-language formats already supported:
   - [pygments-swift/Sources/PygmentsSwift/Lexers/TypeScriptLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/TypeScriptLexer.swift)
   - [pygments-swift/Sources/PygmentsSwift/Lexers/CLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/CLexer.swift)
   - [pygments-swift/Sources/PygmentsSwift/Lexers/CppLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/CppLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/CSharpLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/CSharpLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/GoLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/GoLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/RustLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/RustLexer.swift)
 - Tests:
   - Parity: [pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift](pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift)
   - Engine features: [pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift](pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift)
@@ -102,6 +105,9 @@ Non-language formats already supported:
 - [x] `TypeScriptLexer` (pragmatic)
 - [x] `CLexer` (pragmatic)
 - [x] `CppLexer` (pragmatic)
+- [x] `CSharpLexer` (pragmatic)
+- [x] `GoLexer` (pragmatic)
+- [x] `RustLexer` (pragmatic)
 
 ### Parity testing vs Python Pygments
 - [x] Python reference runner script emits JSON tokens (from in-repo `pygments-master`)
