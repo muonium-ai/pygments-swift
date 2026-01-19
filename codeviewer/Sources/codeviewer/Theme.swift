@@ -28,6 +28,43 @@ enum CodeTheme {
     }
 
     func foreground(for type: TokenType) -> NSColor {
+        // More specific subtypes first.
+        if type.isSubtype(of: .comment) {
+            return self == .dark
+                ? NSColor(calibratedWhite: 0.65, alpha: 1)
+                : NSColor(calibratedWhite: 0.45, alpha: 1)
+        }
+
+        if type.isSubtype(of: .string.child("Escape")) {
+            return self == .dark
+                ? NSColor(calibratedRed: 0.98, green: 0.80, blue: 0.60, alpha: 1)
+                : NSColor(calibratedRed: 0.70, green: 0.45, blue: 0.10, alpha: 1)
+        }
+
+        if type.isSubtype(of: .name.child("Decorator")) {
+            return self == .dark
+                ? NSColor(calibratedRed: 0.62, green: 0.90, blue: 0.75, alpha: 1)
+                : NSColor(calibratedRed: 0.10, green: 0.55, blue: 0.35, alpha: 1)
+        }
+
+        if type.isSubtype(of: .keyword.child("Declaration")) {
+            return self == .dark
+                ? NSColor(calibratedRed: 0.78, green: 0.62, blue: 1.00, alpha: 1)
+                : NSColor(calibratedRed: 0.40, green: 0.20, blue: 0.70, alpha: 1)
+        }
+
+        if type.isSubtype(of: .keyword.child("Type")) {
+            return self == .dark
+                ? NSColor(calibratedRed: 0.55, green: 0.85, blue: 1.00, alpha: 1)
+                : NSColor(calibratedRed: 0.10, green: 0.45, blue: 0.80, alpha: 1)
+        }
+
+        if type.isSubtype(of: .keyword.child("Constant")) {
+            return self == .dark
+                ? NSColor(calibratedRed: 0.98, green: 0.78, blue: 0.55, alpha: 1)
+                : NSColor(calibratedRed: 0.62, green: 0.40, blue: 0.05, alpha: 1)
+        }
+
         if type.isSubtype(of: .comment) {
             return self == .dark
                 ? NSColor(calibratedWhite: 0.65, alpha: 1)

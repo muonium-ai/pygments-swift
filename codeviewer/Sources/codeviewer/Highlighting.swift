@@ -7,9 +7,14 @@ struct CodeHighlighter {
         let tokens = lexer.getTokens(text)
         let out = NSMutableAttributedString()
 
+        let paragraph = NSMutableParagraphStyle()
+        // Code often contains long tokens without spaces; wrap by character to avoid clipping.
+        paragraph.lineBreakMode = .byCharWrapping
+
         let base: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: theme.defaultForeground
+            .foregroundColor: theme.defaultForeground,
+            .paragraphStyle: paragraph
         ]
 
         for t in tokens {

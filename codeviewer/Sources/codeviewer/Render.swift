@@ -20,6 +20,7 @@ enum CodeRender {
         let layoutManager = NSLayoutManager()
         let textContainer = NSTextContainer(containerSize: containerSize)
         textContainer.lineFragmentPadding = 0
+        textContainer.lineBreakMode = .byCharWrapping
         layoutManager.addTextContainer(textContainer)
         textStorage.addLayoutManager(layoutManager)
 
