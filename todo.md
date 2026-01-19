@@ -19,6 +19,17 @@ Goal: highlight source code for ~10 widely used programming languages.
 - [x] Go (pragmatic lexer; not yet full Pygments parity)
 - [x] Rust (pragmatic lexer; not yet full Pygments parity)
 
+## ➕ Next Set (tracker)
+
+Goal: expand coverage beyond the top-10.
+
+- [x] Kotlin (pragmatic lexer)
+- [ ] PHP
+- [ ] Ruby
+- [ ] R
+- [ ] Scala
+- [ ] Bash / Shell
+
 Non-language formats already supported:
 - [x] JSON
 - [x] JSON-LD
@@ -51,6 +62,7 @@ Non-language formats already supported:
   - [pygments-swift/Sources/PygmentsSwift/Lexers/CSharpLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/CSharpLexer.swift)
   - [pygments-swift/Sources/PygmentsSwift/Lexers/GoLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/GoLexer.swift)
   - [pygments-swift/Sources/PygmentsSwift/Lexers/RustLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/RustLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/KotlinLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/KotlinLexer.swift)
 - Tests:
   - Parity: [pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift](pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift)
   - Engine features: [pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift](pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift)
