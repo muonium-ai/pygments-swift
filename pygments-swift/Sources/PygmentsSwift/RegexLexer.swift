@@ -15,6 +15,8 @@ public enum StateOp: Sendable, Hashable {
     case popN(Int)
     case pushCurrent
     case push(String)
+    /// Push a temporary state composed from the rules of the listed states.
+    case pushCombined([String])
 }
 
 public enum StateTransition: Sendable, Hashable {
@@ -91,14 +93,16 @@ open class RegexLexer: LexerBase {
         var ctx = LexerContext(pos: 0, stack: stack)
         var out: [Token] = []
 
-        let compiledTokens = compileTokenDefsIfNeeded()
+        var compiledTokens = compileTokenDefsIfNeeded()
+        var dynamicTokens: [String: [Rule]] = [:]
+        var tmpCounter = 0
 
         func currentRules() -> [Rule] {
             let state = ctx.stack.last ?? "root"
             if !compiledTokens.isEmpty {
-                return compiledTokens[state] ?? []
+                return dynamicTokens[state] ?? compiledTokens[state] ?? []
             }
-            return tokens[state] ?? []
+            return dynamicTokens[state] ?? tokens[state] ?? []
         }
 
         while true {
@@ -158,7 +162,7 @@ open class RegexLexer: LexerBase {
                 ctx.pos = m.range.location + m.range.length
 
                 if let transition = rule.newState {
-                    apply(transition, to: &ctx)
+                    apply(transition, to: &ctx, compiledTokens: &compiledTokens, dynamicTokens: &dynamicTokens, tmpCounter: &tmpCounter)
                 }
 
                 // Safety: if we matched a zero-length regex and neither position nor state changes,
@@ -198,6 +202,28 @@ open class RegexLexer: LexerBase {
     }
 
     private func apply(_ transition: StateTransition, to ctx: inout LexerContext) {
+        // Backwards-compatible wrapper for callers that don't use combined.
+        var compiledTokens: [String: [Rule]] = [:]
+        var dynamicTokens: [String: [Rule]] = [:]
+        var tmpCounter = 0
+        apply(transition, to: &ctx, compiledTokens: &compiledTokens, dynamicTokens: &dynamicTokens, tmpCounter: &tmpCounter)
+    }
+
+    private func apply(
+        _ transition: StateTransition,
+        to ctx: inout LexerContext,
+        compiledTokens: inout [String: [Rule]],
+        dynamicTokens: inout [String: [Rule]],
+        tmpCounter: inout Int
+    ) {
+        func lookupRules(_ state: String) -> [Rule] {
+            if let dyn = dynamicTokens[state] { return dyn }
+            if !compiledTokens.isEmpty {
+                return compiledTokens[state] ?? []
+            }
+            return tokens[state] ?? []
+        }
+
         switch transition {
         case .ops(let ops):
             for op in ops {
@@ -221,6 +247,16 @@ open class RegexLexer: LexerBase {
                     }
                 case .push(let state):
                     ctx.stack.append(state)
+                case .pushCombined(let states):
+                    // Build a temporary combined state.
+                    let tmpState = "_tmp_\\(tmpCounter)"
+                    tmpCounter += 1
+                    var combined: [Rule] = []
+                    for s in states {
+                        combined.append(contentsOf: lookupRules(s))
+                    }
+                    dynamicTokens[tmpState] = combined
+                    ctx.stack.append(tmpState)
                 }
             }
         }

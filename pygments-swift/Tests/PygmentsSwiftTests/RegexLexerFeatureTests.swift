@@ -55,4 +55,31 @@ final class RegexLexerFeatureTests: XCTestCase {
         XCTAssertTrue(tokens.contains(where: { $0.type.isSubtype(of: .name) && $0.value == "abc" }))
         XCTAssertFalse(tokens.contains(where: { $0.type == .error }))
     }
+
+    func testCombinedPushMergesStates() {
+        final class CombinedLexer: RegexLexer {
+            override var tokenDefs: [String: [TokenRuleDef]] {
+                [
+                    "root": [
+                        .rule(Rule("\\{", action: .token(.punctuation), newState: .ops([.pushCombined(["inner", "close"])])))
+                    ],
+                    "inner": [
+                        .rule(Rule("a", action: .token(.name))),
+                        .rule(Rule("b", action: .token(.keyword)))
+                    ],
+                    "close": [
+                        .rule(Rule("\\}", action: .token(.punctuation), newState: .ops([.pop])))
+                    ]
+                ]
+            }
+        }
+
+        let lexer = CombinedLexer()
+        let tokens = lexer.getTokens("{ab}")
+
+        XCTAssertEqual(tokens.map { $0.value }.joined(), "{ab}\n")
+        XCTAssertTrue(tokens.contains(where: { $0.type.isSubtype(of: .name) && $0.value == "a" }))
+        XCTAssertTrue(tokens.contains(where: { $0.type.isSubtype(of: .keyword) && $0.value == "b" }))
+        XCTAssertFalse(tokens.contains(where: { $0.type == .error }))
+    }
 }
