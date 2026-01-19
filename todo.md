@@ -1,0 +1,99 @@
+# Pygments → Swift Port Progress (TODO)
+
+Last updated: 2026-01-19
+
+## ✅ Implemented (pygments-swift)
+
+## 🔗 Key Files (jump points)
+
+- Package: [pygments-swift/Package.swift](pygments-swift/Package.swift)
+- Core tokens:
+  - [pygments-swift/Sources/PygmentsSwift/TokenType.swift](pygments-swift/Sources/PygmentsSwift/TokenType.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Token.swift](pygments-swift/Sources/PygmentsSwift/Token.swift)
+- Lexer runtime:
+  - [pygments-swift/Sources/PygmentsSwift/Lexer.swift](pygments-swift/Sources/PygmentsSwift/Lexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/RegexLexer.swift](pygments-swift/Sources/PygmentsSwift/RegexLexer.swift)
+- Regex helpers:
+  - [pygments-swift/Sources/PygmentsSwift/RegexOpt.swift](pygments-swift/Sources/PygmentsSwift/RegexOpt.swift)
+  - [pygments-swift/Sources/PygmentsSwift/RegexHelpers.swift](pygments-swift/Sources/PygmentsSwift/RegexHelpers.swift)
+- Lexers:
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/SwiftLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/SwiftLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/IniLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/IniLexer.swift)
+- Tests:
+  - Parity: [pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift](pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift)
+  - Engine features: [pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift](pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift)
+  - Token types: [pygments-swift/Tests/PygmentsSwiftTests/TokenTypeTests.swift](pygments-swift/Tests/PygmentsSwiftTests/TokenTypeTests.swift)
+- Python reference runner (used by parity tests):
+  - [pygments-swift/Tests/Support/pygments_swift_ref.py](pygments-swift/Tests/Support/pygments_swift_ref.py)
+
+### Project / packaging
+- [x] SwiftPM package scaffolded (PygmentsSwift) targeting macOS
+- [x] XCTest test suite wired up; `swift test` passing
+
+### Core model
+- [x] `TokenType` model with hierarchy/subtype checks and parsing from string
+- [x] `Token` model includes:
+  - [x] `start` (UTF-16 offset, matches `NSString`/`NSRange` world)
+  - [x] `startScalar` (Unicode-scalar offset for parity with Python indices)
+
+### Lexer runtime
+- [x] Pygments-like preprocessing for inputs (newline normalization, etc.)
+- [x] Regex/state-machine lexer engine (RegexLexer-style)
+- [x] State stack semantics (push/pop/switch)
+- [x] Rule actions:
+  - [x] single token
+  - [x] `byGroups(...)`
+  - [x] `using(...)` (delegate lexing to another lexer)
+  - [x] `usingThis(...)` (delegate lexing to same lexer type)
+  - [x] `default(...)` (zero-length transition; maps to `(?:)` for `NSRegularExpression`)
+- [x] State composition:
+  - [x] `.include("state")`
+  - [x] `combined(...)` support via temporary runtime-composed state
+  - [x] `inherit` support: merge/splice parent states during compilation
+- [x] Loop-safety for zero-length matches (prevents infinite loops)
+
+### Regex helpers
+- [x] Ported Pygments `regexopt` algorithm (keyword list → optimized regex)
+- [x] `words(...)` helper (prefix/suffix + optimized alternation)
+
+### Lexers
+- [x] `IniLexer` (sanity / baseline)
+- [x] `SwiftLexer` ported from Python Pygments (`pygments.lexers.objective.SwiftLexer`)
+  - [x] Major states implemented (root/keywords/comments/strings/preproc/module/etc.)
+  - [x] Expanded builtin patterns to match Pygments lists
+
+### Parity testing vs Python Pygments
+- [x] Python reference runner script emits JSON tokens (from in-repo `pygments-master`)
+- [x] Python reference uses `_preprocess_lexer_input` to match real Pygments behavior
+- [x] Strict parity test for an ASCII sample (type/value/start)
+- [x] Unicode parity coverage via `startScalar` comparisons
+
+---
+
+## ⏳ Pending / Next (recommended order)
+
+### Unicode identifiers (highest value next)
+- [ ] Improve Swift identifier regex to support Unicode identifiers (currently ASCII-ish)
+- [ ] Add a parity test that includes Unicode identifiers and verifies strict parity
+
+### Expand parity corpus
+- [ ] Add more Swift snippets covering:
+  - [ ] nested/multiline comments
+  - [ ] string interpolation edge cases
+  - [ ] raw strings / multi-line strings (if supported by the Python lexer)
+  - [ ] preprocessor branches and directives
+- [ ] Run strict parity across multiple samples (keep failures actionable)
+
+### Engine completeness / polish
+- [ ] Performance pass for `startScalar` mapping (optimize if it becomes hot)
+- [ ] Improve error reporting for no-match situations (diagnostics & debugging helpers)
+
+### Scope expansion
+- [ ] Port one more “real” lexer to validate engine generality (e.g., JSON, Python, etc.)
+- [ ] Decide how formatters will be handled in Swift (later milestone)
+
+---
+
+## Notes
+- Parity strategy: Swift tests call a Python runner against `pygments-master` and compare token streams.
+- Current parity focus is the Swift lexer (good stress test) plus engine feature tests.
