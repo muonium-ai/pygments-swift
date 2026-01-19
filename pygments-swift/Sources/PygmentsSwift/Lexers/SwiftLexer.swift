@@ -29,10 +29,88 @@ public final class SwiftLexer: RegexLexer {
         ], suffix: "\\b")
 
         let builtinTypesPattern = RegexHelpers.words([
-            // Minimal subset to match our current tests; expand over time.
-            "Any", "AnyObject", "Bool", "Character", "Double", "Float", "Int",
-            "Int8", "Int16", "Int32", "Int64", "String", "UInt", "UInt8", "UInt16", "UInt32", "UInt64",
-            "Void"
+            // Mirrors Pygments' SwiftLexer global types list.
+            "Array", "AutoreleasingUnsafeMutablePointer", "BidirectionalReverseView",
+            "Bit", "Bool", "CFunctionPointer", "COpaquePointer", "CVaListPointer",
+            "Character", "ClosedInterval", "CollectionOfOne", "ContiguousArray",
+            "Dictionary", "DictionaryGenerator", "DictionaryIndex", "Double",
+            "EmptyCollection", "EmptyGenerator", "EnumerateGenerator",
+            "EnumerateSequence", "FilterCollectionView",
+            "FilterCollectionViewIndex", "FilterGenerator", "FilterSequenceView",
+            "Float", "Float80", "FloatingPointClassification", "GeneratorOf",
+            "GeneratorOfOne", "GeneratorSequence", "HalfOpenInterval", "HeapBuffer",
+            "HeapBufferStorage", "ImplicitlyUnwrappedOptional", "IndexingGenerator",
+            "Int", "Int16", "Int32", "Int64", "Int8", "LazyBidirectionalCollection",
+            "LazyForwardCollection", "LazyRandomAccessCollection",
+            "LazySequence", "MapCollectionView", "MapSequenceGenerator",
+            "MapSequenceView", "MirrorDisposition", "ObjectIdentifier", "OnHeap",
+            "Optional", "PermutationGenerator", "QuickLookObject",
+            "RandomAccessReverseView", "Range", "RangeGenerator", "RawByte", "Repeat",
+            "ReverseBidirectionalIndex", "ReverseRandomAccessIndex", "SequenceOf",
+            "SinkOf", "Slice", "StaticString", "StrideThrough", "StrideThroughGenerator",
+            "StrideTo", "StrideToGenerator", "String", "UInt", "UInt16", "UInt32",
+            "UInt64", "UInt8", "UTF16", "UTF32", "UTF8", "UnicodeDecodingResult",
+            "UnicodeScalar", "Unmanaged", "UnsafeBufferPointer",
+            "UnsafeBufferPointerGenerator", "UnsafeMutableBufferPointer",
+            "UnsafeMutablePointer", "UnsafePointer", "Zip2", "ZipGenerator2",
+            // Protocols
+            "AbsoluteValuable", "AnyObject", "ArrayLiteralConvertible",
+            "BidirectionalIndexType", "BitwiseOperationsType",
+            "BooleanLiteralConvertible", "BooleanType", "CVarArgType",
+            "CollectionType", "Comparable", "DebugPrintable",
+            "DictionaryLiteralConvertible", "Equatable",
+            "ExtendedGraphemeClusterLiteralConvertible",
+            "ExtensibleCollectionType", "FloatLiteralConvertible",
+            "FloatingPointType", "ForwardIndexType", "GeneratorType", "Hashable",
+            "IntegerArithmeticType", "IntegerLiteralConvertible", "IntegerType",
+            "IntervalType", "MirrorType", "MutableCollectionType", "MutableSliceable",
+            "NilLiteralConvertible", "OutputStreamType", "Printable",
+            "RandomAccessIndexType", "RangeReplaceableCollectionType",
+            "RawOptionSetType", "RawRepresentable", "Reflectable", "SequenceType",
+            "SignedIntegerType", "SignedNumberType", "SinkType", "Sliceable",
+            "Streamable", "Strideable", "StringInterpolationConvertible",
+            "StringLiteralConvertible", "UnicodeCodecType",
+            "UnicodeScalarLiteralConvertible", "UnsignedIntegerType",
+            "_ArrayBufferType", "_BidirectionalIndexType", "_CocoaStringType",
+            "_CollectionType", "_Comparable", "_ExtensibleCollectionType",
+            "_ForwardIndexType", "_Incrementable", "_IntegerArithmeticType",
+            "_IntegerType", "_ObjectiveCBridgeable", "_RandomAccessIndexType",
+            "_RawOptionSetType", "_SequenceType", "_Sequence_Type",
+            "_SignedIntegerType", "_SignedNumberType", "_Sliceable", "_Strideable",
+            "_SwiftNSArrayRequiredOverridesType", "_SwiftNSArrayType",
+            "_SwiftNSCopyingType", "_SwiftNSDictionaryRequiredOverridesType",
+            "_SwiftNSDictionaryType", "_SwiftNSEnumeratorType",
+            "_SwiftNSFastEnumerationType", "_SwiftNSStringRequiredOverridesType",
+            "_SwiftNSStringType", "_UnsignedIntegerType",
+            // Variables
+            "C_ARGC", "C_ARGV", "Process",
+            // Typealiases
+            "Any", "AnyClass", "BooleanLiteralType", "CBool", "CChar", "CChar16",
+            "CChar32", "CDouble", "CFloat", "CInt", "CLong", "CLongLong", "CShort",
+            "CSignedChar", "CUnsignedInt", "CUnsignedLong", "CUnsignedShort",
+            "CWideChar", "ExtendedGraphemeClusterType", "Float32", "Float64",
+            "FloatLiteralType", "IntMax", "IntegerLiteralType", "StringLiteralType",
+            "UIntMax", "UWord", "UnicodeScalarType", "Void", "Word",
+            // Foundation/Cocoa
+            "NSErrorPointer", "NSObjectProtocol", "Selector"
+        ], suffix: "\\b")
+
+        let builtinFunctionsPattern = RegexHelpers.words([
+            "abs", "advance", "alignof", "alignofValue", "assert", "assertionFailure",
+            "contains", "count", "countElements", "debugPrint", "debugPrintln",
+            "distance", "dropFirst", "dropLast", "dump", "enumerate", "equal",
+            "extend", "fatalError", "filter", "find", "first", "getVaList", "indices",
+            "insert", "isEmpty", "join", "last", "lazy", "lexicographicalCompare",
+            "map", "max", "maxElement", "min", "minElement", "numericCast", "overlaps",
+            "partition", "precondition", "preconditionFailure", "prefix", "print",
+            "println", "reduce", "reflect", "removeAll", "removeAtIndex", "removeLast",
+            "removeRange", "reverse", "sizeof", "sizeofValue", "sort", "sorted",
+            "splice", "split", "startsWith", "stride", "strideof", "strideofValue",
+            "suffix", "swap", "toDebugString", "toString", "transcode",
+            "underestimateCount", "unsafeAddressOf", "unsafeBitCast", "unsafeDowncast",
+            "withExtendedLifetime", "withUnsafeMutablePointer",
+            "withUnsafeMutablePointers", "withUnsafePointer", "withUnsafePointers",
+            "withVaList"
         ], suffix: "\\b")
 
         return [
@@ -48,6 +126,9 @@ public final class SwiftLexer: RegexLexer {
 
                 // Global Types (minimal subset)
                 .rule(Rule(builtinTypesPattern, action: .token(.name.child("Builtin")))),
+
+                // Functions
+                .rule(Rule(builtinFunctionsPattern, action: .token(.name.child("Builtin").child("Pseudo")))),
 
                 // Implicit Block Variables
                 .rule(Rule("\\$\\d+", action: .token(.name.child("Variable")))),
