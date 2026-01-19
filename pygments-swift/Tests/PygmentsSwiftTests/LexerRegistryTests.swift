@@ -18,6 +18,8 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "kotlin"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "ruby"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "php"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "bash"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "sh"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -45,6 +47,10 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "view.phtml"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "test.php8"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "test.phpt"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.sh"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.bash"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.zsh"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "Run.command"))
         XCTAssertNil(LexerRegistry.makeLexer(filename: "README.md"))
     }
 }
