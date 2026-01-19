@@ -1,0 +1,74 @@
+[
+  {
+    "name": "swift_ascii_1",
+    "lexerName": "swift",
+    "swiftLexer": "swift",
+    "inputResource": "swift_ascii_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "swift_unicode_1",
+    "lexerName": "swift",
+    "swiftLexer": "swift",
+    "inputResource": "swift_unicode_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "swift_multiline_strings_1",
+    "lexerName": "swift",
+    "swiftLexer": "swift",
+    "inputResource": "swift_multiline_strings_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "swift_raw_strings_1",
+    "lexerName": "swift",
+    "swiftLexer": "swift",
+    "inputResource": "swift_raw_strings_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "json_ascii_1",
+    "lexerName": "json",
+    "swiftLexer": "json",
+    "inputResource": "json_ascii_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "json_numbers_1",
+    "lexerName": "json",
+    "swiftLexer": "json",
+    "inputResource": "json_numbers_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "json_unicode_escapes_1",
+    "lexerName": "json",
+    "swiftLexer": "json",
+    "inputResource": "json_unicode_escapes_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "jsonld_ascii_1",
+    "lexerName": "jsonld",
+    "swiftLexer": "jsonld",
+    "inputResource": "jsonld_ascii_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "jsonld_context_array_1",
+    "lexerName": "jsonld",
+    "swiftLexer": "jsonld",
+    "inputResource": "jsonld_context_array_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  }
+]

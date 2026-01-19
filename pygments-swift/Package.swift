@@ -20,7 +20,10 @@ let package = Package(
         ),
         .testTarget(
             name: "PygmentsSwiftTests",
-            dependencies: ["PygmentsSwift"]
+            dependencies: ["PygmentsSwift"],
+            resources: [
+                .process("Fixtures")
+            ]
         )
     ]
 )

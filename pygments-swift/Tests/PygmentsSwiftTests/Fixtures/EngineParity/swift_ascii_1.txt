@@ -1,0 +1,9 @@
+import Foundation
+
+struct Foo {
+    let x: Int = 42
+    func bar() -> String { return "hi" }
+}
+
+/* outer /* inner */ done */
+let s = "value: \(x)"

@@ -1,0 +1,6 @@
+{
+  "simple": "\u00E9",
+  "surrogatePair": "\uD83D\uDE00",
+  "mix": "A\u0041B\u0062",
+  "slashes": "\\/\/"
+}

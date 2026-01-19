@@ -1,0 +1,6 @@
+let poem = """
+Roses are red,
+Violets are blue.
+"""
+
+let escaped = "line1\nline2\t\"quote\""

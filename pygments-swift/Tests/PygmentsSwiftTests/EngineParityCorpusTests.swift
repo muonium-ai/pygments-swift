@@ -2,6 +2,15 @@ import XCTest
 @testable import PygmentsSwift
 
 final class EngineParityCorpusTests: XCTestCase {
+    private struct FixtureManifest: Decodable {
+        let name: String
+        let lexerName: String
+        let swiftLexer: String
+        let inputResource: String
+        let inputExtension: String
+        let compareStartScalar: Bool
+    }
+
     struct Fixture {
         let name: String
         let lexerName: String
@@ -13,72 +22,75 @@ final class EngineParityCorpusTests: XCTestCase {
     func testEngineParityCorpus() throws {
         // These fixtures are intended to exercise core engine semantics (states, byGroups,
         // delegation, defaults, Unicode handling) using lexers we have strict ports for.
-        let fixtures: [Fixture] = [
-            Fixture(
-                name: "swift_ascii_1",
-                lexerName: "swift",
-                makeSwiftLexer: { SwiftLexer() },
-                input: """
-                import Foundation
-
-                struct Foo {
-                    let x: Int = 42
-                    func bar() -> String { return \"hi\" }
-                }
-
-                /* outer /* inner */ done */
-                let s = \"value: \\(x)\"\n
-                """,
-                compareStartScalar: true
-            ),
-            Fixture(
-                name: "swift_unicode_1",
-                lexerName: "swift",
-                makeSwiftLexer: { SwiftLexer() },
-                input: """
-                import Foundation
-
-                let cafe = \"café\"
-                let combining = \"e\u{0301}\"
-                let emoji = \"🙂\"\n
-                """,
-                compareStartScalar: true
-            ),
-            Fixture(
-                name: "json_ascii_1",
-                lexerName: "json",
-                makeSwiftLexer: { JsonLexer() },
-                input: """
-                {
-                  // comment
-                  \"a\": 1,
-                  \"b\": 2.5e+2,
-                  \"c\": true,
-                  \"d\": null,
-                  \"e\": \"str\\n\\t\\u1234\",
-                  \"arr\": [1, 2, 3]
-                }\n
-                """,
-                compareStartScalar: true
-            ),
-            Fixture(
-                name: "jsonld_ascii_1",
-                lexerName: "jsonld",
-                makeSwiftLexer: { JsonLdLexer() },
-                input: """
-                {
-                  \"@context\": {\"name\": \"http://schema.org/name\"},
-                  \"@id\": \"http://example.com\",
-                  \"name\": \"Alice\"\n
-                }\n
-                """,
-                compareStartScalar: true
-            ),
-        ]
+        let fixtures = try loadFixtures()
+        XCTAssertFalse(fixtures.isEmpty, "Engine parity corpus has no fixtures")
 
         for fx in fixtures {
             try runFixture(fx)
         }
+    }
+
+    private func loadFixtures() throws -> [Fixture] {
+        let manifestURL = try requireResourceURL(resource: "engine_parity", ext: "json")
+        let manifestData = try Data(contentsOf: manifestURL)
+        let manifests = try JSONDecoder().decode([FixtureManifest].self, from: manifestData)
+
+        return try manifests.map { entry in
+            let inputURL = try requireResourceURL(resource: entry.inputResource, ext: entry.inputExtension, subdirectory: "EngineParity")
+            let input = try String(contentsOf: inputURL, encoding: .utf8)
+            return Fixture(
+                name: entry.name,
+                lexerName: entry.lexerName,
+                makeSwiftLexer: { self.makeLexer(entry.swiftLexer) },
+                input: input,
+                compareStartScalar: entry.compareStartScalar
+            )
+        }
+    }
+
+    private func makeLexer(_ key: String) -> Lexer {
+        switch key.lowercased() {
+        case "swift":
+            return SwiftLexer()
+        case "json":
+            return JsonLexer()
+        case "jsonld":
+            return JsonLdLexer()
+        default:
+            // Keep this strict: adding a new corpus lexer should require wiring it here.
+            preconditionFailure("Unknown swiftLexer key: \(key)")
+        }
+    }
+
+    private func requireResourceURL(resource: String, ext: String, subdirectory: String? = nil) throws -> URL {
+        let candidates: [String?] = {
+            if let subdirectory {
+                return [subdirectory, "Fixtures/\(subdirectory)"]
+            }
+            return [nil, "Fixtures"]
+        }()
+
+        for candidate in candidates {
+            if let url = Bundle.module.url(forResource: resource, withExtension: ext, subdirectory: candidate) {
+                return url
+            }
+        }
+
+        // Fallback: SwiftPM resource paths can vary (especially around top-level directory names).
+        // If lookup fails, walk the bundle and find the first matching filename.
+        let targetName = "\(resource).\(ext)"
+        if let enumerator = FileManager.default.enumerator(at: Bundle.module.bundleURL, includingPropertiesForKeys: nil) {
+            for case let url as URL in enumerator {
+                if url.lastPathComponent == targetName {
+                    return url
+                }
+            }
+        }
+
+        throw XCTSkip(
+            "Missing test resource: \(resource).\(ext)" +
+                (subdirectory.map { " in \($0)" } ?? "")
+        )
     }
 
     private func runFixture(_ fixture: Fixture) throws {
