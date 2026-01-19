@@ -110,5 +110,29 @@
     "inputResource": "custom_stack_popn_1",
     "inputExtension": "txt",
     "compareStartScalar": true
+  },
+  {
+    "name": "custom_combined_precedence_1",
+    "lexerName": "custom:combined_precedence",
+    "swiftLexer": "custom_combined_precedence",
+    "inputResource": "custom_combined_precedence_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "custom_inherit_splice_1",
+    "lexerName": "custom:inherit_splice",
+    "swiftLexer": "custom_inherit_splice",
+    "inputResource": "custom_inherit_splice_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "custom_bygroups_1",
+    "lexerName": "custom:bygroups",
+    "swiftLexer": "custom_bygroups",
+    "inputResource": "custom_bygroups_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
   }
 ]
