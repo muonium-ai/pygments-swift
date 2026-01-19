@@ -95,6 +95,34 @@ open class RegexLexer: LexerBase {
         let nsText = processed as NSString
         let end = nsText.length
 
+        // Map UTF-16 offsets -> Unicode-scalar offsets (codepoint indices).
+        // We precompute on scalar boundaries so we can translate match/group NSRange locations.
+        var utf16ToScalar: [Int: Int] = [:]
+        utf16ToScalar.reserveCapacity(processed.unicodeScalars.count + 1)
+        var utf16Offset = 0
+        var scalarOffset = 0
+        utf16ToScalar[0] = 0
+        for scalar in processed.unicodeScalars {
+            utf16Offset += scalar.utf16.count
+            scalarOffset += 1
+            utf16ToScalar[utf16Offset] = scalarOffset
+        }
+
+        func scalarIndex(forUTF16Offset off: Int) -> Int {
+            // Most regex boundaries will align with scalar boundaries.
+            if let mapped = utf16ToScalar[off] { return mapped }
+            // Fallback: find nearest lower boundary.
+            // This is conservative if a regex split a surrogate pair.
+            var candidate = off
+            while candidate > 0 {
+                candidate -= 1
+                if let mapped = utf16ToScalar[candidate] {
+                    return mapped
+                }
+            }
+            return 0
+        }
+
         var ctx = LexerContext(pos: 0, stack: stack)
         var out: [Token] = []
 
@@ -131,7 +159,7 @@ open class RegexLexer: LexerBase {
                     switch action {
                     case .token(let ttype):
                         let value = nsText.substring(with: m.range)
-                        out.append(Token(start: ctx.pos, type: ttype, value: value))
+                        out.append(Token(start: ctx.pos, startScalar: scalarIndex(forUTF16Offset: ctx.pos), type: ttype, value: value))
 
                     case .byGroups(let groups):
                         // Groups correspond to capture groups 1..N.
@@ -142,15 +170,16 @@ open class RegexLexer: LexerBase {
                             let r = m.range(at: groupIndex)
                             if r.location == NSNotFound || r.length == 0 { continue }
                             let value = nsText.substring(with: r)
-                            out.append(Token(start: r.location, type: ttype, value: value))
+                            out.append(Token(start: r.location, startScalar: scalarIndex(forUTF16Offset: r.location), type: ttype, value: value))
                         }
 
                     case .using(let otherType, let stackOverride):
                         let sub = nsText.substring(with: m.range)
                         let other = otherType.init(options: self.options)
                         let subTokens = other.getTokensUnprocessedRaw(sub, stack: stackOverride ?? ["root"])
+                        let matchStartScalar = scalarIndex(forUTF16Offset: m.range.location)
                         for t in subTokens {
-                            out.append(Token(start: t.start + m.range.location, type: t.type, value: t.value))
+                            out.append(Token(start: t.start + m.range.location, startScalar: t.startScalar + matchStartScalar, type: t.type, value: t.value))
                         }
 
                     case .usingThis(let stackOverride):
@@ -158,8 +187,9 @@ open class RegexLexer: LexerBase {
                         let sameType = type(of: self)
                         let other = sameType.init(options: self.options)
                         let subTokens = other.getTokensUnprocessedRaw(sub, stack: stackOverride ?? ["root"])
+                        let matchStartScalar = scalarIndex(forUTF16Offset: m.range.location)
                         for t in subTokens {
-                            out.append(Token(start: t.start + m.range.location, type: t.type, value: t.value))
+                            out.append(Token(start: t.start + m.range.location, startScalar: t.startScalar + matchStartScalar, type: t.type, value: t.value))
                         }
                     }
                 }
@@ -177,7 +207,7 @@ open class RegexLexer: LexerBase {
                     if priorPos < end {
                         let r = NSRange(location: priorPos, length: 1)
                         let value = nsText.substring(with: r)
-                        out.append(Token(start: priorPos, type: .error, value: value))
+                        out.append(Token(start: priorPos, startScalar: scalarIndex(forUTF16Offset: priorPos), type: .error, value: value))
                         ctx.pos = priorPos + 1
                     }
                 }
@@ -191,7 +221,7 @@ open class RegexLexer: LexerBase {
             let ch = nsText.character(at: ctx.pos)
             if ch == 10 { // '\n'
                 ctx.stack = ["root"]
-                out.append(Token(start: ctx.pos, type: .whitespace, value: "\n"))
+                out.append(Token(start: ctx.pos, startScalar: scalarIndex(forUTF16Offset: ctx.pos), type: .whitespace, value: "\n"))
                 ctx.pos += 1
                 continue
             }
@@ -199,7 +229,7 @@ open class RegexLexer: LexerBase {
             // Emit error token for the single UTF-16 code unit.
             let r = NSRange(location: ctx.pos, length: 1)
             let value = nsText.substring(with: r)
-            out.append(Token(start: ctx.pos, type: .error, value: value))
+            out.append(Token(start: ctx.pos, startScalar: scalarIndex(forUTF16Offset: ctx.pos), type: .error, value: value))
             ctx.pos += 1
         }
 

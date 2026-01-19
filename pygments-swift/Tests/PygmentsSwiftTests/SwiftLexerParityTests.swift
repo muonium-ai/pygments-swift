@@ -69,6 +69,43 @@ final class SwiftLexerParityTests: XCTestCase {
         }
     }
 
+    func testParityStartScalarOnUnicodeSample() throws {
+        // Includes non-ASCII identifiers and strings.
+        let input = """
+        import Foundation
+
+        let cafe = \"café\"
+        let naive = \"naïve\"
+        // Combining character: e + ◌́ (U+0301)
+        let combining = \"e\u{0301}\"
+        let emoji = \"🙂\"
+        """
+
+        guard let python = findPython() else {
+            throw XCTSkip("python3 not found; skipping Pygments parity test")
+        }
+
+        let pyTokens = try runPythonReference(python: python, input: input)
+        let lexer = SwiftLexer()
+        let swiftTokens = lexer.getTokens(input)
+
+        // Compare full (type, value) stream, and compare python start to swift startScalar.
+        XCTAssertEqual(pyTokens.count, swiftTokens.count, "Token stream lengths differ")
+
+        for idx in 0..<min(pyTokens.count, swiftTokens.count) {
+            let py = pyTokens[idx]
+            let sw = swiftTokens[idx]
+            if py.type != sw.type.description || py.value != sw.value {
+                XCTFail("Mismatch at #\\(idx): python=(\\(py.type), \\(py.value.debugDescription)) swift=(\\(sw.type.description), \\(sw.value.debugDescription))")
+                return
+            }
+            if py.start != sw.startScalar {
+                XCTFail("Start mismatch at #\\(idx): pythonStart=\\(py.start) swiftStartScalar=\\(sw.startScalar) value=\\(sw.value.debugDescription)")
+                return
+            }
+        }
+    }
+
     private func normalizeType(_ s: String) -> String {
         // Collapse subtypes to their top-level families.
         // Example: Token.Name.Builtin -> Token.Name
