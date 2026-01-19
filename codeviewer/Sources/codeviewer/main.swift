@@ -33,7 +33,23 @@ do {
         return FallbackTextLexer()
     }()
 
-    let theme = try CodeTheme.named(opts.theme)
+    let theme: CodeTheme = try {
+        if let themeFile = opts.themeFile {
+            if themeFile == "-" {
+                let data = FileHandle.standardInput.readDataToEndOfFile()
+                if data.isEmpty {
+                    throw CLIError("--theme-file - expects theme JSON on stdin")
+                }
+                let ht = try UserThemeFile.load(data: data, nameHint: "stdin-theme")
+                return CodeTheme(theme: ht)
+            } else {
+                let url = URL(fileURLWithPath: themeFile)
+                let ht = try UserThemeFile.load(url: url)
+                return CodeTheme(theme: ht)
+            }
+        }
+        return try CodeTheme.named(opts.theme)
+    }()
     let font = NSFont.monospacedSystemFont(ofSize: CGFloat(opts.fontSize), weight: .regular)
 
     let attributed = CodeHighlighter.highlight(text: source, lexer: lexer, theme: theme, font: font)

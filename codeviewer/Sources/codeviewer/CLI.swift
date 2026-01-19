@@ -5,24 +5,30 @@ struct CLIOptions {
     var outDir: String
     var languageOverride: String?
     var theme: String
+    var themeFile: String?
     var fontSize: Double
     var width: Double?
 
     static func usage(program: String) -> String {
         return """
         Usage:
-                    \(program) <input-file> [--outdir <dir>] [--lang <name>] [--theme <name>] [--font-size <n>] [--width <n>]
+                    \(program) <input-file> [--outdir <dir>] [--lang <name>] [--theme <name>] [--theme-file <path>] [--font-size <n>] [--width <n>]
                     \(program) --list-themes
+                    \(program) --print-theme-template
 
         Examples:
           \(program) MyFile.swift
                     \(program) MyFile.py --outdir out --theme github-light
+                    \(program) MyFile.py --outdir out --theme-file my-theme.json
           \(program) unknown.txt --lang swift
                     \(program) --list-themes
+                                        \(program) --print-theme-template > my-theme.json
 
         Notes:
                     - Output files are written as <filename>.<ext>.pdf and <filename>.<ext>.png in --outdir (default: current directory)
           - Lexer selection uses filename extension unless --lang is provided
+                    - --theme-file overrides --theme
+                    - Use --theme-file - to read the theme JSON from stdin
         """
     }
 
@@ -41,6 +47,7 @@ struct CLIOptions {
         var outDir = FileManager.default.currentDirectoryPath
         var languageOverride: String?
         var theme = "github-dark"
+        var themeFile: String?
         var fontSize: Double = 13
         var width: Double?
 
@@ -50,12 +57,16 @@ struct CLIOptions {
                 throw CLIHelp(usage(program: program))
             case "--list-themes":
                 throw CLIHelp(CodeTheme.allNames.joined(separator: "\n"))
+            case "--print-theme-template":
+                throw CLIHelp(UserThemeFile.template())
             case "--outdir":
                 outDir = try requireValue(a)
             case "--lang":
                 languageOverride = try requireValue(a)
             case "--theme":
                 theme = try requireValue(a)
+            case "--theme-file":
+                themeFile = try requireValue(a)
             case "--font-size":
                 let v = try requireValue(a)
                 guard let n = Double(v), n > 0 else { throw CLIError("Invalid --font-size: \(v)") }
@@ -80,11 +91,16 @@ struct CLIOptions {
             throw CLIError("Missing <input-file>\n\n\(usage(program: program))")
         }
 
+        if themeFile != nil {
+            // Theme file wins, but we still allow --theme for backwards compat.
+        }
+
         return CLIOptions(
             inputPath: inputPath,
             outDir: outDir,
             languageOverride: languageOverride,
             theme: theme,
+            themeFile: themeFile,
             fontSize: fontSize,
             width: width
         )
