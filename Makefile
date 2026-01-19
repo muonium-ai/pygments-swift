@@ -1,4 +1,4 @@
-.PHONY: help clean build test
+.PHONY: help clean build test clean-samples
 
 SWIFT_PACKAGE_DIR := pygments-swift
 CODEVIEWER_PACKAGE_DIR := codeviewer
@@ -9,6 +9,7 @@ help:
 	@echo "  make test    - Run the Swift test suite"
 	@echo "  make codeviewer-build - Build the codeviewer CLI"
 	@echo "  make render-samples   - Render sample-code/*.ext to PNG/PDF"
+	@echo "  make clean-samples    - Remove generated sample renders"
 	@echo "  make clean   - Clean Swift build artifacts"
 
 build:
@@ -19,6 +20,10 @@ test:
 
 clean:
 	swift package clean --package-path "$(SWIFT_PACKAGE_DIR)"
+
+clean-samples:
+	@rm -rf out/samples
+	@echo "Removed out/samples"
 
 codeviewer-build:
 	swift build --package-path "$(CODEVIEWER_PACKAGE_DIR)"
