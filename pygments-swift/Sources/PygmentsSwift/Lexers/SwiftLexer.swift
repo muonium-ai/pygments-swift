@@ -28,6 +28,13 @@ public final class SwiftLexer: RegexLexer {
             "static", "struct", "subscript", "typealias", "var"
         ], suffix: "\\b")
 
+        let builtinTypesPattern = RegexHelpers.words([
+            // Minimal subset to match our current tests; expand over time.
+            "Any", "AnyObject", "Bool", "Character", "Double", "Float", "Int",
+            "Int8", "Int16", "Int32", "Int64", "String", "UInt", "UInt8", "UInt16", "UInt32", "UInt64",
+            "Void"
+        ], suffix: "\\b")
+
         return [
             "root": [
                 // Whitespace and Comments
@@ -38,6 +45,9 @@ public final class SwiftLexer: RegexLexer {
                 .rule(Rule("#(if|elseif|else|endif|available)\\b", action: .token(.comment.child("Preproc")), newState: .ops([.push("preproc")]))),
 
                 .include("keywords"),
+
+                // Global Types (minimal subset)
+                .rule(Rule(builtinTypesPattern, action: .token(.name.child("Builtin")))),
 
                 // Implicit Block Variables
                 .rule(Rule("\\$\\d+", action: .token(.name.child("Variable")))),
@@ -94,8 +104,7 @@ public final class SwiftLexer: RegexLexer {
             "module": [
                 .rule(Rule("\\n", action: .token(.whitespace), newState: .ops([.pop]))),
                 .rule(Rule("[a-zA-Z_]\\w*", action: .token(.name.child("Class")))),
-                .rule(Rule("\\.", action: .token(.punctuation))),
-                .rule(Rule("\\s+", action: .token(.whitespace)))
+                .include("root")
             ],
 
             "preproc": [
