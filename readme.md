@@ -45,6 +45,3 @@ let lexer = LexerRegistry.makeLexer(languageName: "swift")!
 let tokens = lexer.getTokens("let x = 1")
 ```
 
-## Python reference
-
-The upstream Python Pygments source is vendored under [pygments-master](pygments-master/) and is used by Swift parity tests.
