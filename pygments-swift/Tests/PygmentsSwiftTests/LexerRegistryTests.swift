@@ -20,6 +20,8 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "php"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "bash"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "sh"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "scala"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "sc"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -51,6 +53,9 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.bash"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.zsh"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "Run.command"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "App.scala"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "amm.sc"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "build.sbt"))
         XCTAssertNil(LexerRegistry.makeLexer(filename: "README.md"))
     }
 }

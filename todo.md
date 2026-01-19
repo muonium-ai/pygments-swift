@@ -27,7 +27,7 @@ Goal: expand coverage beyond the top-10.
 - [x] PHP (pragmatic lexer)
 - [x] Ruby (pragmatic lexer)
 - [ ] R
-- [ ] Scala
+- [x] Scala (pragmatic lexer)
 - [x] Bash / Shell (pragmatic lexer)
 
 Non-language formats already supported:
@@ -66,6 +66,7 @@ Non-language formats already supported:
   - [pygments-swift/Sources/PygmentsSwift/Lexers/RubyLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/RubyLexer.swift)
   - [pygments-swift/Sources/PygmentsSwift/Lexers/PHPLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/PHPLexer.swift)
   - [pygments-swift/Sources/PygmentsSwift/Lexers/ShellLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/ShellLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/ScalaLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/ScalaLexer.swift)
 - Tests:
   - Parity: [pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift](pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift)
   - Engine features: [pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift](pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift)

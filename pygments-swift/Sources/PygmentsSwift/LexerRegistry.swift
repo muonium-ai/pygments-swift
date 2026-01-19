@@ -17,6 +17,7 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case ruby
     case php
     case shell
+    case scala
 }
 
 public enum LexerRegistry {
@@ -54,6 +55,8 @@ public enum LexerRegistry {
             return PHPLexer(options: options)
         case .shell:
             return ShellLexer(options: options)
+        case .scala:
+            return ScalaLexer(options: options)
         }
     }
 
@@ -93,6 +96,8 @@ public enum LexerRegistry {
             return makeLexer(language: .php, options: options)
         case "shell", "sh", "bash", "zsh", "ksh":
             return makeLexer(language: .shell, options: options)
+        case "scala", "sc":
+            return makeLexer(language: .scala, options: options)
         default:
             return nil
         }
@@ -134,6 +139,8 @@ public enum LexerRegistry {
             return makeLexer(language: .php, options: options)
         case "sh", "bash", "zsh", "ksh", "command":
             return makeLexer(language: .shell, options: options)
+        case "scala", "sc", "sbt":
+            return makeLexer(language: .scala, options: options)
         default:
             return nil
         }
