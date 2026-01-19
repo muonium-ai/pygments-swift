@@ -3,6 +3,10 @@ import Foundation
 /// Swift lexer based on Pygments' `SwiftLexer` (ported from `pygments.lexers.objective`).
 public final class SwiftLexer: RegexLexer {
     public override var tokenDefs: [String: [TokenRuleDef]] {
+        // Swift identifiers are Unicode; use Unicode identifier properties.
+        // ICU (used by NSRegularExpression) supports XID_Start/XID_Continue.
+        let identPattern = #"[_\p{XID_Start}][_\p{XID_Continue}]*"#
+
         let keywordPattern = RegexHelpers.words([
             "as", "async", "await", "break", "case", "catch", "continue", "default", "defer",
             "do", "else", "fallthrough", "for", "guard", "if", "in", "is",
@@ -149,7 +153,7 @@ public final class SwiftLexer: RegexLexer {
                 .rule(Rule("[/=\\-+!*%<>&|^?~]+", action: .token(.operator))),
 
                 // Identifier
-                .rule(Rule("[a-zA-Z_]\\w*", action: .token(.name)))
+                .rule(Rule(identPattern, action: .token(.name)))
             ],
 
             "keywords": [
@@ -158,14 +162,14 @@ public final class SwiftLexer: RegexLexer {
                 .rule(Rule(reservedPattern, action: .token(.keyword.child("Reserved")))),
                 .rule(Rule("(as|dynamicType|false|is|nil|self|Self|super|true|__COLUMN__|__FILE__|__FUNCTION__|__LINE__|_|#(?:file|line|column|function))\\b", action: .token(.keyword.child("Constant")))),
                 .rule(Rule("import\\b", action: .token(.keyword.child("Declaration")), newState: .ops([.push("module")]))),
-                .rule(Rule("(class|enum|extension|struct|protocol)(\\s+)([a-zA-Z_]\\w*)", action: .byGroups([.keyword.child("Declaration"), .whitespace, .name.child("Class")]))),
-                .rule(Rule("(func)(\\s+)([a-zA-Z_]\\w*)", action: .byGroups([.keyword.child("Declaration"), .whitespace, .name.child("Function")]))),
-                .rule(Rule("(var|let)(\\s+)([a-zA-Z_]\\w*)", action: .byGroups([.keyword.child("Declaration"), .whitespace, .name.child("Variable")]))),
+                .rule(Rule("(class|enum|extension|struct|protocol)(\\s+)(" + identPattern + ")", action: .byGroups([.keyword.child("Declaration"), .whitespace, .name.child("Class")]))),
+                .rule(Rule("(func)(\\s+)(" + identPattern + ")", action: .byGroups([.keyword.child("Declaration"), .whitespace, .name.child("Function")]))),
+                .rule(Rule("(var|let)(\\s+)(" + identPattern + ")", action: .byGroups([.keyword.child("Declaration"), .whitespace, .name.child("Variable")]))),
                 .rule(Rule(declPattern, action: .token(.keyword.child("Declaration"))))
             ],
 
             "comment": [
-                .rule(Rule(":param: [a-zA-Z_]\\w*|:returns?:|(FIXME|MARK|TODO):", action: .token(.comment.child("Special"))))
+                .rule(Rule(":param: " + identPattern + "|:returns?:|(FIXME|MARK|TODO):", action: .token(.comment.child("Special"))))
             ],
 
             "comment-single": [
@@ -184,14 +188,14 @@ public final class SwiftLexer: RegexLexer {
 
             "module": [
                 .rule(Rule("\\n", action: .token(.whitespace), newState: .ops([.pop]))),
-                .rule(Rule("[a-zA-Z_]\\w*", action: .token(.name.child("Class")))),
+                .rule(Rule(identPattern, action: .token(.name.child("Class")))),
                 .include("root")
             ],
 
             "preproc": [
                 .rule(Rule("\\n", action: .token(.whitespace), newState: .ops([.pop]))),
                 .include("keywords"),
-                .rule(Rule("[A-Za-z]\\w*", action: .token(.comment.child("Preproc")))),
+                .rule(Rule(identPattern, action: .token(.comment.child("Preproc")))),
                 .include("root")
             ],
 
