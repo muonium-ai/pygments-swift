@@ -18,6 +18,8 @@ def main() -> int:
             from pygments.lexers.objective import SwiftLexer as SelectedLexer
         elif lexer_name in {"json", "json-object", "jsonlexer"}:
             from pygments.lexers.data import JsonLexer as SelectedLexer
+        elif lexer_name in {"jsonld", "json-ld"}:
+            from pygments.lexers.data import JsonLdLexer as SelectedLexer
         else:
             print(json.dumps({"error": f"Unsupported Pygments lexer: {lexer_name}"}, ensure_ascii=False))
             return 2

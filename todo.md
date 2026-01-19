@@ -65,6 +65,8 @@ Last updated: 2026-01-19
 - [x] `JsonLexer` ported from Python Pygments (`pygments.lexers.data.JsonLexer`)
   - [x] Supports object-key reclassification (`String.Double` → `Name.Tag` before `:`)
   - [x] Supports JS-style comments like Pygments (`//`, `/* ... */`)
+- [x] `JsonLdLexer` ported from Python Pygments (`pygments.lexers.data.JsonLdLexer`)
+  - [x] Retokenizes JSON-LD keywords (`"@context"`, `"@id"`, etc.) as `Name.Decorator`
 
 ### Parity testing vs Python Pygments
 - [x] Python reference runner script emits JSON tokens (from in-repo `pygments-master`)
@@ -72,6 +74,7 @@ Last updated: 2026-01-19
 - [x] Strict parity test for an ASCII sample (type/value/start)
 - [x] Unicode parity coverage via `startScalar` comparisons
 - [x] Python parity supports selecting lexer via `PYGMENTS_LEXER` (swift/json)
+- [x] Python parity supports `PYGMENTS_LEXER=jsonld`
 
 ---
 

@@ -199,6 +199,40 @@ final class SwiftLexerParityTests: XCTestCase {
         }
     }
 
+    func testJsonLdParityWithPythonPygmentsOnAsciiSample() throws {
+        let input = """
+        {
+          "@context": {"name": "http://schema.org/name"},
+          "@id": "http://example.com",
+          "name": "Alice"
+        }
+        """
+
+        guard let python = findPython() else {
+            throw XCTSkip("python3 not found; skipping Pygments parity test")
+        }
+
+        let pyTokens = try runPythonReference(python: python, input: input, lexerName: "jsonld")
+        let lexer = JsonLdLexer()
+        let swiftTokens = lexer.getTokens(input)
+
+        let preprocessed = lexer.preprocess(input)
+        XCTAssertEqual(pyTokens.map { $0.value }.joined(), preprocessed)
+        XCTAssertEqual(swiftTokens.map { $0.value }.joined(), preprocessed)
+
+        let pyPairs = pyTokens.map { ($0.type, $0.value) }
+        let swiftPairs = swiftTokens.map { ($0.type.description, $0.value) }
+        XCTAssertEqual(pyPairs.count, swiftPairs.count, "Token stream lengths differ")
+        for idx in 0..<min(pyPairs.count, swiftPairs.count) {
+            let (pyType, pyValue) = pyPairs[idx]
+            let (swType, swValue) = swiftPairs[idx]
+            if pyType != swType || pyValue != swValue {
+                XCTFail("Mismatch at #\\(idx): python=(\\(pyType), \\(pyValue.debugDescription)) swift=(\\(swType), \\(swValue.debugDescription))")
+                return
+            }
+        }
+    }
+
     private func normalizeType(_ s: String) -> String {
         // Collapse subtypes to their top-level families.
         // Example: Token.Name.Builtin -> Token.Name
