@@ -13,9 +13,49 @@ struct RenderOptions {
 }
 
 enum CodeRender {
+    private struct TextStats {
+        let lineCount: Int
+        let maxLineCharacters: Int
+
+        static func from(_ attributed: NSAttributedString) -> TextStats {
+            let s = attributed.string
+            if s.isEmpty {
+                return TextStats(lineCount: 1, maxLineCharacters: 0)
+            }
+            var lines = s.split(separator: "\n", omittingEmptySubsequences: false)
+            if lines.isEmpty { lines = [""] }
+            var maxChars = 0
+            for line in lines {
+                maxChars = max(maxChars, line.count)
+            }
+            return TextStats(lineCount: max(1, lines.count), maxLineCharacters: maxChars)
+        }
+    }
+
+    private static func estimateWidth(attributed: NSAttributedString, padding: CGFloat) -> CGFloat {
+        let stats = TextStats.from(attributed)
+
+        // Prefer the actual font if present; otherwise fall back to a monospaced guess.
+        let font = (attributed.attribute(.font, at: 0, effectiveRange: nil) as? NSFont)
+            ?? NSFont.monospacedSystemFont(ofSize: 13, weight: .regular)
+
+        // For monospaced fonts, using a single-glyph width is a decent estimate.
+        let glyphWidth = ("M" as NSString).size(withAttributes: [.font: font]).width
+        // Add a small safety margin so we don't accidentally wrap due to rounding.
+        let contentWidth = ceil(CGFloat(stats.maxLineCharacters) * glyphWidth + glyphWidth * 2)
+        return max(1, contentWidth + padding * 2)
+    }
+
     static func makeTextView(attributed: NSAttributedString, options: RenderOptions) -> NSTextView {
-        let containerSize = NSSize(width: options.width.map { max(1, $0 - options.padding * 2) } ?? .greatestFiniteMagnitude,
-                                  height: .greatestFiniteMagnitude)
+        let initialWidth: CGFloat = {
+            if let w = options.width { return w }
+            return estimateWidth(attributed: attributed, padding: options.padding)
+        }()
+
+        let containerSize = NSSize(
+            width: max(1, initialWidth - options.padding * 2),
+            height: .greatestFiniteMagnitude
+        )
 
         let textStorage = NSTextStorage(attributedString: attributed)
         let layoutManager = NSLayoutManager()
@@ -36,25 +76,37 @@ enum CodeRender {
         textView.isVerticallyResizable = true
         textView.isHorizontallyResizable = false
 
-        // Wrap to width (default). If width is nil, allow the layout to be as wide as it needs.
-        if options.width == nil {
-            textView.isHorizontallyResizable = true
-            textView.textContainer?.widthTracksTextView = false
-            textView.textContainer?.containerSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
-        } else {
-            textView.textContainer?.widthTracksTextView = true
-        }
+        // IMPORTANT: keep the container width explicit. Tracking the textView width can be
+        // problematic before the view has its final frame, and it can lead to incorrect
+        // layout caching (PDF reflows later; PNG often doesn't).
+        textView.textContainer?.widthTracksTextView = false
+        textView.textContainer?.containerSize = containerSize
 
-        // Force layout so we can measure.
+        // Give the view a width up-front so layout happens against the right constraint.
+        textView.frame = NSRect(x: 0, y: 0, width: initialWidth, height: 1)
+
+        // First layout pass (measuring).
         layoutManager.ensureLayout(for: textContainer)
-        let used = layoutManager.usedRect(for: textContainer)
+        var used = layoutManager.usedRect(for: textContainer)
 
-        let finalWidth: CGFloat
-        if let w = options.width {
-            finalWidth = w
-        } else {
-            finalWidth = ceil(used.width + options.padding * 2)
-        }
+        // Final width:
+        // - If the user requested a width, honor it.
+        // - Otherwise, use our estimate but also expand if the laid-out text is wider.
+        let finalWidth: CGFloat = {
+            if let w = options.width { return w }
+            return max(initialWidth, ceil(used.width + options.padding * 2))
+        }()
+
+        // Update container width if we changed finalWidth.
+        textView.textContainer?.containerSize = NSSize(
+            width: max(1, finalWidth - options.padding * 2),
+            height: .greatestFiniteMagnitude
+        )
+
+        // Second layout pass (finalizing) so PNG drawing uses the correct cached layout.
+        layoutManager.invalidateLayout(forCharacterRange: NSRange(location: 0, length: textStorage.length), actualCharacterRange: nil)
+        layoutManager.ensureLayout(for: textContainer)
+        used = layoutManager.usedRect(for: textContainer)
 
         let finalHeight = ceil(used.height + options.padding * 2)
         textView.frame = NSRect(x: 0, y: 0, width: finalWidth, height: finalHeight)
@@ -68,6 +120,7 @@ enum CodeRender {
 
     static func renderPNG(attributed: NSAttributedString, options: RenderOptions, scale: CGFloat = 2.0) throws -> Data {
         let view = makeTextView(attributed: attributed, options: options)
+        view.wantsLayer = true
 
         let bounds = view.bounds
         let pixelSize = NSSize(width: bounds.width * scale, height: bounds.height * scale)
@@ -89,19 +142,21 @@ enum CodeRender {
 
         rep.size = NSSize(width: bounds.width, height: bounds.height)
 
-        let ctx = NSGraphicsContext(bitmapImageRep: rep)
+        guard let ctx = NSGraphicsContext(bitmapImageRep: rep) else {
+            throw CLIError("Failed to create graphics context")
+        }
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = ctx
 
         // High quality text rendering.
-        ctx?.imageInterpolation = .high
-        ctx?.shouldAntialias = true
+        ctx.imageInterpolation = .high
+        ctx.shouldAntialias = true
 
         // Apply scaling.
-        NSGraphicsContext.current?.cgContext.scaleBy(x: scale, y: scale)
+        ctx.cgContext.scaleBy(x: scale, y: scale)
         view.layer?.contentsScale = scale
 
-        view.displayIgnoringOpacity(bounds, in: ctx!)
+        view.displayIgnoringOpacity(bounds, in: ctx)
 
         NSGraphicsContext.restoreGraphicsState()
 

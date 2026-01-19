@@ -32,10 +32,17 @@ render-samples: codeviewer-build
 	@mkdir -p out/samples/$(THEME)
 	@for f in sample-code/*; do \
 		if [ -f "$$f" ]; then \
-			./codeviewer/.build/debug/codeviewer "$$f" --outdir out/samples/$(THEME) --theme $(THEME) --width 1100; \
+			if [ -n "$(WIDTH)" ]; then \
+				./codeviewer/.build/debug/codeviewer "$$f" --outdir out/samples/$(THEME) --theme $(THEME) --width $(WIDTH); \
+			else \
+				./codeviewer/.build/debug/codeviewer "$$f" --outdir out/samples/$(THEME) --theme $(THEME); \
+			fi; \
 		fi; \
 	done
 	@echo "Rendered outputs in out/samples/$(THEME)"
 
 # Default theme for render-samples
 THEME ?= github-dark
+
+# Optional fixed width for renders. If empty, images auto-size to content.
+WIDTH ?=
