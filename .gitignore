@@ -1,3 +1,5 @@
 pygments-master/
 .DS_Store
 pygments-swift/.build/
+codeviewer/.build/
+codeviewer/.swiftpm/
