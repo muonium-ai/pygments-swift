@@ -12,7 +12,7 @@ Goal: highlight source code for ~10 widely used programming languages.
 - [x] Python (pragmatic lexer; not yet full Pygments parity)
 - [x] JavaScript (pragmatic lexer; not yet full Pygments parity)
 - [x] Java (pragmatic lexer; not yet full Pygments parity)
-- [ ] TypeScript
+- [x] TypeScript (pragmatic lexer; not yet full Pygments parity)
 - [ ] C
 - [ ] C++
 - [ ] C#
@@ -45,6 +45,7 @@ Non-language formats already supported:
   - [pygments-swift/Sources/PygmentsSwift/Lexers/PythonLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/PythonLexer.swift)
   - [pygments-swift/Sources/PygmentsSwift/Lexers/JavaScriptLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/JavaScriptLexer.swift)
   - [pygments-swift/Sources/PygmentsSwift/Lexers/JavaLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/JavaLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/TypeScriptLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/TypeScriptLexer.swift)
 - Tests:
   - Parity: [pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift](pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift)
   - Engine features: [pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift](pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift)
@@ -96,6 +97,7 @@ Non-language formats already supported:
 - [x] `PythonLexer` (pragmatic)
 - [x] `JavaScriptLexer` (pragmatic)
 - [x] `JavaLexer` (pragmatic)
+- [x] `TypeScriptLexer` (pragmatic)
 
 ### Parity testing vs Python Pygments
 - [x] Python reference runner script emits JSON tokens (from in-repo `pygments-master`)

@@ -7,6 +7,7 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case python
     case javascript
     case java
+    case typescript
 }
 
 public enum LexerRegistry {
@@ -24,6 +25,8 @@ public enum LexerRegistry {
             return JavaScriptLexer(options: options)
         case .java:
             return JavaLexer(options: options)
+        case .typescript:
+            return TypeScriptLexer(options: options)
         }
     }
 
@@ -43,6 +46,8 @@ public enum LexerRegistry {
             return makeLexer(language: .javascript, options: options)
         case "java":
             return makeLexer(language: .java, options: options)
+        case "typescript", "ts":
+            return makeLexer(language: .typescript, options: options)
         default:
             return nil
         }
@@ -64,6 +69,8 @@ public enum LexerRegistry {
             return makeLexer(language: .javascript, options: options)
         case "java":
             return makeLexer(language: .java, options: options)
+        case "ts", "tsx":
+            return makeLexer(language: .typescript, options: options)
         default:
             return nil
         }
