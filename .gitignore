@@ -3,3 +3,4 @@ pygments-master/
 pygments-swift/.build/
 codeviewer/.build/
 codeviewer/.swiftpm/
+out/

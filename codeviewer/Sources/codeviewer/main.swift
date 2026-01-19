@@ -40,9 +40,10 @@ do {
 
     try FileManager.default.createDirectory(at: outDirURL, withIntermediateDirectories: true)
 
-    let baseName = inputURL.deletingPathExtension().lastPathComponent
-    let pdfURL = outDirURL.appendingPathComponent(baseName + ".pdf")
-    let pngURL = outDirURL.appendingPathComponent(baseName + ".png")
+    // Use the full filename to avoid collisions like fibonacci.py vs fibonacci.rs.
+    let outputPrefix = inputURL.lastPathComponent
+    let pdfURL = outDirURL.appendingPathComponent(outputPrefix + ".pdf")
+    let pngURL = outDirURL.appendingPathComponent(outputPrefix + ".png")
 
     let renderOptions = RenderOptions(width: opts.width.map { CGFloat($0) }, padding: 18, background: theme.background)
 

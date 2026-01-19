@@ -1,0 +1,14 @@
+{
+  "@context": {
+    "name": "http://schema.org/name",
+    "n": "http://schema.org/Integer",
+    "sequence": {
+      "@id": "http://schema.org/ItemList",
+      "@container": "@list"
+    }
+  },
+  "@type": "ItemList",
+  "name": "fibonacci",
+  "n": 12,
+  "sequence": [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+}
