@@ -52,6 +52,52 @@ final class EngineParityCorpusTests: XCTestCase {
         }
     }
 
+    private final class CustomStackPushLexer: RegexLexer {
+        override var tokenDefs: [String: [TokenRuleDef]] {
+            [
+                "root": [
+                    .rule(Rule("\\n", action: .token(.whitespace))),
+                    .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
+                    .rule(Rule("\\{", action: .token(.punctuation), newState: .ops([.push("inner")]))),
+                    .rule(Rule("a", action: .token(.name))),
+                ],
+                "inner": [
+                    .rule(Rule("\\n", action: .token(.whitespace))),
+                    .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
+                    .rule(Rule("!", action: .token(.punctuation), newState: .ops([.pushCurrent]))),
+                    .rule(Rule("\\}", action: .token(.punctuation), newState: .ops([.pop]))),
+                    .rule(Rule("a", action: .token(.keyword))),
+                ]
+            ]
+        }
+    }
+
+    private final class CustomStackPopNLexer: RegexLexer {
+        override var tokenDefs: [String: [TokenRuleDef]] {
+            [
+                "root": [
+                    .rule(Rule("\\n", action: .token(.whitespace))),
+                    .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
+                    .rule(Rule("\\{", action: .token(.punctuation), newState: .ops([.push("a")]))),
+                    .rule(Rule("a", action: .token(.name))),
+                ],
+                "a": [
+                    .rule(Rule("\\n", action: .token(.whitespace))),
+                    .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
+                    .rule(Rule("\\[", action: .token(.punctuation), newState: .ops([.push("b")]))),
+                    .rule(Rule("a", action: .token(.keyword))),
+                ],
+                "b": [
+                    .rule(Rule("\\n", action: .token(.whitespace))),
+                    .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
+                    .rule(Rule("a", action: .token(.text))),
+                    .rule(Rule("\\]", action: .token(.punctuation), newState: .ops([.popN(2)]))),
+                    .rule(Rule("!", action: .token(.punctuation), newState: .ops([.popN(99)]))),
+                ]
+            ]
+        }
+    }
+
     private struct FixtureManifest: Decodable {
         let name: String
         let lexerName: String
@@ -112,6 +158,10 @@ final class EngineParityCorpusTests: XCTestCase {
             return CustomDefaultPopLexer()
         case "custom_nomatch_newline_reset":
             return CustomNoMatchNewlineResetLexer()
+        case "custom_stack_push":
+            return CustomStackPushLexer()
+        case "custom_stack_popn":
+            return CustomStackPopNLexer()
         default:
             // Keep this strict: adding a new corpus lexer should require wiring it here.
             preconditionFailure("Unknown swiftLexer key: \(key)")

@@ -66,6 +66,55 @@ def main() -> int:
 
             return NoMatchNewlineResetLexer()
 
+        if key == "stack_push":
+            # Exercise '#push' semantics (push current state).
+            # Observable behavior: a single '#pop' should leave us in the pushed state.
+            class StackPushLexer(RegexLexer):
+                tokens = {
+                    "root": [
+                        (r"\n", Text.Whitespace),
+                        (r"[\t\f ]+", Text.Whitespace),
+                        (r"\{", Punctuation, "inner"),
+                        (r"a", Name),
+                    ],
+                    "inner": [
+                        (r"\n", Text.Whitespace),
+                        (r"[\t\f ]+", Text.Whitespace),
+                        (r"!", Punctuation, "#push"),
+                        (r"\}", Punctuation, "#pop"),
+                        (r"a", Keyword),
+                    ],
+                }
+
+            return StackPushLexer()
+
+        if key == "stack_popn":
+            # Exercise '#pop:n' semantics including over-pop behavior.
+            class StackPopNLexer(RegexLexer):
+                tokens = {
+                    "root": [
+                        (r"\n", Text.Whitespace),
+                        (r"[\t\f ]+", Text.Whitespace),
+                        (r"\{", Punctuation, "a"),
+                        (r"a", Name),
+                    ],
+                    "a": [
+                        (r"\n", Text.Whitespace),
+                        (r"[\t\f ]+", Text.Whitespace),
+                        (r"\[", Punctuation, "b"),
+                        (r"a", Keyword),
+                    ],
+                    "b": [
+                        (r"\n", Text.Whitespace),
+                        (r"[\t\f ]+", Text.Whitespace),
+                        (r"a", Text),
+                        (r"\]", Punctuation, "#pop:2"),
+                        (r"!", Punctuation, "#pop:99"),
+                    ],
+                }
+
+            return StackPopNLexer()
+
         raise ValueError(f"unknown custom lexer: {key}")
 
     try:

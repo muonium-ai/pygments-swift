@@ -94,5 +94,21 @@
     "inputResource": "custom_nomatch_newline_reset_1",
     "inputExtension": "txt",
     "compareStartScalar": true
+  },
+  {
+    "name": "custom_stack_push_1",
+    "lexerName": "custom:stack_push",
+    "swiftLexer": "custom_stack_push",
+    "inputResource": "custom_stack_push_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "custom_stack_popn_1",
+    "lexerName": "custom:stack_popn",
+    "swiftLexer": "custom_stack_popn",
+    "inputResource": "custom_stack_popn_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
   }
 ]
