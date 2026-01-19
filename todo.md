@@ -1,8 +1,27 @@
 # Pygments → Swift Port Progress (TODO)
 
-Last updated: 2026-01-19
+Last updated: 2026-01-20
 
 ## ✅ Implemented (pygments-swift)
+
+## 🎯 Top-10 Language Support (tracker)
+
+Goal: highlight source code for ~10 widely used programming languages.
+
+- [x] Swift (ported from Pygments SwiftLexer + Swift-only Unicode identifiers)
+- [x] Python (pragmatic lexer; not yet full Pygments parity)
+- [x] JavaScript (pragmatic lexer; not yet full Pygments parity)
+- [x] Java (pragmatic lexer; not yet full Pygments parity)
+- [ ] TypeScript
+- [ ] C
+- [ ] C++
+- [ ] C#
+- [ ] Go
+- [ ] Rust
+
+Non-language formats already supported:
+- [x] JSON
+- [x] JSON-LD
 
 ## 🔗 Key Files (jump points)
 
@@ -16,9 +35,16 @@ Last updated: 2026-01-19
 - Regex helpers:
   - [pygments-swift/Sources/PygmentsSwift/RegexOpt.swift](pygments-swift/Sources/PygmentsSwift/RegexOpt.swift)
   - [pygments-swift/Sources/PygmentsSwift/RegexHelpers.swift](pygments-swift/Sources/PygmentsSwift/RegexHelpers.swift)
+- Lexer registry:
+  - [pygments-swift/Sources/PygmentsSwift/LexerRegistry.swift](pygments-swift/Sources/PygmentsSwift/LexerRegistry.swift)
 - Lexers:
   - [pygments-swift/Sources/PygmentsSwift/Lexers/SwiftLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/SwiftLexer.swift)
   - [pygments-swift/Sources/PygmentsSwift/Lexers/IniLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/IniLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/JsonLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/JsonLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/JsonLdLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/JsonLdLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/PythonLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/PythonLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/JavaScriptLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/JavaScriptLexer.swift)
+  - [pygments-swift/Sources/PygmentsSwift/Lexers/JavaLexer.swift](pygments-swift/Sources/PygmentsSwift/Lexers/JavaLexer.swift)
 - Tests:
   - Parity: [pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift](pygments-swift/Tests/PygmentsSwiftTests/SwiftLexerParityTests.swift)
   - Engine features: [pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift](pygments-swift/Tests/PygmentsSwiftTests/RegexLexerFeatureTests.swift)
@@ -67,6 +93,9 @@ Last updated: 2026-01-19
   - [x] Supports JS-style comments like Pygments (`//`, `/* ... */`)
 - [x] `JsonLdLexer` ported from Python Pygments (`pygments.lexers.data.JsonLdLexer`)
   - [x] Retokenizes JSON-LD keywords (`"@context"`, `"@id"`, etc.) as `Name.Decorator`
+- [x] `PythonLexer` (pragmatic)
+- [x] `JavaScriptLexer` (pragmatic)
+- [x] `JavaLexer` (pragmatic)
 
 ### Parity testing vs Python Pygments
 - [x] Python reference runner script emits JSON tokens (from in-repo `pygments-master`)
@@ -79,6 +108,13 @@ Last updated: 2026-01-19
 ---
 
 ## ⏳ Pending / Next (recommended order)
+
+### Top-10 lexers to add next
+- [ ] Add `TypeScriptLexer` (likely build on JS lexer)
+- [ ] Add `CLexer` and `CppLexer`
+- [ ] Add `CSharpLexer`
+- [ ] Add `GoLexer`
+- [ ] Add `RustLexer`
 
 ### Expand parity corpus
 - [ ] Add more Swift snippets covering:
