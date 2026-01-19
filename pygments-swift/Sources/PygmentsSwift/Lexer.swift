@@ -18,11 +18,12 @@ public protocol Lexer {
     func getTokens(_ text: String) -> [Token]
 }
 
-open class LexerBase: Lexer {
+open class LexerBase: NSObject, Lexer {
     public let options: LexerOptions
 
     public required init(options: LexerOptions = .init()) {
         self.options = options
+        super.init()
     }
 
     open func getTokens(_ text: String) -> [Token] {

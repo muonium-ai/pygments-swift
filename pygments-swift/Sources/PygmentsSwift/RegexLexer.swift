@@ -1,4 +1,5 @@
 import Foundation
+import ObjectiveC.runtime
 
 public struct LexerContext: Sendable {
     public var pos: Int
@@ -43,6 +44,10 @@ public enum TokenRuleDef: Sendable {
     /// A default transition rule (zero-length match) for a state.
     /// Mirrors Pygments' `default(...)`.
     case `default`(StateTransition)
+
+    /// Insert rules from the superclass' state definition at this point.
+    /// Mirrors Pygments' `inherit` marker.
+    case inherit
 }
 
 public struct Rule: Sendable {
@@ -266,6 +271,9 @@ open class RegexLexer: LexerBase {
         let defs = tokenDefs
         guard !defs.isEmpty else { return [:] }
 
+        // Compile parent first (if any).
+        let parentCompiled = compileParentTokenDefsIfAny()
+
         var compiled: [String: [Rule]] = [:]
         var visiting: Set<String> = []
 
@@ -277,17 +285,26 @@ open class RegexLexer: LexerBase {
             }
             visiting.insert(state)
 
+            let parentRules = parentCompiled[state] ?? []
             var rules: [Rule] = []
-            for def in defs[state] ?? [] {
-                switch def {
-                case .include(let other):
-                    rules.append(contentsOf: compileState(other))
-                case .rule(let rule):
-                    rules.append(rule)
-                case .default(let transition):
-                    // Zero-length match; relies on state transition to make progress.
-                    rules.append(Rule("", action: nil, newState: transition))
+
+            if let localDefs = defs[state] {
+                for def in localDefs {
+                    switch def {
+                    case .include(let other):
+                        rules.append(contentsOf: compileState(other))
+                    case .inherit:
+                        rules.append(contentsOf: parentRules)
+                    case .rule(let rule):
+                        rules.append(rule)
+                    case .default(let transition):
+                        // Zero-length match; relies on state transition to make progress.
+                        rules.append(Rule("", action: nil, newState: transition))
+                    }
                 }
+            } else {
+                // If the subclass doesn't define this state, inherit it fully.
+                rules.append(contentsOf: parentRules)
             }
 
             visiting.remove(state)
@@ -295,10 +312,22 @@ open class RegexLexer: LexerBase {
             return rules
         }
 
-        // Compile all known states.
-        for state in defs.keys {
+        // Compile all known states (local and inherited).
+        for state in Set(defs.keys).union(parentCompiled.keys) {
             _ = compileState(state)
         }
         return compiled
+    }
+
+    private func compileParentTokenDefsIfAny() -> [String: [Rule]] {
+        guard let superCls = class_getSuperclass(type(of: self)) as? RegexLexer.Type else {
+            return [:]
+        }
+        let parent = superCls.init(options: self.options)
+        // If parent doesn't use tokenDefs, we don't try to synthesize them.
+        if parent.tokenDefs.isEmpty {
+            return [:]
+        }
+        return parent.compileTokenDefsIfNeeded()
     }
 }

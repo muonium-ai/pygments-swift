@@ -82,4 +82,36 @@ final class RegexLexerFeatureTests: XCTestCase {
         XCTAssertTrue(tokens.contains(where: { $0.type.isSubtype(of: .keyword) && $0.value == "b" }))
         XCTAssertFalse(tokens.contains(where: { $0.type == .error }))
     }
+
+    func testInheritMarkerSplicesSuperclassRules() {
+        class BaseLexer: RegexLexer {
+            override var tokenDefs: [String: [TokenRuleDef]] {
+                [
+                    "root": [
+                        .rule(Rule("a", action: .token(.name)))
+                    ]
+                ]
+            }
+        }
+
+        final class ChildLexer: BaseLexer {
+            override var tokenDefs: [String: [TokenRuleDef]] {
+                [
+                    "root": [
+                        .rule(Rule("b", action: .token(.keyword))),
+                        .inherit,
+                        .rule(Rule("c", action: .token(.string)))
+                    ]
+                ]
+            }
+        }
+
+        let lexer = ChildLexer()
+        let tokens = lexer.getTokens("bac")
+
+        // Ensure we got b (child), a (inherited), c (child).
+        let nonWs = tokens.filter { !$0.type.isSubtype(of: .whitespace) && !$0.type.isSubtype(of: .text) }
+        XCTAssertEqual(nonWs.map { $0.value }.joined(), "bac")
+        XCTAssertEqual(nonWs.map { $0.type.description }, [TokenType.keyword.description, TokenType.name.description, TokenType.string.description])
+    }
 }
