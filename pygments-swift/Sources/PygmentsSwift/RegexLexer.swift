@@ -130,6 +130,20 @@ open class RegexLexer: LexerBase {
         var dynamicTokens: [String: [Rule]] = [:]
         var tmpCounter = 0
 
+        func delegationStack(_ override: [String]?) -> [String] {
+            // Mirrors Pygments `using(..., state=...)` behavior:
+            // - nil => start at root
+            // - list/tuple => explicit stack
+            // - single string => ('root', string)
+            guard let override, !override.isEmpty else {
+                return ["root"]
+            }
+            if override.count == 1, override.first != "root" {
+                return ["root"] + override
+            }
+            return override
+        }
+
         func currentRules() -> [Rule] {
             let state = ctx.stack.last ?? "root"
             if !compiledTokens.isEmpty {
@@ -176,7 +190,7 @@ open class RegexLexer: LexerBase {
                     case .using(let otherType, let stackOverride):
                         let sub = nsText.substring(with: m.range)
                         let other = otherType.init(options: self.options)
-                        let subTokens = other.getTokensUnprocessedRaw(sub, stack: stackOverride ?? ["root"])
+                        let subTokens = other.getTokensUnprocessedRaw(sub, stack: delegationStack(stackOverride))
                         let matchStartScalar = scalarIndex(forUTF16Offset: m.range.location)
                         for t in subTokens {
                             out.append(Token(start: t.start + m.range.location, startScalar: t.startScalar + matchStartScalar, type: t.type, value: t.value))
@@ -184,9 +198,10 @@ open class RegexLexer: LexerBase {
 
                     case .usingThis(let stackOverride):
                         let sub = nsText.substring(with: m.range)
-                        let sameType = type(of: self)
-                        let other = sameType.init(options: self.options)
-                        let subTokens = other.getTokensUnprocessedRaw(sub, stack: stackOverride ?? ["root"])
+                        // Pygments `using(this)` reuses the current lexer instance unless
+                        // keyword args require instantiation. We don't have kwargs here, so
+                        // always delegate to `self`.
+                        let subTokens = self.getTokensUnprocessedRaw(sub, stack: delegationStack(stackOverride))
                         let matchStartScalar = scalarIndex(forUTF16Offset: m.range.location)
                         for t in subTokens {
                             out.append(Token(start: t.start + m.range.location, startScalar: t.startScalar + matchStartScalar, type: t.type, value: t.value))

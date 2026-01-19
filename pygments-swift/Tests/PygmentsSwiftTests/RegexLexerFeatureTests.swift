@@ -32,6 +32,39 @@ final class RegexLexerFeatureTests: XCTestCase {
         XCTAssertTrue(tokens.contains(where: { $0.type.isSubtype(of: .number) && $0.value == "34" }))
     }
 
+    func testUsingThisSingleStateIsRootPrefixed() {
+        final class UsingThisStackLexer: RegexLexer {
+            override var tokenDefs: [String: [TokenRuleDef]] {
+                [
+                    "root": [
+                        // Delegate whole input to `inner`.
+                        // Corner case: in Pygments, `state="inner"` implies stack (root, inner).
+                        .rule(Rule("\\{\\{x\\}\\}y", action: .usingThis(stack: ["inner"]))),
+                        .rule(Rule("y", action: .token(.keyword))),
+                        .rule(Rule("\\n", action: .token(.whitespace))),
+                    ],
+                    "inner": [
+                        .rule(Rule("\\{\\{", action: .token(.punctuation))),
+                        .rule(Rule("x", action: .token(.name))),
+                        // Pop back to root before consuming trailing 'y'.
+                        .rule(Rule("\\}\\}", action: .token(.punctuation), newState: .ops([.pop]))),
+                        .rule(Rule("y", action: .token(.name))),
+                        .rule(Rule("\\n", action: .token(.whitespace))),
+                    ]
+                ]
+            }
+        }
+
+        let lexer = UsingThisStackLexer()
+        let tokens = lexer.getTokens("{{x}}y")
+
+        // If `usingThis(stack: ["inner"])` does NOT implicitly prefix root,
+        // the pop in inner would be a no-op (stack count == 1) and 'y' would be lexed as Name.
+        XCTAssertTrue(tokens.contains(where: { $0.type == .keyword && $0.value == "y" }))
+        XCTAssertFalse(tokens.contains(where: { $0.type == .name && $0.value == "y" }))
+        XCTAssertFalse(tokens.contains(where: { $0.type == .error }))
+    }
+
     func testDefaultTransitionPopsStateWithoutConsuming() {
         final class DefaultPopLexer: RegexLexer {
             override var tokenDefs: [String: [TokenRuleDef]] {
