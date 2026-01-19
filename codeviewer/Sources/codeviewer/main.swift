@@ -33,7 +33,7 @@ do {
         return FallbackTextLexer()
     }()
 
-    let theme = try CodeTheme(name: opts.theme)
+    let theme = try CodeTheme.named(opts.theme)
     let font = NSFont.monospacedSystemFont(ofSize: CGFloat(opts.fontSize), weight: .regular)
 
     let attributed = CodeHighlighter.highlight(text: source, lexer: lexer, theme: theme, font: font)
@@ -45,7 +45,12 @@ do {
     let pdfURL = outDirURL.appendingPathComponent(outputPrefix + ".pdf")
     let pngURL = outDirURL.appendingPathComponent(outputPrefix + ".png")
 
-    let renderOptions = RenderOptions(width: opts.width.map { CGFloat($0) }, padding: 18, background: theme.background)
+    let renderOptions = RenderOptions(
+        width: opts.width.map { CGFloat($0) },
+        padding: 18,
+        background: theme.background,
+        foreground: theme.defaultForeground
+    )
 
     let pdfData = CodeRender.renderPDF(attributed: attributed, options: renderOptions)
     try pdfData.write(to: pdfURL, options: .atomic)

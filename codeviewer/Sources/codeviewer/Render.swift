@@ -5,9 +5,10 @@ struct RenderOptions {
     var width: CGFloat?
     var padding: CGFloat
     var background: NSColor
+    var foreground: NSColor
 
     static var `default`: RenderOptions {
-        RenderOptions(width: 900, padding: 18, background: NSColor(calibratedWhite: 1, alpha: 1))
+        RenderOptions(width: 900, padding: 18, background: NSColor(calibratedWhite: 1, alpha: 1), foreground: NSColor(calibratedWhite: 0.1, alpha: 1))
     }
 }
 
@@ -30,7 +31,8 @@ enum CodeRender {
         textView.isEditable = false
         textView.isSelectable = false
         textView.textContainerInset = NSSize(width: options.padding, height: options.padding)
-        textView.textColor = NSColor.textColor
+        // Base color (attributed runs still override this).
+        textView.textColor = options.foreground
         textView.isVerticallyResizable = true
         textView.isHorizontallyResizable = false
 

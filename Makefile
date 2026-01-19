@@ -24,10 +24,13 @@ codeviewer-build:
 	swift build --package-path "$(CODEVIEWER_PACKAGE_DIR)"
 
 render-samples: codeviewer-build
-	@mkdir -p out/samples
+	@mkdir -p out/samples/$(THEME)
 	@for f in sample-code/*; do \
 		if [ -f "$$f" ]; then \
-			./codeviewer/.build/debug/codeviewer "$$f" --outdir out/samples --theme dark --width 1100; \
+			./codeviewer/.build/debug/codeviewer "$$f" --outdir out/samples/$(THEME) --theme $(THEME) --width 1100; \
 		fi; \
 	done
-	@echo "Rendered outputs in out/samples"
+	@echo "Rendered outputs in out/samples/$(THEME)"
+
+# Default theme for render-samples
+THEME ?= github-dark

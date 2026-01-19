@@ -11,15 +11,17 @@ struct CLIOptions {
     static func usage(program: String) -> String {
         return """
         Usage:
-          \(program) <input-file> [--outdir <dir>] [--lang <name>] [--theme <dark|light>] [--font-size <n>] [--width <n>]
+                    \(program) <input-file> [--outdir <dir>] [--lang <name>] [--theme <name>] [--font-size <n>] [--width <n>]
+                    \(program) --list-themes
 
         Examples:
           \(program) MyFile.swift
-          \(program) MyFile.py --outdir out --theme light
+                    \(program) MyFile.py --outdir out --theme github-light
           \(program) unknown.txt --lang swift
+                    \(program) --list-themes
 
         Notes:
-          - Output files are written as <basename>.pdf and <basename>.png in --outdir (default: current directory)
+                    - Output files are written as <filename>.<ext>.pdf and <filename>.<ext>.png in --outdir (default: current directory)
           - Lexer selection uses filename extension unless --lang is provided
         """
     }
@@ -38,7 +40,7 @@ struct CLIOptions {
         var inputPath: String?
         var outDir = FileManager.default.currentDirectoryPath
         var languageOverride: String?
-        var theme = "dark"
+        var theme = "github-dark"
         var fontSize: Double = 13
         var width: Double?
 
@@ -46,6 +48,8 @@ struct CLIOptions {
             switch a {
             case "-h", "--help":
                 throw CLIHelp(usage(program: program))
+            case "--list-themes":
+                throw CLIHelp(CodeTheme.allNames.joined(separator: "\n"))
             case "--outdir":
                 outDir = try requireValue(a)
             case "--lang":
