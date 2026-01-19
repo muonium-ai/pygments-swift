@@ -12,7 +12,7 @@ build:
 	swift build --package-path "$(SWIFT_PACKAGE_DIR)"
 
 test:
-	swift test --package-path "$(SWIFT_PACKAGE_DIR)"
+	swift test --disable-swift-testing --package-path "$(SWIFT_PACKAGE_DIR)"
 
 clean:
 	swift package clean --package-path "$(SWIFT_PACKAGE_DIR)"
