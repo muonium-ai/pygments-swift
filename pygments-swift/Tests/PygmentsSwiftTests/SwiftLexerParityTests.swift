@@ -160,6 +160,45 @@ final class SwiftLexerParityTests: XCTestCase {
         }
     }
 
+    func testJsonParityWithPythonPygmentsOnAsciiSample() throws {
+        // ASCII-only sample so python indices align with UTF-16 offsets.
+        let input = """
+        {
+          // comment
+          "a": 1,
+          "b": 2.5e+2,
+          "c": true,
+          "d": null,
+          "e": "str\\n\\t\\u1234",
+          "arr": [1, 2, 3]
+        }
+        """
+
+        guard let python = findPython() else {
+            throw XCTSkip("python3 not found; skipping Pygments parity test")
+        }
+
+        let pyTokens = try runPythonReference(python: python, input: input, lexerName: "json")
+        let lexer = JsonLexer()
+        let swiftTokens = lexer.getTokens(input)
+
+        let preprocessed = lexer.preprocess(input)
+        XCTAssertEqual(pyTokens.map { $0.value }.joined(), preprocessed)
+        XCTAssertEqual(swiftTokens.map { $0.value }.joined(), preprocessed)
+
+        let pyPairs = pyTokens.map { ($0.type, $0.value) }
+        let swiftPairs = swiftTokens.map { ($0.type.description, $0.value) }
+        XCTAssertEqual(pyPairs.count, swiftPairs.count, "Token stream lengths differ")
+        for idx in 0..<min(pyPairs.count, swiftPairs.count) {
+            let (pyType, pyValue) = pyPairs[idx]
+            let (swType, swValue) = swiftPairs[idx]
+            if pyType != swType || pyValue != swValue {
+                XCTFail("Mismatch at #\\(idx): python=(\\(pyType), \\(pyValue.debugDescription)) swift=(\\(swType), \\(swValue.debugDescription))")
+                return
+            }
+        }
+    }
+
     private func normalizeType(_ s: String) -> String {
         // Collapse subtypes to their top-level families.
         // Example: Token.Name.Builtin -> Token.Name
@@ -200,7 +239,7 @@ final class SwiftLexerParityTests: XCTestCase {
         return "/usr/bin/python3"
     }
 
-    private func runPythonReference(python: String, input: String) throws -> [RefToken] {
+    private func runPythonReference(python: String, input: String, lexerName: String? = nil) throws -> [RefToken] {
         let testFile = URL(fileURLWithPath: #filePath)
         let testsDir = testFile.deletingLastPathComponent()
         let pkgRoot = testsDir.deletingLastPathComponent().deletingLastPathComponent() // .../pygments-swift
@@ -213,6 +252,9 @@ final class SwiftLexerParityTests: XCTestCase {
         proc.arguments = [script.path]
         proc.environment = ProcessInfo.processInfo.environment
         proc.environment?["PYGMENTS_MASTER"] = master.path
+        if let lexerName, !lexerName.isEmpty {
+            proc.environment?["PYGMENTS_LEXER"] = lexerName
+        }
 
         let stdinPipe = Pipe()
         let stdoutPipe = Pipe()

@@ -11,14 +11,22 @@ def main() -> int:
     if pygments_master:
         sys.path.insert(0, pygments_master)
 
+    lexer_name = (os.environ.get("PYGMENTS_LEXER") or "swift").strip().lower()
+
     try:
-        from pygments.lexers.objective import SwiftLexer
+        if lexer_name in {"swift"}:
+            from pygments.lexers.objective import SwiftLexer as SelectedLexer
+        elif lexer_name in {"json", "json-object", "jsonlexer"}:
+            from pygments.lexers.data import JsonLexer as SelectedLexer
+        else:
+            print(json.dumps({"error": f"Unsupported Pygments lexer: {lexer_name}"}, ensure_ascii=False))
+            return 2
     except Exception as e:
-        print(json.dumps({"error": f"Failed to import Pygments SwiftLexer: {e}"}))
+        print(json.dumps({"error": f"Failed to import Pygments lexer ({lexer_name}): {e}"}, ensure_ascii=False))
         return 2
 
     text = sys.stdin.read()
-    lexer = SwiftLexer()
+    lexer = SelectedLexer()
 
     # Match Pygments' normal path (`Lexer.get_tokens()`), which preprocesses
     # the input (newline normalization, ensure trailing newline, etc.).

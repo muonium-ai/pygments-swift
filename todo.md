@@ -62,12 +62,16 @@ Last updated: 2026-01-19
   - [x] Major states implemented (root/keywords/comments/strings/preproc/module/etc.)
   - [x] Expanded builtin patterns to match Pygments lists
   - [x] Unicode-aware identifier matching in Swift port (XID_Start/XID_Continue)
+- [x] `JsonLexer` ported from Python Pygments (`pygments.lexers.data.JsonLexer`)
+  - [x] Supports object-key reclassification (`String.Double` → `Name.Tag` before `:`)
+  - [x] Supports JS-style comments like Pygments (`//`, `/* ... */`)
 
 ### Parity testing vs Python Pygments
 - [x] Python reference runner script emits JSON tokens (from in-repo `pygments-master`)
 - [x] Python reference uses `_preprocess_lexer_input` to match real Pygments behavior
 - [x] Strict parity test for an ASCII sample (type/value/start)
 - [x] Unicode parity coverage via `startScalar` comparisons
+- [x] Python parity supports selecting lexer via `PYGMENTS_LEXER` (swift/json)
 
 ---
 
@@ -86,7 +90,7 @@ Last updated: 2026-01-19
 - [ ] Improve error reporting for no-match situations (diagnostics & debugging helpers)
 
 ### Scope expansion
-- [ ] Port one more “real” lexer to validate engine generality (e.g., JSON, Python, etc.)
+- [x] Port one more “real” lexer to validate engine generality (JSON)
 - [ ] Decide how formatters will be handled in Swift (later milestone)
 
 ---
