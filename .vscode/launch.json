@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:pygments-port}/codeviewer",
+            "name": "Debug codeviewer (codeviewer)",
+            "target": "codeviewer",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug codeviewer (codeviewer)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:pygments-port}/codeviewer",
+            "name": "Release codeviewer (codeviewer)",
+            "target": "codeviewer",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release codeviewer (codeviewer)"
+        }
+    ]
+}
