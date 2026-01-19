@@ -25,6 +25,7 @@ Pragmatic (smoke-test level highlighting for common code):
 - Kotlin, Ruby, PHP
 - Bash/Shell
 - Scala
+- R
 
 ### Build & test
 
