@@ -233,10 +233,17 @@ open class RegexLexer: LexerBase {
             if matched { continue }
 
             // No rule matched at this position.
-            // Emit error token for the single UTF-16 code unit.
+            // Mirror Pygments' RegexLexer behavior:
+            // - if the unmatched character is a newline, reset state to root and emit Whitespace
+            // - otherwise emit Error for the single UTF-16 code unit.
             let r = NSRange(location: ctx.pos, length: 1)
             let value = nsText.substring(with: r)
-            out.append(Token(start: ctx.pos, startScalar: scalarIndex(forUTF16Offset: ctx.pos), type: .error, value: value))
+            if value == "\n" {
+                ctx.stack = ["root"]
+                out.append(Token(start: ctx.pos, startScalar: scalarIndex(forUTF16Offset: ctx.pos), type: .whitespace, value: value))
+            } else {
+                out.append(Token(start: ctx.pos, startScalar: scalarIndex(forUTF16Offset: ctx.pos), type: .error, value: value))
+            }
             ctx.pos += 1
         }
 

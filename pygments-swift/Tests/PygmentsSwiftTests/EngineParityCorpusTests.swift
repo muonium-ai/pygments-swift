@@ -2,6 +2,56 @@ import XCTest
 @testable import PygmentsSwift
 
 final class EngineParityCorpusTests: XCTestCase {
+    // MARK: - Swift-side custom lexers for engine parity
+
+    private final class CustomIncludePrecedenceLexer: RegexLexer {
+        override var tokenDefs: [String: [TokenRuleDef]] {
+            [
+                "root": [
+                    .rule(Rule("\\n", action: .token(.whitespace))),
+                    .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
+                    .include("inc"),
+                    .rule(Rule("x", action: .token(.keyword))),
+                ],
+                "inc": [
+                    .rule(Rule("x", action: .token(.name))),
+                ],
+            ]
+        }
+    }
+
+    private final class CustomDefaultPopLexer: RegexLexer {
+        override var tokenDefs: [String: [TokenRuleDef]] {
+            [
+                "root": [
+                    .rule(Rule("\\n", action: .token(.whitespace))),
+                    .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
+                    .rule(Rule("\\{", action: .token(.punctuation), newState: .ops([.push("inner")]))),
+                    .rule(Rule("[a-zA-Z_]+", action: .token(.name))),
+                ],
+                "inner": [
+                    .default(.ops([.pop]))
+                ],
+            ]
+        }
+    }
+
+    private final class CustomNoMatchNewlineResetLexer: RegexLexer {
+        override var tokenDefs: [String: [TokenRuleDef]] {
+            [
+                "root": [
+                    .rule(Rule("[\\t\\f ]+", action: .token(.whitespace))),
+                    .rule(Rule("\\{", action: .token(.punctuation), newState: .ops([.push("inner")]))),
+                    .rule(Rule("a", action: .token(.name))),
+                ],
+                "inner": [
+                    // Intentionally no rule for "\\n".
+                    .rule(Rule("a", action: .token(.keyword))),
+                ]
+            ]
+        }
+    }
+
     private struct FixtureManifest: Decodable {
         let name: String
         let lexerName: String
@@ -56,6 +106,12 @@ final class EngineParityCorpusTests: XCTestCase {
             return JsonLexer()
         case "jsonld":
             return JsonLdLexer()
+        case "custom_include_precedence":
+            return CustomIncludePrecedenceLexer()
+        case "custom_default_pop":
+            return CustomDefaultPopLexer()
+        case "custom_nomatch_newline_reset":
+            return CustomNoMatchNewlineResetLexer()
         default:
             // Keep this strict: adding a new corpus lexer should require wiring it here.
             preconditionFailure("Unknown swiftLexer key: \(key)")

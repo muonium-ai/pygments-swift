@@ -156,7 +156,7 @@ final class RegexLexerFeatureTests: XCTestCase {
         XCTAssertEqual(nonWs.map { $0.type.description }, [TokenType.keyword.description, TokenType.name.description, TokenType.string.description])
     }
 
-    func testNoMatchNewlineDoesNotResetState() {
+    func testNoMatchNewlineResetsStateToRoot() {
         final class NewlineStateLexer: RegexLexer {
             override var tokenDefs: [String: [TokenRuleDef]] {
                 [
@@ -175,11 +175,11 @@ final class RegexLexerFeatureTests: XCTestCase {
         let lexer = NewlineStateLexer()
         let tokens = lexer.getTokens("{\na")
 
-        // After '{' we are in inner. Newline is unmatched => Error, but state must remain inner.
-        // Therefore the 'a' after the newline should be tokenized by inner as Keyword, not by root as Name.
+        // Mirror Pygments RegexLexer behavior: unmatched newline yields Whitespace and resets to root.
+        // Therefore the 'a' after the newline should be tokenized by root as Name (not by inner as Keyword).
         XCTAssertTrue(tokens.contains(where: { $0.type == .punctuation && $0.value == "{" }))
-        XCTAssertTrue(tokens.contains(where: { $0.type == .error && $0.value == "\n" }))
-        XCTAssertTrue(tokens.contains(where: { $0.type == .keyword && $0.value == "a" }))
-        XCTAssertFalse(tokens.contains(where: { $0.type == .name && $0.value == "a" }))
+        XCTAssertTrue(tokens.contains(where: { $0.type == .whitespace && $0.value == "\n" }))
+        XCTAssertTrue(tokens.contains(where: { $0.type == .name && $0.value == "a" }))
+        XCTAssertFalse(tokens.contains(where: { $0.type == .keyword && $0.value == "a" }))
     }
 }

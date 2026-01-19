@@ -70,5 +70,29 @@
     "inputResource": "jsonld_context_array_1",
     "inputExtension": "txt",
     "compareStartScalar": true
+  },
+  {
+    "name": "custom_include_precedence_1",
+    "lexerName": "custom:include_precedence",
+    "swiftLexer": "custom_include_precedence",
+    "inputResource": "custom_include_precedence_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "custom_default_pop_1",
+    "lexerName": "custom:default_pop",
+    "swiftLexer": "custom_default_pop",
+    "inputResource": "custom_default_pop_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
+  },
+  {
+    "name": "custom_nomatch_newline_reset_1",
+    "lexerName": "custom:nomatch_newline_reset",
+    "swiftLexer": "custom_nomatch_newline_reset",
+    "inputResource": "custom_nomatch_newline_reset_1",
+    "inputExtension": "txt",
+    "compareStartScalar": true
   }
 ]
