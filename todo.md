@@ -61,6 +61,7 @@ Last updated: 2026-01-19
 - [x] `SwiftLexer` ported from Python Pygments (`pygments.lexers.objective.SwiftLexer`)
   - [x] Major states implemented (root/keywords/comments/strings/preproc/module/etc.)
   - [x] Expanded builtin patterns to match Pygments lists
+  - [x] Unicode-aware identifier matching in Swift port (XID_Start/XID_Continue)
 
 ### Parity testing vs Python Pygments
 - [x] Python reference runner script emits JSON tokens (from in-repo `pygments-master`)
@@ -71,10 +72,6 @@ Last updated: 2026-01-19
 ---
 
 ## ⏳ Pending / Next (recommended order)
-
-### Unicode identifiers (highest value next)
-- [ ] Improve Swift identifier regex to support Unicode identifiers (currently ASCII-ish)
-- [ ] Add a parity test that includes Unicode identifiers and verifies strict parity
 
 ### Expand parity corpus
 - [ ] Add more Swift snippets covering:

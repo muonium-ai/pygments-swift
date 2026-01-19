@@ -69,6 +69,60 @@ final class SwiftLexerParityTests: XCTestCase {
         }
     }
 
+    func testParityWithPythonPygmentsOnAsciiSampleMoreStates() throws {
+        // ASCII-only input: keeps Python indices aligned with UTF-16 offsets.
+        // This sample tries to touch more SwiftLexer states without relying on
+        // version-specific builtins.
+        let input = """
+        #if available(iOS 13, *)
+        import Foundation
+        #else
+        import Foundation
+        #endif
+
+        // MARK: parity
+        /* TODO: make sure nested comments work
+           outer /* inner */ done
+        */
+
+        struct Foo {
+            let x: Int = 42
+            var y: Int = 0b1010_0011
+            let z: Int = 0xFF_EE
+
+            func bar() -> String {
+                let s = "escapes: \\n \\t \\u{1234} value=\\(x)"
+                return s
+            }
+        }
+        """
+
+        guard let python = findPython() else {
+            throw XCTSkip("python3 not found; skipping Pygments parity test")
+        }
+
+        let pyTokens = try runPythonReference(python: python, input: input)
+        let lexer = SwiftLexer()
+        let swiftTokens = lexer.getTokens(input)
+
+        let preprocessed = lexer.preprocess(input)
+        XCTAssertEqual(pyTokens.map { $0.value }.joined(), preprocessed)
+        XCTAssertEqual(swiftTokens.map { $0.value }.joined(), preprocessed)
+
+        // Keep parity strict for ASCII samples.
+        let pyPairs = pyTokens.map { ($0.type, $0.value) }
+        let swiftPairs = swiftTokens.map { ($0.type.description, $0.value) }
+        XCTAssertEqual(pyPairs.count, swiftPairs.count, "Token stream lengths differ")
+        for idx in 0..<min(pyPairs.count, swiftPairs.count) {
+            let (pyType, pyValue) = pyPairs[idx]
+            let (swType, swValue) = swiftPairs[idx]
+            if pyType != swType || pyValue != swValue {
+                XCTFail("Mismatch at #\\(idx): python=(\\(pyType), \\(pyValue.debugDescription)) swift=(\\(swType), \\(swValue.debugDescription))")
+                return
+            }
+        }
+    }
+
     func testParityStartScalarOnUnicodeSample() throws {
         // Includes non-ASCII identifiers and strings.
         let input = """
