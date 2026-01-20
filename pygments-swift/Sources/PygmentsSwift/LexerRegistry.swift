@@ -19,6 +19,16 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case shell
     case scala
     case r
+    case markdown
+    case yaml
+    case toml
+    case html
+    case xml
+    case css
+    case sql
+    case diff
+    case dockerfile
+    case makefile
 }
 
 public enum LexerRegistry {
@@ -60,6 +70,26 @@ public enum LexerRegistry {
             return ScalaLexer(options: options)
         case .r:
             return RLexer(options: options)
+        case .markdown:
+            return MarkdownLexer(options: options)
+        case .yaml:
+            return YamlLexer(options: options)
+        case .toml:
+            return TomlLexer(options: options)
+        case .html:
+            return HtmlLexer(options: options)
+        case .xml:
+            return XmlLexer(options: options)
+        case .css:
+            return CssLexer(options: options)
+        case .sql:
+            return SqlLexer(options: options)
+        case .diff:
+            return DiffLexer(options: options)
+        case .dockerfile:
+            return DockerfileLexer(options: options)
+        case .makefile:
+            return MakefileLexer(options: options)
         }
     }
 
@@ -103,6 +133,26 @@ public enum LexerRegistry {
             return makeLexer(language: .scala, options: options)
         case "r":
             return makeLexer(language: .r, options: options)
+        case "markdown", "md":
+            return makeLexer(language: .markdown, options: options)
+        case "yaml", "yml":
+            return makeLexer(language: .yaml, options: options)
+        case "toml":
+            return makeLexer(language: .toml, options: options)
+        case "html", "xhtml":
+            return makeLexer(language: .html, options: options)
+        case "xml":
+            return makeLexer(language: .xml, options: options)
+        case "css":
+            return makeLexer(language: .css, options: options)
+        case "sql":
+            return makeLexer(language: .sql, options: options)
+        case "diff", "patch":
+            return makeLexer(language: .diff, options: options)
+        case "dockerfile", "docker":
+            return makeLexer(language: .dockerfile, options: options)
+        case "make", "makefile", "mk":
+            return makeLexer(language: .makefile, options: options)
         default:
             return nil
         }
@@ -110,6 +160,16 @@ public enum LexerRegistry {
 
     /// Returns a lexer for a filename extension (e.g. ".py", "js", "java").
     public static func makeLexer(filename: String, options: LexerOptions = .init()) -> Lexer? {
+        let base = (filename as NSString).lastPathComponent.lowercased()
+        switch base {
+        case "dockerfile":
+            return makeLexer(language: .dockerfile, options: options)
+        case "makefile":
+            return makeLexer(language: .makefile, options: options)
+        default:
+            break
+        }
+
         let ext = (filename as NSString).pathExtension.lowercased()
         switch ext {
         case "swift":
@@ -148,6 +208,22 @@ public enum LexerRegistry {
             return makeLexer(language: .scala, options: options)
         case "r", "rmd", "rnw":
             return makeLexer(language: .r, options: options)
+        case "md", "markdown", "mdown", "mkd":
+            return makeLexer(language: .markdown, options: options)
+        case "yaml", "yml":
+            return makeLexer(language: .yaml, options: options)
+        case "toml":
+            return makeLexer(language: .toml, options: options)
+        case "html", "htm", "xhtml":
+            return makeLexer(language: .html, options: options)
+        case "xml":
+            return makeLexer(language: .xml, options: options)
+        case "css":
+            return makeLexer(language: .css, options: options)
+        case "sql":
+            return makeLexer(language: .sql, options: options)
+        case "diff", "patch":
+            return makeLexer(language: .diff, options: options)
         default:
             return nil
         }

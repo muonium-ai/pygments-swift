@@ -1,0 +1,13 @@
+diff --git a/fib.txt b/fib.txt
+index 1111111..2222222 100644
+--- a/fib.txt
++++ b/fib.txt
+@@ -1,6 +1,8 @@
+ fib(0)=0
+ fib(1)=1
++fib(2)=2
+ fib(3)=3
+-fib(4)=4
++fib(4)=5
+ fib(5)=8
++fib(6)=13

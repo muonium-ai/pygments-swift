@@ -1,0 +1,15 @@
+# Fibonacci (TOML)
+
+title = "Fibonacci"
+version = 1
+
+[inputs]
+small = [0, 1, 2, 3, 4]
+
+[[cases]]
+n = 10
+expected = 55
+
+[[cases]]
+n = 11
+expected = 89

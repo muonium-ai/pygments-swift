@@ -1,0 +1,14 @@
+/* Fibonacci (CSS) */
+:root {
+  --accent: #0ea5e9;
+}
+
+.value {
+  color: var(--accent);
+  font-weight: 700;
+  margin: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  body { background: #111827; color: #e5e7eb; }
+}

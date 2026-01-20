@@ -1,0 +1,13 @@
+# Fibonacci (YAML)
+---
+name: fibonacci
+version: 1
+inputs:
+  - n: 0
+    expected: 0
+  - n: 1
+    expected: 1
+  - n: 10
+    expected: 55
+notes: "Use recursion for demo"
+...

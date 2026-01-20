@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fibonacci">
+  <!-- comment -->
+  <case n="10" expected="55" />
+  <case n="11" expected="89" />
+  <![CDATA[
+  raw <xml> should not be parsed
+  ]]>
+</testsuite>
