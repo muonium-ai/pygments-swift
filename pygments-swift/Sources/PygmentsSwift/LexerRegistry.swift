@@ -29,6 +29,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case diff
     case dockerfile
     case makefile
+
+    case lua
+    case perl
+    case haskell
+    case clojure
+    case elixir
+    case erlang
+    case dart
+    case julia
+    case powershell
+    case groovy
 }
 
 public enum LexerRegistry {
@@ -90,6 +101,27 @@ public enum LexerRegistry {
             return DockerfileLexer(options: options)
         case .makefile:
             return MakefileLexer(options: options)
+
+        case .lua:
+            return LuaLexer(options: options)
+        case .perl:
+            return PerlLexer(options: options)
+        case .haskell:
+            return HaskellLexer(options: options)
+        case .clojure:
+            return ClojureLexer(options: options)
+        case .elixir:
+            return ElixirLexer(options: options)
+        case .erlang:
+            return ErlangLexer(options: options)
+        case .dart:
+            return DartLexer(options: options)
+        case .julia:
+            return JuliaLexer(options: options)
+        case .powershell:
+            return PowerShellLexer(options: options)
+        case .groovy:
+            return GroovyLexer(options: options)
         }
     }
 
@@ -153,6 +185,27 @@ public enum LexerRegistry {
             return makeLexer(language: .dockerfile, options: options)
         case "make", "makefile", "mk":
             return makeLexer(language: .makefile, options: options)
+
+        case "lua":
+            return makeLexer(language: .lua, options: options)
+        case "perl", "pl":
+            return makeLexer(language: .perl, options: options)
+        case "haskell", "hs":
+            return makeLexer(language: .haskell, options: options)
+        case "clojure", "clj", "cljs":
+            return makeLexer(language: .clojure, options: options)
+        case "elixir", "ex":
+            return makeLexer(language: .elixir, options: options)
+        case "erlang", "erl":
+            return makeLexer(language: .erlang, options: options)
+        case "dart":
+            return makeLexer(language: .dart, options: options)
+        case "julia", "jl":
+            return makeLexer(language: .julia, options: options)
+        case "powershell", "pwsh", "ps":
+            return makeLexer(language: .powershell, options: options)
+        case "groovy", "gradle":
+            return makeLexer(language: .groovy, options: options)
         default:
             return nil
         }
@@ -224,6 +277,26 @@ public enum LexerRegistry {
             return makeLexer(language: .sql, options: options)
         case "diff", "patch":
             return makeLexer(language: .diff, options: options)
+        case "lua":
+            return makeLexer(language: .lua, options: options)
+        case "pl", "pm":
+            return makeLexer(language: .perl, options: options)
+        case "hs":
+            return makeLexer(language: .haskell, options: options)
+        case "clj", "cljs", "cljc", "edn":
+            return makeLexer(language: .clojure, options: options)
+        case "ex", "exs":
+            return makeLexer(language: .elixir, options: options)
+        case "erl", "hrl":
+            return makeLexer(language: .erlang, options: options)
+        case "dart":
+            return makeLexer(language: .dart, options: options)
+        case "jl":
+            return makeLexer(language: .julia, options: options)
+        case "ps1", "psm1", "psd1":
+            return makeLexer(language: .powershell, options: options)
+        case "groovy", "gvy", "gy", "gradle":
+            return makeLexer(language: .groovy, options: options)
         default:
             return nil
         }
