@@ -16,7 +16,7 @@ WIDTH ?=
 # Custom theme file (checked in)
 CUSTOM_THEME_FILE ?= themes/custom-theme.json
 
-.PHONY: help clean build test clean-samples codeviewer-build render-samples render-samples-all render-samples-custom
+.PHONY: help clean build test clean-samples codeviewer-build render-samples render-samples-all render-samples-custom code-stats code-stats-full
 
 # OCR tooling (system python3 + tesseract)
 OCR_SCRIPT ?= python3 tools/ocr_compare_png.py
@@ -34,6 +34,8 @@ help:
 	@echo "  make ocr-check        - OCR-check rendered PNGs for cropping (quiet unless failures)"
 	@echo "  make ocr-check-pdf    - Also OCR-check matching PDFs via sips (baseline; set FAIL=1 to fail on CROPPED?)"
 	@echo "    Options: SHOW_TAILS=1 (print OCR/source tails on CROPPED?)"
+	@echo "  make code-stats       - Print first/last commit dates"
+	@echo "  make code-stats-full  - Print repo stats (commits + total lines)"
 	@echo "  make clean-samples    - Remove generated sample renders"
 	@echo "  make clean   - Clean Swift build artifacts"
 
@@ -49,6 +51,36 @@ clean:
 clean-samples:
 	@rm -rf out/samples
 	@echo "Removed out/samples"
+
+code-stats:
+	@command -v git >/dev/null 2>&1 || (echo "Error: git not found"; exit 2)
+	@git rev-parse --is-inside-work-tree >/dev/null 2>&1 || (echo "Error: not a git repo"; exit 2)
+	@first_commit=$$(git log --reverse --format='%H' | head -n 1); \
+	last_commit=$$(git rev-parse HEAD); \
+	first_date=$$(git show -s --format='%ad' --date=short $$first_commit); \
+	last_date=$$(git show -s --format='%ad' --date=short $$last_commit); \
+	echo "first_commit_date=$$first_date"; \
+	echo "last_commit_date=$$last_date"
+
+code-stats-full:
+	@command -v git >/dev/null 2>&1 || (echo "Error: git not found"; exit 2)
+	@git rev-parse --is-inside-work-tree >/dev/null 2>&1 || (echo "Error: not a git repo"; exit 2)
+	@echo "Repo: $$(git rev-parse --show-toplevel)"
+	@echo "Branch: $$(git branch --show-current 2>/dev/null || true)"
+	@echo ""
+	@echo "Commits:"
+	@echo "  total: $$(git rev-list --count HEAD)"
+	@first_commit=$$(git log --reverse --format='%H' | head -n 1); \
+	last_commit=$$(git rev-parse HEAD); \
+	first_date=$$(git show -s --format='%ad' --date=short $$first_commit); \
+	last_date=$$(git show -s --format='%ad' --date=short $$last_commit); \
+	echo "  first commit date: $$first_date"; \
+	echo "  last commit date:  $$last_date"
+	@echo ""
+	@echo "Lines (tracked files):"
+	@total_lines=$$(git ls-files -z | xargs -0 wc -l 2>/dev/null | tail -n 1 | awk '{print $$1}'); \
+	echo "  total: $$total_lines"; \
+	echo "  note:  counts lines across all git-tracked files"
 
 codeviewer-build:
 	swift build -c $(CONFIG) --package-path "$(CODEVIEWER_PACKAGE_DIR)"

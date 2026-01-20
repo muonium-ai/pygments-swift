@@ -1,3 +1,7 @@
+<p align="center">
+	<img src="assets/assets/pygments_swift_code_highlighter_logo.png" alt="PygmentsSwift logo" width="420" />
+</p>
+
 # Pygments Port
 
 Vibe coded by Senthil Nayagam (@senthilnayagam) from Muonium AI Venture Studios.
