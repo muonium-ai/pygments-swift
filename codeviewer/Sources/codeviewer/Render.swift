@@ -26,9 +26,25 @@ enum CodeRender {
             if lines.isEmpty { lines = [""] }
             var maxChars = 0
             for line in lines {
-                maxChars = max(maxChars, line.count)
+                // Use tab-expanded columns so we don't underestimate width for tab-indented code
+                // (e.g. Go uses tabs heavily).
+                let cols = displayColumns(String(line), tabSize: 4)
+                maxChars = max(maxChars, cols)
             }
             return TextStats(lineCount: max(1, lines.count), maxLineCharacters: maxChars)
+        }
+
+        private static func displayColumns(_ s: String, tabSize: Int) -> Int {
+            var col = 0
+            for ch in s.unicodeScalars {
+                if ch == "\t" {
+                    let toNext = tabSize - (col % tabSize)
+                    col += toNext
+                } else {
+                    col += 1
+                }
+            }
+            return col
         }
     }
 
@@ -127,12 +143,13 @@ enum CodeRender {
         view.wantsLayer = true
 
         let bounds = view.bounds
-        let pixelSize = NSSize(width: bounds.width * scale, height: bounds.height * scale)
+        let pixelW = Int(ceil(bounds.width * scale))
+        let pixelH = Int(ceil(bounds.height * scale))
 
         guard let rep = NSBitmapImageRep(
             bitmapDataPlanes: nil,
-            pixelsWide: Int(pixelSize.width.rounded(.up)),
-            pixelsHigh: Int(pixelSize.height.rounded(.up)),
+            pixelsWide: pixelW,
+            pixelsHigh: pixelH,
             bitsPerSample: 8,
             samplesPerPixel: 4,
             hasAlpha: true,
@@ -144,25 +161,12 @@ enum CodeRender {
             throw CLIError("Failed to allocate bitmap")
         }
 
+        // Size in points; pixelsWide/pixelsHigh control resolution.
         rep.size = NSSize(width: bounds.width, height: bounds.height)
 
-        guard let ctx = NSGraphicsContext(bitmapImageRep: rep) else {
-            throw CLIError("Failed to create graphics context")
-        }
-        NSGraphicsContext.saveGraphicsState()
-        NSGraphicsContext.current = ctx
-
-        // High quality text rendering.
-        ctx.imageInterpolation = .high
-        ctx.shouldAntialias = true
-
-        // Apply scaling.
-        ctx.cgContext.scaleBy(x: scale, y: scale)
+        // Render at the target scale.
         view.layer?.contentsScale = scale
-
-        view.displayIgnoringOpacity(bounds, in: ctx)
-
-        NSGraphicsContext.restoreGraphicsState()
+        view.cacheDisplay(in: bounds, to: rep)
 
         guard let data = rep.representation(using: .png, properties: [:]) else {
             throw CLIError("Failed to encode PNG")
