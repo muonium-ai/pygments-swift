@@ -8,6 +8,29 @@ A Swift port (starting minimal) of the Python [Pygments](https://pygments.org/) 
 - Regex/state-machine lexer: minimal implementation
 - Example lexer: INI
 
+## Supported lexers
+
+Strict parity (Swift tests compare token streams to Python Pygments for chosen samples):
+- Swift
+- JSON
+- JSON-LD
+
+Pragmatic (smoke-test level highlighting for common code):
+- Python, JavaScript, TypeScript, Java
+- C, C++, C#, Go, Rust
+- Kotlin, Ruby, PHP
+- Bash/Shell
+- Tcl, Awk, Sed
+- Windows Batchfile, VBScript
+- Pascal
+- Racket, Scheme, Common Lisp, Emacs Lisp
+- Scala
+- R
+- reStructuredText, LaTeX
+- GitIgnore, EditorConfig, Properties, CSV
+- Graphviz (DOT), PlantUML, Mermaid
+- ApacheConf
+
 ## Quick start
 
 ```swift

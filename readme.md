@@ -30,8 +30,16 @@ Pragmatic (smoke-test level highlighting for common code):
 - C, C++, C#, Go, Rust
 - Kotlin, Ruby, PHP
 - Bash/Shell
+- Tcl, Awk, Sed
+- Windows Batchfile, VBScript
+- Pascal
+- Racket, Scheme, Common Lisp, Emacs Lisp
 - Scala
 - R
+- reStructuredText, LaTeX
+- GitIgnore, EditorConfig, Properties, CSV
+- Graphviz (DOT), PlantUML, Mermaid
+- ApacheConf
 
 ### Build & test
 
