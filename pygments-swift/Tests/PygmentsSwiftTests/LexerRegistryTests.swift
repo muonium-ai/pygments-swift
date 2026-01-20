@@ -102,6 +102,23 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "plantuml"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "mermaid"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "apacheconf"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "tcl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "awk"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "sed"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "bat"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "batchfile"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "vbscript"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "vbs"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "pascal"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "delphi"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "racket"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "scheme"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "scm"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "commonlisp"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "lisp"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "emacslisp"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "elisp"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -213,5 +230,18 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "diagram.mmd"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "httpd.conf"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: ".htaccess"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.tcl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.awk"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.sed"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "build.bat"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "build.cmd"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.vbs"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.pas"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "project.dpr"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.rkt"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.scm"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.lisp"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "init.el"))
     }
 }

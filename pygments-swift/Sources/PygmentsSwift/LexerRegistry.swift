@@ -73,6 +73,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case plantuml
     case mermaid
     case apacheconf
+
+    case tcl
+    case awk
+    case sed
+    case batchfile
+    case vbscript
+    case pascal
+    case racket
+    case scheme
+    case commonlisp
+    case emacslisp
 }
 
 public enum LexerRegistry {
@@ -218,6 +229,27 @@ public enum LexerRegistry {
             return MermaidLexer(options: options)
         case .apacheconf:
             return ApacheConfLexer(options: options)
+
+        case .tcl:
+            return TclLexer(options: options)
+        case .awk:
+            return AwkLexer(options: options)
+        case .sed:
+            return SedLexer(options: options)
+        case .batchfile:
+            return BatchfileLexer(options: options)
+        case .vbscript:
+            return VBScriptLexer(options: options)
+        case .pascal:
+            return PascalLexer(options: options)
+        case .racket:
+            return RacketLexer(options: options)
+        case .scheme:
+            return SchemeLexer(options: options)
+        case .commonlisp:
+            return CommonLispLexer(options: options)
+        case .emacslisp:
+            return EmacsLispLexer(options: options)
         }
     }
 
@@ -365,6 +397,27 @@ public enum LexerRegistry {
             return makeLexer(language: .mermaid, options: options)
         case "apache", "apacheconf", "httpd", "htaccess":
             return makeLexer(language: .apacheconf, options: options)
+
+        case "tcl":
+            return makeLexer(language: .tcl, options: options)
+        case "awk", "gawk":
+            return makeLexer(language: .awk, options: options)
+        case "sed":
+            return makeLexer(language: .sed, options: options)
+        case "batch", "batchfile", "dosbatch", "bat", "cmd":
+            return makeLexer(language: .batchfile, options: options)
+        case "vbscript", "vbs":
+            return makeLexer(language: .vbscript, options: options)
+        case "pascal", "pas", "delphi":
+            return makeLexer(language: .pascal, options: options)
+        case "racket":
+            return makeLexer(language: .racket, options: options)
+        case "scheme", "scm":
+            return makeLexer(language: .scheme, options: options)
+        case "commonlisp", "common-lisp", "lisp":
+            return makeLexer(language: .commonlisp, options: options)
+        case "emacslisp", "emacs-lisp", "elisp":
+            return makeLexer(language: .emacslisp, options: options)
         default:
             return nil
         }
@@ -527,6 +580,27 @@ public enum LexerRegistry {
             return makeLexer(language: .mermaid, options: options)
         case "htaccess":
             return makeLexer(language: .apacheconf, options: options)
+
+        case "tcl":
+            return makeLexer(language: .tcl, options: options)
+        case "awk":
+            return makeLexer(language: .awk, options: options)
+        case "sed":
+            return makeLexer(language: .sed, options: options)
+        case "bat", "cmd":
+            return makeLexer(language: .batchfile, options: options)
+        case "vbs":
+            return makeLexer(language: .vbscript, options: options)
+        case "pas", "pp", "dpr":
+            return makeLexer(language: .pascal, options: options)
+        case "rkt":
+            return makeLexer(language: .racket, options: options)
+        case "scm", "ss":
+            return makeLexer(language: .scheme, options: options)
+        case "lisp", "lsp":
+            return makeLexer(language: .commonlisp, options: options)
+        case "el", "elisp":
+            return makeLexer(language: .emacslisp, options: options)
         default:
             return nil
         }
