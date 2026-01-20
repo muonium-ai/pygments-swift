@@ -107,6 +107,7 @@ enum CodeRender {
 
         // First layout pass (measuring).
         layoutManager.ensureLayout(for: textContainer)
+        layoutManager.ensureLayout(forCharacterRange: NSRange(location: 0, length: textStorage.length))
         var used = layoutManager.usedRect(for: textContainer)
 
         // Final width:
@@ -126,9 +127,14 @@ enum CodeRender {
         // Second layout pass (finalizing) so PNG drawing uses the correct cached layout.
         layoutManager.invalidateLayout(forCharacterRange: NSRange(location: 0, length: textStorage.length), actualCharacterRange: nil)
         layoutManager.ensureLayout(for: textContainer)
+        layoutManager.ensureLayout(forCharacterRange: NSRange(location: 0, length: textStorage.length))
         used = layoutManager.usedRect(for: textContainer)
 
-        let finalHeight = ceil(used.height + options.padding * 2)
+        // `usedRect` can be slightly optimistic in some cases; include the extra line fragment
+        // and a tiny safety margin to avoid off-by-one rasterization clipping.
+        let extra = layoutManager.extraLineFragmentRect
+        let contentHeight = max(used.maxY, extra.maxY)
+        let finalHeight = ceil(contentHeight + options.padding * 2 + 2)
         textView.frame = NSRect(x: 0, y: 0, width: finalWidth, height: finalHeight)
         return textView
     }
