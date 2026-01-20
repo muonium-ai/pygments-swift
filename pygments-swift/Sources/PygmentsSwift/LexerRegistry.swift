@@ -40,6 +40,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case julia
     case powershell
     case groovy
+
+    case cmake
+    case graphql
+    case terraform
+    case nginx
+    case objectivec
+    case objectivecpp
+    case vim
+    case zig
+    case nim
+    case solidity
 }
 
 public enum LexerRegistry {
@@ -122,6 +133,27 @@ public enum LexerRegistry {
             return PowerShellLexer(options: options)
         case .groovy:
             return GroovyLexer(options: options)
+
+        case .cmake:
+            return CMakeLexer(options: options)
+        case .graphql:
+            return GraphQLLexer(options: options)
+        case .terraform:
+            return TerraformLexer(options: options)
+        case .nginx:
+            return NginxLexer(options: options)
+        case .objectivec:
+            return ObjectiveCLexer(options: options)
+        case .objectivecpp:
+            return ObjectiveCppLexer(options: options)
+        case .vim:
+            return VimLexer(options: options)
+        case .zig:
+            return ZigLexer(options: options)
+        case .nim:
+            return NimLexer(options: options)
+        case .solidity:
+            return SolidityLexer(options: options)
         }
     }
 
@@ -206,6 +238,27 @@ public enum LexerRegistry {
             return makeLexer(language: .powershell, options: options)
         case "groovy", "gradle":
             return makeLexer(language: .groovy, options: options)
+
+        case "cmake":
+            return makeLexer(language: .cmake, options: options)
+        case "graphql", "gql":
+            return makeLexer(language: .graphql, options: options)
+        case "terraform", "hcl", "tf":
+            return makeLexer(language: .terraform, options: options)
+        case "nginx":
+            return makeLexer(language: .nginx, options: options)
+        case "objective-c", "objectivec", "objc":
+            return makeLexer(language: .objectivec, options: options)
+        case "objective-c++", "objectivecpp", "objcpp":
+            return makeLexer(language: .objectivecpp, options: options)
+        case "vim", "vimscript":
+            return makeLexer(language: .vim, options: options)
+        case "zig":
+            return makeLexer(language: .zig, options: options)
+        case "nim":
+            return makeLexer(language: .nim, options: options)
+        case "solidity", "sol":
+            return makeLexer(language: .solidity, options: options)
         default:
             return nil
         }
@@ -219,6 +272,10 @@ public enum LexerRegistry {
             return makeLexer(language: .dockerfile, options: options)
         case "makefile":
             return makeLexer(language: .makefile, options: options)
+        case "cmakelists.txt":
+            return makeLexer(language: .cmake, options: options)
+        case "nginx.conf":
+            return makeLexer(language: .nginx, options: options)
         default:
             break
         }
@@ -297,6 +354,25 @@ public enum LexerRegistry {
             return makeLexer(language: .powershell, options: options)
         case "groovy", "gvy", "gy", "gradle":
             return makeLexer(language: .groovy, options: options)
+        case "cmake":
+            return makeLexer(language: .cmake, options: options)
+        case "gql", "graphql":
+            return makeLexer(language: .graphql, options: options)
+        case "tf", "tfvars", "hcl":
+            return makeLexer(language: .terraform, options: options)
+        case "nginx":
+            return makeLexer(language: .nginx, options: options)
+        case "m", "mm":
+            // Note: .m can also be MATLAB; we treat it as Objective-C here.
+            return makeLexer(language: ext == "mm" ? .objectivecpp : .objectivec, options: options)
+        case "vim":
+            return makeLexer(language: .vim, options: options)
+        case "zig":
+            return makeLexer(language: .zig, options: options)
+        case "nim":
+            return makeLexer(language: .nim, options: options)
+        case "sol":
+            return makeLexer(language: .solidity, options: options)
         default:
             return nil
         }

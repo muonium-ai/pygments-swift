@@ -1,0 +1,4 @@
+# Fibonacci GraphQL query
+query Fib($n: Int!) {
+  fib(n: $n)
+}
