@@ -1,0 +1,15 @@
+# Build artifacts
+.build/
+DerivedData/
+
+# Ignore all logs
+*.log
+
+# But keep this one
+!important.log
+
+# Node
+node_modules/
+
+# Glob character class
+cache/[0-9][0-9]*/

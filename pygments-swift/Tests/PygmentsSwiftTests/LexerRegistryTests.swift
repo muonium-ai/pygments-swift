@@ -89,6 +89,19 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "f90"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "assembly"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "asm"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "rst"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "restructuredtext"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "latex"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "tex"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "gitignore"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "editorconfig"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "properties"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "csv"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "dot"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "plantuml"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "mermaid"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "apacheconf"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -188,5 +201,17 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "fibonacci.fsx"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "fibonacci.f90"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "fibonacci.asm"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "README.rst"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "paper.tex"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: ".gitignore"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: ".editorconfig"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "app.properties"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "data.csv"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "diagram.dot"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "diagram.puml"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "diagram.mmd"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "httpd.conf"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: ".htaccess"))
     }
 }

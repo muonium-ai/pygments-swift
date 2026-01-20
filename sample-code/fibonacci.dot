@@ -1,0 +1,13 @@
+// Graphviz DOT sample
+
+digraph Fibonacci {
+  rankdir=LR;
+  node [shape=box];
+
+  F0 [label="F0 = 0"];
+  F1 [label="F1 = 1"];
+  F2 [label="F2 = F1 + F0"];
+
+  F0 -> F2;
+  F1 -> F2;
+}

@@ -1,0 +1,10 @@
+@startuml
+' PlantUML sample
+class Fibonacci {
+  +fib(n: int): int
+}
+
+Fibonacci --> Fibonacci : fib(n-1)
+Fibonacci --> Fibonacci : fib(n-2)
+
+@enduml

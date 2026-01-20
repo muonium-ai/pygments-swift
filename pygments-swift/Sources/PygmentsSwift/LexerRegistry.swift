@@ -62,6 +62,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case fsharp
     case fortran
     case assembly
+
+    case restructuredtext
+    case latex
+    case gitignore
+    case editorconfig
+    case properties
+    case csv
+    case graphviz
+    case plantuml
+    case mermaid
+    case apacheconf
 }
 
 public enum LexerRegistry {
@@ -186,6 +197,27 @@ public enum LexerRegistry {
             return FortranLexer(options: options)
         case .assembly:
             return AssemblyLexer(options: options)
+
+        case .restructuredtext:
+            return ReStructuredTextLexer(options: options)
+        case .latex:
+            return LatexLexer(options: options)
+        case .gitignore:
+            return GitIgnoreLexer(options: options)
+        case .editorconfig:
+            return EditorConfigLexer(options: options)
+        case .properties:
+            return PropertiesLexer(options: options)
+        case .csv:
+            return CsvLexer(options: options)
+        case .graphviz:
+            return GraphvizLexer(options: options)
+        case .plantuml:
+            return PlantUmlLexer(options: options)
+        case .mermaid:
+            return MermaidLexer(options: options)
+        case .apacheconf:
+            return ApacheConfLexer(options: options)
         }
     }
 
@@ -312,6 +344,27 @@ public enum LexerRegistry {
             return makeLexer(language: .fortran, options: options)
         case "assembly", "asm":
             return makeLexer(language: .assembly, options: options)
+
+        case "restructuredtext", "restructured-text", "rst", "rest":
+            return makeLexer(language: .restructuredtext, options: options)
+        case "latex", "tex":
+            return makeLexer(language: .latex, options: options)
+        case "gitignore", "git-ignore":
+            return makeLexer(language: .gitignore, options: options)
+        case "editorconfig", "editor-config":
+            return makeLexer(language: .editorconfig, options: options)
+        case "properties", "java-properties", "javaproperties":
+            return makeLexer(language: .properties, options: options)
+        case "csv":
+            return makeLexer(language: .csv, options: options)
+        case "graphviz", "dot":
+            return makeLexer(language: .graphviz, options: options)
+        case "plantuml", "puml":
+            return makeLexer(language: .plantuml, options: options)
+        case "mermaid", "mmd":
+            return makeLexer(language: .mermaid, options: options)
+        case "apache", "apacheconf", "httpd", "htaccess":
+            return makeLexer(language: .apacheconf, options: options)
         default:
             return nil
         }
@@ -321,6 +374,12 @@ public enum LexerRegistry {
     public static func makeLexer(filename: String, options: LexerOptions = .init()) -> Lexer? {
         let base = (filename as NSString).lastPathComponent.lowercased()
         switch base {
+        case ".gitignore":
+            return makeLexer(language: .gitignore, options: options)
+        case ".editorconfig":
+            return makeLexer(language: .editorconfig, options: options)
+        case ".htaccess", "httpd.conf", "apache.conf", "apache2.conf":
+            return makeLexer(language: .apacheconf, options: options)
         case "dockerfile":
             return makeLexer(language: .dockerfile, options: options)
         case "makefile":
@@ -447,6 +506,27 @@ public enum LexerRegistry {
             return makeLexer(language: .fortran, options: options)
         case "s", "asm":
             return makeLexer(language: .assembly, options: options)
+
+        case "rst", "rest":
+            return makeLexer(language: .restructuredtext, options: options)
+        case "tex", "latex", "ltx", "sty", "cls":
+            return makeLexer(language: .latex, options: options)
+        case "gitignore":
+            return makeLexer(language: .gitignore, options: options)
+        case "editorconfig":
+            return makeLexer(language: .editorconfig, options: options)
+        case "properties", "props":
+            return makeLexer(language: .properties, options: options)
+        case "csv":
+            return makeLexer(language: .csv, options: options)
+        case "dot", "gv":
+            return makeLexer(language: .graphviz, options: options)
+        case "puml", "plantuml", "pu":
+            return makeLexer(language: .plantuml, options: options)
+        case "mmd", "mermaid":
+            return makeLexer(language: .mermaid, options: options)
+        case "htaccess":
+            return makeLexer(language: .apacheconf, options: options)
         default:
             return nil
         }
