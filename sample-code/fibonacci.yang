@@ -1,0 +1,11 @@
+module fibonacci {
+  namespace "urn:example:fibonacci";
+  prefix fib;
+
+  container config {
+    leaf n {
+      type uint32;
+      description "Input value";
+    }
+  }
+}

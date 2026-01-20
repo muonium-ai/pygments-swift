@@ -106,6 +106,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case vhdl
     case llvm
     case glsl
+
+    case json5
+    case jsonnet
+    case yara
+    case yang
+    case wgsl
+    case webassembly
+    case webidl
+    case meson
+    case gdscript
+    case teal
 }
 
 public enum LexerRegistry {
@@ -314,6 +325,27 @@ public enum LexerRegistry {
             return LlvmLexer(options: options)
         case .glsl:
             return GlslLexer(options: options)
+
+        case .json5:
+            return Json5Lexer(options: options)
+        case .jsonnet:
+            return JsonnetLexer(options: options)
+        case .yara:
+            return YaraLexer(options: options)
+        case .yang:
+            return YangLexer(options: options)
+        case .wgsl:
+            return WgslLexer(options: options)
+        case .webassembly:
+            return WebAssemblyLexer(options: options)
+        case .webidl:
+            return WebIdlLexer(options: options)
+        case .meson:
+            return MesonLexer(options: options)
+        case .gdscript:
+            return GdscriptLexer(options: options)
+        case .teal:
+            return TealLexer(options: options)
         }
     }
 
@@ -524,6 +556,26 @@ public enum LexerRegistry {
             return makeLexer(language: .llvm, options: options)
         case "glsl":
             return makeLexer(language: .glsl, options: options)
+        case "json5":
+            return makeLexer(language: .json5, options: options)
+        case "jsonnet":
+            return makeLexer(language: .jsonnet, options: options)
+        case "yara", "yar":
+            return makeLexer(language: .yara, options: options)
+        case "yang":
+            return makeLexer(language: .yang, options: options)
+        case "wgsl":
+            return makeLexer(language: .wgsl, options: options)
+        case "webassembly", "wasm", "wat":
+            return makeLexer(language: .webassembly, options: options)
+        case "webidl", "web-idl":
+            return makeLexer(language: .webidl, options: options)
+        case "meson":
+            return makeLexer(language: .meson, options: options)
+        case "gdscript", "gd":
+            return makeLexer(language: .gdscript, options: options)
+        case "teal", "tl":
+            return makeLexer(language: .teal, options: options)
         default:
             return nil
         }
@@ -547,6 +599,8 @@ public enum LexerRegistry {
             return makeLexer(language: .cmake, options: options)
         case "nginx.conf":
             return makeLexer(language: .nginx, options: options)
+        case "meson.build", "meson_options.txt":
+            return makeLexer(language: .meson, options: options)
         default:
             break
         }
@@ -749,6 +803,26 @@ public enum LexerRegistry {
             return makeLexer(language: .llvm, options: options)
         case "glsl", "vert", "frag", "geom", "comp", "tesc", "tese":
             return makeLexer(language: .glsl, options: options)
+        case "json5":
+            return makeLexer(language: .json5, options: options)
+        case "jsonnet", "libsonnet":
+            return makeLexer(language: .jsonnet, options: options)
+        case "yar", "yara":
+            return makeLexer(language: .yara, options: options)
+        case "yang":
+            return makeLexer(language: .yang, options: options)
+        case "wgsl":
+            return makeLexer(language: .wgsl, options: options)
+        case "wat", "wast":
+            return makeLexer(language: .webassembly, options: options)
+        case "webidl", "idl":
+            return makeLexer(language: .webidl, options: options)
+        case "wrap":
+            return makeLexer(language: .meson, options: options)
+        case "gd":
+            return makeLexer(language: .gdscript, options: options)
+        case "tl":
+            return makeLexer(language: .teal, options: options)
         default:
             return nil
         }

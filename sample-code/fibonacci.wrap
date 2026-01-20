@@ -1,0 +1,8 @@
+# fibonacci in Meson (using .wrap extension)
+project('fibonacci', 'c')
+
+executable('fib', 'fib.c')
+
+if true
+  message('ok')
+endif

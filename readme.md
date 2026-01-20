@@ -48,6 +48,7 @@ Pragmatic (smoke-test level highlighting for common code):
 - ApacheConf
 - Ada, COBOL, Prolog, Smalltalk, Eiffel, Visual Basic
 - SystemVerilog, VHDL, LLVM IR, GLSL
+- JSON5, Jsonnet, YARA, YANG, WGSL, WebAssembly (WAT), WebIDL, Meson, GDScript, Teal
 
 ### Build & test
 

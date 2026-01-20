@@ -148,6 +148,18 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "vhdl"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "llvm"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "glsl"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "json5"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "jsonnet"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "yara"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "yang"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "wgsl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "webassembly"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "wat"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "webidl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "meson"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "gdscript"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "teal"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -300,5 +312,17 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "module.ll"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "shader.glsl"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "shader.vert"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "data.json5"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.jsonnet"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "rules.yar"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "model.yang"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "shader.wgsl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "module.wat"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "bindings.webidl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "meson.build"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "package.wrap"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "player.gd"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.tl"))
     }
 }

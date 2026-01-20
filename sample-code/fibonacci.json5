@@ -1,0 +1,11 @@
+// fibonacci in JSON5
+{
+  // unquoted key + single-quoted string + trailing commas
+  name: 'fibonacci',
+  seq: [0, 1, 1, 2, 3, 5, 8,],
+  obj: {
+    ok: true,
+    // hex + plus sign
+    n: 0x10,
+  },
+}
