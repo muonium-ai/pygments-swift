@@ -160,6 +160,59 @@ final class SwiftLexerParityTests: XCTestCase {
         }
     }
 
+    func testParityWithPythonPygmentsOnAsciiSampleRawAndMultilineStrings() throws {
+        // ASCII-only sample: keeps Python indices aligned with UTF-16 offsets.
+        // Use normalized (non-strict) comparison to keep this corpus expansion
+        // resilient across minor Pygments lexer variations.
+        let input = ##"""
+        struct S {
+            let x: Int = 42
+
+            // Raw string literal (Swift 5+): backslashes are mostly literal.
+            let raw = #"raw \n \t"#
+
+            // Interpolation inside raw strings uses \#(...)
+            let interp = #"value=\#(x)"#
+
+            // Multiline string literal
+            let multi = """
+            line1
+            line2 \(x)
+            """
+        }
+        """##
+
+        guard let python = findPython() else {
+            throw XCTSkip("python3 not found; skipping Pygments parity test")
+        }
+
+        let pyTokens = try runPythonReference(python: python, input: input)
+        let lexer = SwiftLexer()
+        let swiftTokens = lexer.getTokens(input)
+
+        let preprocessed = lexer.preprocess(input)
+        XCTAssertEqual(pyTokens.map { $0.value }.joined(), preprocessed)
+        XCTAssertEqual(swiftTokens.map { $0.value }.joined(), preprocessed)
+
+        let pyPairs = pyTokens
+            .filter { !$0.type.hasPrefix("Token.Text") && !$0.type.hasPrefix("Token.Whitespace") }
+            .map { (normalizeType($0.type), $0.value) }
+
+        let swiftPairs = swiftTokens
+            .filter { !$0.type.isSubtype(of: TokenType.text) && !$0.type.isSubtype(of: TokenType.whitespace) }
+            .map { (normalizeType($0.type.description), $0.value) }
+
+        XCTAssertEqual(pyPairs.count, swiftPairs.count, "Normalized token stream lengths differ")
+        for idx in 0..<min(pyPairs.count, swiftPairs.count) {
+            let (pyType, pyValue) = pyPairs[idx]
+            let (swType, swValue) = swiftPairs[idx]
+            if pyType != swType || pyValue != swValue {
+                XCTFail("Normalized mismatch at #\\(idx): python=(\\(pyType), \\(pyValue.debugDescription)) swift=(\\(swType), \\(swValue.debugDescription))")
+                return
+            }
+        }
+    }
+
     func testJsonParityWithPythonPygmentsOnAsciiSample() throws {
         // ASCII-only sample so python indices align with UTF-16 offsets.
         let input = """

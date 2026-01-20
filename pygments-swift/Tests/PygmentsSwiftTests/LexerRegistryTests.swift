@@ -187,6 +187,20 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "prql"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "typst"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "smithy"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "abnf"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "actionscript"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "as"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "arduino"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "autohotkey"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "ahk"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "cuda"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "asymptote"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "chapel"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "alloy"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "augeas"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "codeql"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "ql"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -375,5 +389,16 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "query.prql"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "doc.typ"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "model.smithy"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "grammar.abnf"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "Main.as"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "sketch.ino"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.ahk"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "kernel.cu"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "plot.asy"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.chpl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "model.als"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "lens.aug"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "query.ql"))
     }
 }

@@ -139,6 +139,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case prql
     case typst
     case smithy
+
+    case abnf
+    case actionscript
+    case arduino
+    case autohotkey
+    case cuda
+    case asymptote
+    case chapel
+    case alloy
+    case augeas
+    case codeql
 }
 
 public enum LexerRegistry {
@@ -410,6 +421,27 @@ public enum LexerRegistry {
             return TypstLexer(options: options)
         case .smithy:
             return SmithyLexer(options: options)
+
+        case .abnf:
+            return AbnfLexer(options: options)
+        case .actionscript:
+            return ActionScriptLexer(options: options)
+        case .arduino:
+            return ArduinoLexer(options: options)
+        case .autohotkey:
+            return AutoHotkeyLexer(options: options)
+        case .cuda:
+            return CudaLexer(options: options)
+        case .asymptote:
+            return AsymptoteLexer(options: options)
+        case .chapel:
+            return ChapelLexer(options: options)
+        case .alloy:
+            return AlloyLexer(options: options)
+        case .augeas:
+            return AugeasLexer(options: options)
+        case .codeql:
+            return CodeQLLexer(options: options)
         }
     }
 
@@ -681,6 +713,27 @@ public enum LexerRegistry {
             return makeLexer(language: .typst, options: options)
         case "smithy":
             return makeLexer(language: .smithy, options: options)
+
+        case "abnf":
+            return makeLexer(language: .abnf, options: options)
+        case "actionscript", "actionscript3", "as3", "as":
+            return makeLexer(language: .actionscript, options: options)
+        case "arduino":
+            return makeLexer(language: .arduino, options: options)
+        case "autohotkey", "ahk":
+            return makeLexer(language: .autohotkey, options: options)
+        case "cuda":
+            return makeLexer(language: .cuda, options: options)
+        case "asymptote", "asy":
+            return makeLexer(language: .asymptote, options: options)
+        case "chapel", "chpl":
+            return makeLexer(language: .chapel, options: options)
+        case "alloy":
+            return makeLexer(language: .alloy, options: options)
+        case "augeas":
+            return makeLexer(language: .augeas, options: options)
+        case "codeql", "ql":
+            return makeLexer(language: .codeql, options: options)
         default:
             return nil
         }
@@ -973,6 +1026,27 @@ public enum LexerRegistry {
             return makeLexer(language: .typst, options: options)
         case "smithy":
             return makeLexer(language: .smithy, options: options)
+
+        case "abnf":
+            return makeLexer(language: .abnf, options: options)
+        case "as":
+            return makeLexer(language: .actionscript, options: options)
+        case "ino":
+            return makeLexer(language: .arduino, options: options)
+        case "ahk", "ahkl":
+            return makeLexer(language: .autohotkey, options: options)
+        case "cu", "cuh":
+            return makeLexer(language: .cuda, options: options)
+        case "asy":
+            return makeLexer(language: .asymptote, options: options)
+        case "chpl":
+            return makeLexer(language: .chapel, options: options)
+        case "als":
+            return makeLexer(language: .alloy, options: options)
+        case "aug":
+            return makeLexer(language: .augeas, options: options)
+        case "ql", "qll":
+            return makeLexer(language: .codeql, options: options)
         default:
             return nil
         }

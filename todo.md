@@ -1,6 +1,6 @@
 # Pygments → Swift Port Progress (TODO)
 
-Last updated: 2026-01-20
+Last updated: 2026-01-21
 
 ## ✅ Implemented (pygments-swift)
 
@@ -139,19 +139,19 @@ Non-language formats already supported:
 ## ⏳ Pending / Next (recommended order)
 
 ### Top-10 lexers to add next
-- [ ] Add `TypeScriptLexer` (likely build on JS lexer)
-- [ ] Add `CLexer` and `CppLexer`
-- [ ] Add `CSharpLexer`
-- [ ] Add `GoLexer`
-- [ ] Add `RustLexer`
+- [x] Add `TypeScriptLexer` (likely build on JS lexer)
+- [x] Add `CLexer` and `CppLexer`
+- [x] Add `CSharpLexer`
+- [x] Add `GoLexer`
+- [x] Add `RustLexer`
 
 ### Expand parity corpus
 - [ ] Add more Swift snippets covering:
-  - [ ] nested/multiline comments
-  - [ ] string interpolation edge cases
-  - [ ] raw strings / multi-line strings (if supported by the Python lexer)
-  - [ ] preprocessor branches and directives
-- [ ] Run strict parity across multiple samples (keep failures actionable)
+  - [x] nested/multiline comments
+  - [x] string interpolation edge cases
+  - [x] raw strings / multi-line strings (if supported by the Python lexer)
+  - [x] preprocessor branches and directives
+- [x] Run strict parity across multiple samples (keep failures actionable)
 
 ### Engine completeness / polish
 - [ ] Performance pass for `startScalar` mapping (optimize if it becomes hot)
