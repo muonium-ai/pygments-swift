@@ -30,6 +30,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case dockerfile
     case makefile
 
+    case ini
+    case dotenv
+    case gherkin
+    case vue
+    case svelte
+    case hjson
+    case kdl
+    case bicep
+    case dhall
+    case kusto
+
     case lua
     case perl
     case haskell
@@ -211,6 +222,27 @@ public enum LexerRegistry {
             return DockerfileLexer(options: options)
         case .makefile:
             return MakefileLexer(options: options)
+
+        case .ini:
+            return IniLexer(options: options)
+        case .dotenv:
+            return DotenvLexer(options: options)
+        case .gherkin:
+            return GherkinLexer(options: options)
+        case .vue:
+            return VueLexer(options: options)
+        case .svelte:
+            return SvelteLexer(options: options)
+        case .hjson:
+            return HjsonLexer(options: options)
+        case .kdl:
+            return KdlLexer(options: options)
+        case .bicep:
+            return BicepLexer(options: options)
+        case .dhall:
+            return DhallLexer(options: options)
+        case .kusto:
+            return KustoLexer(options: options)
 
         case .lua:
             return LuaLexer(options: options)
@@ -506,6 +538,27 @@ public enum LexerRegistry {
         case "make", "makefile", "mk":
             return makeLexer(language: .makefile, options: options)
 
+        case "ini":
+            return makeLexer(language: .ini, options: options)
+        case "dotenv", "env":
+            return makeLexer(language: .dotenv, options: options)
+        case "gherkin", "cucumber", "feature":
+            return makeLexer(language: .gherkin, options: options)
+        case "vue":
+            return makeLexer(language: .vue, options: options)
+        case "svelte":
+            return makeLexer(language: .svelte, options: options)
+        case "hjson":
+            return makeLexer(language: .hjson, options: options)
+        case "kdl":
+            return makeLexer(language: .kdl, options: options)
+        case "bicep":
+            return makeLexer(language: .bicep, options: options)
+        case "dhall":
+            return makeLexer(language: .dhall, options: options)
+        case "kusto", "kql":
+            return makeLexer(language: .kusto, options: options)
+
         case "lua":
             return makeLexer(language: .lua, options: options)
         case "perl", "pl":
@@ -761,6 +814,8 @@ public enum LexerRegistry {
             return makeLexer(language: .meson, options: options)
         case "caddyfile":
             return makeLexer(language: .caddyfile, options: options)
+        case ".env":
+            return makeLexer(language: .dotenv, options: options)
         case "kconfig":
             return makeLexer(language: .kconfig, options: options)
         default:
@@ -821,6 +876,27 @@ public enum LexerRegistry {
             return makeLexer(language: .sql, options: options)
         case "diff", "patch":
             return makeLexer(language: .diff, options: options)
+
+        case "ini", "cfg":
+            return makeLexer(language: .ini, options: options)
+        case "env":
+            return makeLexer(language: .dotenv, options: options)
+        case "feature":
+            return makeLexer(language: .gherkin, options: options)
+        case "vue":
+            return makeLexer(language: .vue, options: options)
+        case "svelte":
+            return makeLexer(language: .svelte, options: options)
+        case "hjson":
+            return makeLexer(language: .hjson, options: options)
+        case "kdl":
+            return makeLexer(language: .kdl, options: options)
+        case "bicep":
+            return makeLexer(language: .bicep, options: options)
+        case "dhall":
+            return makeLexer(language: .dhall, options: options)
+        case "kql":
+            return makeLexer(language: .kusto, options: options)
         case "lua":
             return makeLexer(language: .lua, options: options)
         case "pl", "pm":

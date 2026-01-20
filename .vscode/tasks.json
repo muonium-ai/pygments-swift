@@ -1,0 +1,192 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "swift test (pygments-swift)",
+			"type": "shell",
+			"command": "swift",
+			"args": [
+				"test",
+				"--disable-swift-testing",
+				"--package-path",
+				"pygments-swift"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (filter LexerRegistryTests)",
+			"type": "shell",
+			"command": "swift",
+			"args": [
+				"test",
+				"--disable-swift-testing",
+				"--package-path",
+				"pygments-swift",
+				"--filter",
+				"LexerRegistryTests"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (filter KustoLexerTests)",
+			"type": "shell",
+			"command": "swift",
+			"args": [
+				"test",
+				"--disable-swift-testing",
+				"--package-path",
+				"pygments-swift",
+				"--filter",
+				"KustoLexerTests"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (filter SvelteLexerTests)",
+			"type": "shell",
+			"command": "swift",
+			"args": [
+				"test",
+				"--disable-swift-testing",
+				"--package-path",
+				"pygments-swift",
+				"--filter",
+				"SvelteLexerTests"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (filter BicepLexerTests)",
+			"type": "shell",
+			"command": "swift",
+			"args": [
+				"test",
+				"--disable-swift-testing",
+				"--package-path",
+				"pygments-swift",
+				"--filter",
+				"BicepLexerTests"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (pygments-swift full)",
+			"type": "shell",
+			"command": "swift",
+			"args": [
+				"test",
+				"--disable-swift-testing",
+				"--package-path",
+				"pygments-swift"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (pygments-swift verbose)",
+			"type": "shell",
+			"command": "swift",
+			"args": [
+				"test",
+				"--disable-swift-testing",
+				"--package-path",
+				"pygments-swift",
+				"--verbose"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (tail output)",
+			"type": "shell",
+			"command": "/bin/zsh",
+			"args": [
+				"-lc",
+				"swift test --disable-swift-testing --package-path pygments-swift 2>&1 | tail -n 200"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (tail output, default runner)",
+			"type": "shell",
+			"command": "/bin/zsh",
+			"args": [
+				"-lc",
+				"swift test --package-path pygments-swift 2>&1 | tail -n 200"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (grep failures)",
+			"type": "shell",
+			"command": "/bin/zsh",
+			"args": [
+				"-lc",
+				"swift test --disable-swift-testing --package-path pygments-swift 2>&1 | grep -E \"(error:|XCTAssert|failed:|Test Case .*failed)\" | tail -n 80"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (filter GherkinLexerTests)",
+			"type": "shell",
+			"command": "swift",
+			"args": [
+				"test",
+				"--disable-swift-testing",
+				"--package-path",
+				"pygments-swift",
+				"--filter",
+				"GherkinLexerTests"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (pygments-swift full, tail failures)",
+			"type": "shell",
+			"command": "/bin/zsh",
+			"args": [
+				"-lc",
+				"swift test --disable-swift-testing --package-path pygments-swift 2>&1 | tail -n 40"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "swift test (pygments-swift quick)",
+			"type": "shell",
+			"command": "swift",
+			"args": [
+				"test",
+				"--disable-swift-testing",
+				"--package-path",
+				"pygments-swift",
+				"--filter",
+				"LexerRegistryTests"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		}
+	]
+}
