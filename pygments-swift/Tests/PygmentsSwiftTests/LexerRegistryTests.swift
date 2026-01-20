@@ -174,6 +174,19 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "capnp"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "qml"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "hlsl"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "bibtex"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "bib"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "asn1"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "asn.1"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "cddl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "devicetree"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "promql"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "rego"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "jmespath"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "prql"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "typst"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "smithy"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -351,5 +364,16 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "schema.capnp"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "Main.qml"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "shader.hlsl"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "refs.bib"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "spec.asn1"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "schema.cddl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "board.dts"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "expr.promql"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "policy.rego"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "query.jmespath"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "query.prql"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "doc.typ"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "model.smithy"))
     }
 }

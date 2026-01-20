@@ -30,6 +30,7 @@ Pragmatic (smoke-test level highlighting for common code):
 - C, C++, C#, Go, Rust
 - D, Crystal
 - Kotlin, Ruby, PHP
+- BibTeX, ASN.1, CDDL, Devicetree (DTS), PromQL, Rego, JMESPath, PRQL, Typst, Smithy
 - Bash/Shell
 - Tcl, Awk, Sed
 - Windows Batchfile, VBScript

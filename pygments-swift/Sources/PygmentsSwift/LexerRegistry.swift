@@ -128,6 +128,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case capnproto
     case qml
     case hlsl
+
+    case bibtex
+    case asn1
+    case cddl
+    case devicetree
+    case promql
+    case rego
+    case jmespath
+    case prql
+    case typst
+    case smithy
 }
 
 public enum LexerRegistry {
@@ -378,6 +389,27 @@ public enum LexerRegistry {
             return QmlLexer(options: options)
         case .hlsl:
             return HlslLexer(options: options)
+
+        case .bibtex:
+            return BibTeXLexer(options: options)
+        case .asn1:
+            return Asn1Lexer(options: options)
+        case .cddl:
+            return CddlLexer(options: options)
+        case .devicetree:
+            return DevicetreeLexer(options: options)
+        case .promql:
+            return PromqlLexer(options: options)
+        case .rego:
+            return RegoLexer(options: options)
+        case .jmespath:
+            return JmespathLexer(options: options)
+        case .prql:
+            return PrqlLexer(options: options)
+        case .typst:
+            return TypstLexer(options: options)
+        case .smithy:
+            return SmithyLexer(options: options)
         }
     }
 
@@ -628,6 +660,27 @@ public enum LexerRegistry {
             return makeLexer(language: .qml, options: options)
         case "hlsl":
             return makeLexer(language: .hlsl, options: options)
+
+        case "bibtex", "bib":
+            return makeLexer(language: .bibtex, options: options)
+        case "asn1", "asn.1", "asn-1", "asn":
+            return makeLexer(language: .asn1, options: options)
+        case "cddl":
+            return makeLexer(language: .cddl, options: options)
+        case "devicetree", "device-tree", "dts":
+            return makeLexer(language: .devicetree, options: options)
+        case "promql":
+            return makeLexer(language: .promql, options: options)
+        case "rego":
+            return makeLexer(language: .rego, options: options)
+        case "jmespath":
+            return makeLexer(language: .jmespath, options: options)
+        case "prql":
+            return makeLexer(language: .prql, options: options)
+        case "typst":
+            return makeLexer(language: .typst, options: options)
+        case "smithy":
+            return makeLexer(language: .smithy, options: options)
         default:
             return nil
         }
@@ -899,6 +952,27 @@ public enum LexerRegistry {
             return makeLexer(language: .qml, options: options)
         case "hlsl", "hlsli", "fx":
             return makeLexer(language: .hlsl, options: options)
+
+        case "bib", "bibtex":
+            return makeLexer(language: .bibtex, options: options)
+        case "asn", "asn1":
+            return makeLexer(language: .asn1, options: options)
+        case "cddl":
+            return makeLexer(language: .cddl, options: options)
+        case "dts", "dtsi":
+            return makeLexer(language: .devicetree, options: options)
+        case "promql":
+            return makeLexer(language: .promql, options: options)
+        case "rego":
+            return makeLexer(language: .rego, options: options)
+        case "jmespath":
+            return makeLexer(language: .jmespath, options: options)
+        case "prql":
+            return makeLexer(language: .prql, options: options)
+        case "typ":
+            return makeLexer(language: .typst, options: options)
+        case "smithy":
+            return makeLexer(language: .smithy, options: options)
         default:
             return nil
         }
