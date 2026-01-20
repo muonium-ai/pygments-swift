@@ -3,8 +3,7 @@ import Foundation
 import PygmentsSwift
 
 struct CodeHighlighter {
-    static func highlight(text: String, lexer: Lexer, theme: CodeTheme, font: NSFont) -> NSAttributedString {
-        let tokens = lexer.getTokens(text)
+    static func highlight(tokens: [Token], theme: CodeTheme, font: NSFont) -> NSAttributedString {
         let out = NSMutableAttributedString()
 
         let paragraph = NSMutableParagraphStyle()
@@ -22,7 +21,7 @@ struct CodeHighlighter {
             attrs[.foregroundColor] = theme.foreground(for: t.type)
 
             // Keep whitespace legible and avoid accidental bolding/italics.
-            if t.type.isSubtype(of: .whitespace) || t.type.isSubtype(of: .text) {
+            if t.type.isSubtype(of: .whitespace) || t.type == .text {
                 attrs[.foregroundColor] = theme.defaultForeground
             }
 

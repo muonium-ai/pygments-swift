@@ -54,7 +54,7 @@ enum CodeRender {
 
         let containerSize = NSSize(
             width: max(1, initialWidth - options.padding * 2),
-            height: .greatestFiniteMagnitude
+            height: CGFloat.greatestFiniteMagnitude
         )
 
         let textStorage = NSTextStorage(attributedString: attributed)
@@ -62,6 +62,9 @@ enum CodeRender {
         let textContainer = NSTextContainer(containerSize: containerSize)
         textContainer.lineFragmentPadding = 0
         textContainer.lineBreakMode = .byCharWrapping
+        // Important for offscreen layout: don't let the container height track the view.
+        // Otherwise the initial 1pt-high frame can limit layout and produce cropped PNGs.
+        textContainer.heightTracksTextView = false
         layoutManager.addTextContainer(textContainer)
         textStorage.addLayoutManager(layoutManager)
 
@@ -71,15 +74,16 @@ enum CodeRender {
         textView.isEditable = false
         textView.isSelectable = false
         textView.textContainerInset = NSSize(width: options.padding, height: options.padding)
-        // Base color (attributed runs still override this).
-        textView.textColor = options.foreground
         textView.isVerticallyResizable = true
         textView.isHorizontallyResizable = false
+        textView.minSize = NSSize(width: 0, height: 0)
+        textView.maxSize = NSSize(width: initialWidth, height: CGFloat.greatestFiniteMagnitude)
 
         // IMPORTANT: keep the container width explicit. Tracking the textView width can be
         // problematic before the view has its final frame, and it can lead to incorrect
         // layout caching (PDF reflows later; PNG often doesn't).
         textView.textContainer?.widthTracksTextView = false
+        textView.textContainer?.heightTracksTextView = false
         textView.textContainer?.containerSize = containerSize
 
         // Give the view a width up-front so layout happens against the right constraint.
@@ -100,7 +104,7 @@ enum CodeRender {
         // Update container width if we changed finalWidth.
         textView.textContainer?.containerSize = NSSize(
             width: max(1, finalWidth - options.padding * 2),
-            height: .greatestFiniteMagnitude
+            height: CGFloat.greatestFiniteMagnitude
         )
 
         // Second layout pass (finalizing) so PNG drawing uses the correct cached layout.

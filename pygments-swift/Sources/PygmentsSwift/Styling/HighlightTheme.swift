@@ -91,6 +91,11 @@ public struct HighlightTheme: Hashable, Sendable {
         if type.isSubtype(of: .comment) { return palette.comment }
 
         if type.isSubtype(of: .name.child("Decorator")) { return palette.decorator }
+        // Give editors/renders more visual structure without expanding the palette schema.
+        if type.isSubtype(of: .name.child("Function")) { return palette.keywordDeclaration }
+        if type.isSubtype(of: .name.child("Class")) { return palette.keywordType }
+        if type.isSubtype(of: .name.child("Builtin")) { return palette.keywordConstant }
+        if type.isSubtype(of: .name.child("Constant")) { return palette.keywordConstant }
 
         if type.isSubtype(of: .keyword.child("Declaration")) { return palette.keywordDeclaration }
         if type.isSubtype(of: .keyword.child("Type")) { return palette.keywordType }

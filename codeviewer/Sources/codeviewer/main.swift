@@ -2,6 +2,15 @@ import AppKit
 import Foundation
 import PygmentsSwift
 
+private func cssLikeRGBA(_ color: NSColor) -> String {
+    let c = color.usingColorSpace(.deviceRGB) ?? color
+    return String(format: "rgba(%d,%d,%d,%.3f)",
+                  Int((c.redComponent * 255.0).rounded()),
+                  Int((c.greenComponent * 255.0).rounded()),
+                  Int((c.blueComponent * 255.0).rounded()),
+                  c.alphaComponent)
+}
+
 do {
     let opts = try CLIOptions.parse(CommandLine.arguments)
     let inputURL = URL(fileURLWithPath: opts.inputPath)
@@ -33,6 +42,8 @@ do {
         return FallbackTextLexer()
     }()
 
+    let tokens = lexer.getTokens(source)
+
     let theme: CodeTheme = try {
         if let themeFile = opts.themeFile {
             if themeFile == "-" {
@@ -52,7 +63,36 @@ do {
     }()
     let font = NSFont.monospacedSystemFont(ofSize: CGFloat(opts.fontSize), weight: .regular)
 
-    let attributed = CodeHighlighter.highlight(text: source, lexer: lexer, theme: theme, font: font)
+    if opts.dumpTokenSummary {
+        var counts: [String: Int] = [:]
+        for t in tokens {
+            let k = t.type.description
+            counts[k, default: 0] += 1
+        }
+        let top = counts.sorted { $0.value > $1.value }.prefix(40)
+        fputs("Token summary (top \(top.count)):\n", stderr)
+        for (k, v) in top {
+            fputs("  \(v)\t\(k)\n", stderr)
+        }
+    }
+
+    let attributed = CodeHighlighter.highlight(tokens: tokens, theme: theme, font: font)
+
+    if opts.dumpAttributeSummary {
+        var counts: [String: Int] = [:]
+        attributed.enumerateAttribute(.foregroundColor, in: NSRange(location: 0, length: attributed.length)) { v, range, _ in
+            if let c = v as? NSColor {
+                counts[cssLikeRGBA(c), default: 0] += range.length
+            } else {
+                counts["(nil)", default: 0] += range.length
+            }
+        }
+        let top = counts.sorted { $0.value > $1.value }.prefix(20)
+        fputs("Foreground color runs: \(counts.count) distinct (top \(top.count))\n", stderr)
+        for (k, v) in top {
+            fputs("  \(v)\t\(k)\n", stderr)
+        }
+    }
 
     try FileManager.default.createDirectory(at: outDirURL, withIntermediateDirectories: true)
 
@@ -60,6 +100,7 @@ do {
     let outputPrefix = inputURL.lastPathComponent
     let pdfURL = outDirURL.appendingPathComponent(outputPrefix + ".pdf")
     let pngURL = outDirURL.appendingPathComponent(outputPrefix + ".png")
+    let htmlURL = outDirURL.appendingPathComponent(outputPrefix + ".html")
 
     let renderOptions = RenderOptions(
         width: opts.width.map { CGFloat($0) },
@@ -73,6 +114,12 @@ do {
 
     let pngData = try CodeRender.renderPNG(attributed: attributed, options: renderOptions)
     try pngData.write(to: pngURL, options: .atomic)
+
+    if opts.emitHTML {
+        let html = HTMLRender.renderHTML(tokens: tokens, theme: theme.theme, title: outputPrefix)
+        try html.write(to: htmlURL, atomically: true, encoding: .utf8)
+        fputs("Wrote: \(htmlURL.path)\n", stderr)
+    }
 
     fputs("Wrote: \(pdfURL.path)\n", stderr)
     fputs("Wrote: \(pngURL.path)\n", stderr)

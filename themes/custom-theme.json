@@ -1,0 +1,20 @@
+{
+  "name": "custom-theme",
+  "palette": {
+    "background": "#0B1020",
+    "foreground": "#E6EDF3",
+    "comment": "#7E8AA6",
+    "keyword": "#FF7AA2",
+    "keywordType": "#7AE4FF",
+    "keywordDeclaration": "#B693FF",
+    "keywordConstant": "#FFB86B",
+    "string": "#8AF59B",
+    "stringEscape": "#FFB86B",
+    "number": "#FFB86B",
+    "name": "#E6EDF3",
+    "decorator": "#4DE1C1",
+    "punctuation": "#A7B3CF",
+    "operator": "#A7B3CF",
+    "error": "#FF4D4D"
+  }
+}

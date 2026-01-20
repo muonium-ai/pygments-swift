@@ -6,13 +6,16 @@ struct CLIOptions {
     var languageOverride: String?
     var theme: String
     var themeFile: String?
+    var emitHTML: Bool
+    var dumpTokenSummary: Bool
+    var dumpAttributeSummary: Bool
     var fontSize: Double
     var width: Double?
 
     static func usage(program: String) -> String {
         return """
         Usage:
-                    \(program) <input-file> [--outdir <dir>] [--lang <name>] [--theme <name>] [--theme-file <path>] [--font-size <n>] [--width <n>]
+                    \(program) <input-file> [--outdir <dir>] [--lang <name>] [--theme <name>] [--theme-file <path>] [--html] [--dump-token-summary] [--dump-attribute-summary] [--font-size <n>] [--width <n>]
                     \(program) --list-themes
                     \(program) --print-theme-template
 
@@ -20,6 +23,9 @@ struct CLIOptions {
           \(program) MyFile.swift
                     \(program) MyFile.py --outdir out --theme github-light
                     \(program) MyFile.py --outdir out --theme-file my-theme.json
+                                        \(program) MyFile.py --outdir out --html
+                                        \(program) MyFile.py --dump-token-summary
+                                        \(program) MyFile.py --dump-attribute-summary
           \(program) unknown.txt --lang swift
                     \(program) --list-themes
                                         \(program) --print-theme-template > my-theme.json
@@ -29,6 +35,8 @@ struct CLIOptions {
           - Lexer selection uses filename extension unless --lang is provided
                     - --theme-file overrides --theme
                     - Use --theme-file - to read the theme JSON from stdin
+                    - --html writes an additional <filename>.<ext>.html file for easy inspection in a browser
+                    - --dump-attribute-summary prints how many distinct foreground colors are present in the rendered attributed string (helps debug “all text same color” issues)
         """
     }
 
@@ -48,6 +56,9 @@ struct CLIOptions {
         var languageOverride: String?
         var theme = "github-dark"
         var themeFile: String?
+        var emitHTML = false
+        var dumpTokenSummary = false
+        var dumpAttributeSummary = false
         var fontSize: Double = 13
         var width: Double?
 
@@ -67,6 +78,12 @@ struct CLIOptions {
                 theme = try requireValue(a)
             case "--theme-file":
                 themeFile = try requireValue(a)
+            case "--html":
+                emitHTML = true
+            case "--dump-token-summary":
+                dumpTokenSummary = true
+            case "--dump-attribute-summary":
+                dumpAttributeSummary = true
             case "--font-size":
                 let v = try requireValue(a)
                 guard let n = Double(v), n > 0 else { throw CLIError("Invalid --font-size: \(v)") }
@@ -101,6 +118,9 @@ struct CLIOptions {
             languageOverride: languageOverride,
             theme: theme,
             themeFile: themeFile,
+            emitHTML: emitHTML,
+            dumpTokenSummary: dumpTokenSummary,
+            dumpAttributeSummary: dumpAttributeSummary,
             fontSize: fontSize,
             width: width
         )
