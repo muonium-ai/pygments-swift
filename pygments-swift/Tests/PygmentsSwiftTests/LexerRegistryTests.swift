@@ -133,6 +133,21 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "cue"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "nushell"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "nu"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "ada"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "cobol"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "cbl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "prolog"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "smalltalk"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "st"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "eiffel"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "visualbasic"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "vb"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "systemverilog"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "sv"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "vhdl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "llvm"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "glsl"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -269,5 +284,21 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.p6"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "schema.cue"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "tool.nu"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.adb"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "spec.ads"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.cob"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.cbl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.pro"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.st"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.e"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.vb"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "top.sv"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "top.svh"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "chip.vhd"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "chip.vhdl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "module.ll"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "shader.glsl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "shader.vert"))
     }
 }

@@ -36,6 +36,8 @@ Pragmatic (smoke-test level highlighting for common code):
 - GitIgnore, EditorConfig, Properties, CSV
 - Graphviz (DOT), PlantUML, Mermaid
 - ApacheConf
+- Ada, COBOL, Prolog, Smalltalk, Eiffel, Visual Basic
+- SystemVerilog, VHDL, LLVM IR, GLSL
 
 ## Quick start
 

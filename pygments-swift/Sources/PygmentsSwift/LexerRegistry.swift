@@ -95,6 +95,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case raku
     case cue
     case nushell
+
+    case ada
+    case cobol
+    case prolog
+    case smalltalk
+    case eiffel
+    case visualbasic
+    case systemverilog
+    case vhdl
+    case llvm
+    case glsl
 }
 
 public enum LexerRegistry {
@@ -282,6 +293,27 @@ public enum LexerRegistry {
             return CueLexer(options: options)
         case .nushell:
             return NushellLexer(options: options)
+
+        case .ada:
+            return AdaLexer(options: options)
+        case .cobol:
+            return CobolLexer(options: options)
+        case .prolog:
+            return PrologLexer(options: options)
+        case .smalltalk:
+            return SmalltalkLexer(options: options)
+        case .eiffel:
+            return EiffelLexer(options: options)
+        case .visualbasic:
+            return VisualBasicLexer(options: options)
+        case .systemverilog:
+            return SystemVerilogLexer(options: options)
+        case .vhdl:
+            return VhdlLexer(options: options)
+        case .llvm:
+            return LlvmLexer(options: options)
+        case .glsl:
+            return GlslLexer(options: options)
         }
     }
 
@@ -471,6 +503,27 @@ public enum LexerRegistry {
             return makeLexer(language: .cue, options: options)
         case "nushell", "nu":
             return makeLexer(language: .nushell, options: options)
+
+        case "ada":
+            return makeLexer(language: .ada, options: options)
+        case "cobol", "cbl":
+            return makeLexer(language: .cobol, options: options)
+        case "prolog":
+            return makeLexer(language: .prolog, options: options)
+        case "smalltalk", "st":
+            return makeLexer(language: .smalltalk, options: options)
+        case "eiffel":
+            return makeLexer(language: .eiffel, options: options)
+        case "visualbasic", "visual-basic", "vb", "vbnet", "vb.net":
+            return makeLexer(language: .visualbasic, options: options)
+        case "systemverilog", "system-verilog", "sv":
+            return makeLexer(language: .systemverilog, options: options)
+        case "vhdl":
+            return makeLexer(language: .vhdl, options: options)
+        case "llvm", "llvm-ir", "ir":
+            return makeLexer(language: .llvm, options: options)
+        case "glsl":
+            return makeLexer(language: .glsl, options: options)
         default:
             return nil
         }
@@ -675,6 +728,27 @@ public enum LexerRegistry {
             return makeLexer(language: .cue, options: options)
         case "nu":
             return makeLexer(language: .nushell, options: options)
+
+        case "adb", "ads":
+            return makeLexer(language: .ada, options: options)
+        case "cob", "cbl":
+            return makeLexer(language: .cobol, options: options)
+        case "pro", "prolog":
+            return makeLexer(language: .prolog, options: options)
+        case "st":
+            return makeLexer(language: .smalltalk, options: options)
+        case "e":
+            return makeLexer(language: .eiffel, options: options)
+        case "vb":
+            return makeLexer(language: .visualbasic, options: options)
+        case "sv", "svh":
+            return makeLexer(language: .systemverilog, options: options)
+        case "vhd", "vhdl":
+            return makeLexer(language: .vhdl, options: options)
+        case "ll":
+            return makeLexer(language: .llvm, options: options)
+        case "glsl", "vert", "frag", "geom", "comp", "tesc", "tese":
+            return makeLexer(language: .glsl, options: options)
         default:
             return nil
         }
