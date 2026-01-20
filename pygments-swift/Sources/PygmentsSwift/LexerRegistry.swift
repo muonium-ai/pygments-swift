@@ -84,6 +84,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case scheme
     case commonlisp
     case emacslisp
+
+    case d
+    case crystal
+    case elm
+    case haxe
+    case v
+    case nix
+    case fish
+    case raku
+    case cue
+    case nushell
 }
 
 public enum LexerRegistry {
@@ -250,6 +261,27 @@ public enum LexerRegistry {
             return CommonLispLexer(options: options)
         case .emacslisp:
             return EmacsLispLexer(options: options)
+
+        case .d:
+            return DLexer(options: options)
+        case .crystal:
+            return CrystalLexer(options: options)
+        case .elm:
+            return ElmLexer(options: options)
+        case .haxe:
+            return HaxeLexer(options: options)
+        case .v:
+            return VLexer(options: options)
+        case .nix:
+            return NixLexer(options: options)
+        case .fish:
+            return FishLexer(options: options)
+        case .raku:
+            return RakuLexer(options: options)
+        case .cue:
+            return CueLexer(options: options)
+        case .nushell:
+            return NushellLexer(options: options)
         }
     }
 
@@ -418,6 +450,27 @@ public enum LexerRegistry {
             return makeLexer(language: .commonlisp, options: options)
         case "emacslisp", "emacs-lisp", "elisp":
             return makeLexer(language: .emacslisp, options: options)
+
+        case "d", "dlang":
+            return makeLexer(language: .d, options: options)
+        case "crystal", "cr":
+            return makeLexer(language: .crystal, options: options)
+        case "elm":
+            return makeLexer(language: .elm, options: options)
+        case "haxe", "hx":
+            return makeLexer(language: .haxe, options: options)
+        case "v", "vlang":
+            return makeLexer(language: .v, options: options)
+        case "nix":
+            return makeLexer(language: .nix, options: options)
+        case "fish", "fishshell":
+            return makeLexer(language: .fish, options: options)
+        case "raku", "perl6", "perl-6", "p6":
+            return makeLexer(language: .raku, options: options)
+        case "cue", "cuelang":
+            return makeLexer(language: .cue, options: options)
+        case "nushell", "nu":
+            return makeLexer(language: .nushell, options: options)
         default:
             return nil
         }
@@ -601,6 +654,27 @@ public enum LexerRegistry {
             return makeLexer(language: .commonlisp, options: options)
         case "el", "elisp":
             return makeLexer(language: .emacslisp, options: options)
+
+        case "d":
+            return makeLexer(language: .d, options: options)
+        case "cr":
+            return makeLexer(language: .crystal, options: options)
+        case "elm":
+            return makeLexer(language: .elm, options: options)
+        case "hx":
+            return makeLexer(language: .haxe, options: options)
+        case "v":
+            return makeLexer(language: .v, options: options)
+        case "nix":
+            return makeLexer(language: .nix, options: options)
+        case "fish":
+            return makeLexer(language: .fish, options: options)
+        case "raku", "p6", "pl6", "pm6":
+            return makeLexer(language: .raku, options: options)
+        case "cue":
+            return makeLexer(language: .cue, options: options)
+        case "nu":
+            return makeLexer(language: .nushell, options: options)
         default:
             return nil
         }

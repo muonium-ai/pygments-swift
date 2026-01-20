@@ -18,12 +18,18 @@ Strict parity (Swift tests compare token streams to Python Pygments for chosen s
 Pragmatic (smoke-test level highlighting for common code):
 - Python, JavaScript, TypeScript, Java
 - C, C++, C#, Go, Rust
+- D, Crystal
 - Kotlin, Ruby, PHP
 - Bash/Shell
 - Tcl, Awk, Sed
 - Windows Batchfile, VBScript
 - Pascal
 - Racket, Scheme, Common Lisp, Emacs Lisp
+- Elm, Haxe, V
+- Nix
+- Fish, Nushell
+- Raku
+- CUE
 - Scala
 - R
 - reStructuredText, LaTeX

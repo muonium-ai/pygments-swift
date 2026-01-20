@@ -119,6 +119,20 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "lisp"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "emacslisp"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "elisp"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "d"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "dlang"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "crystal"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "elm"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "haxe"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "v"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "nix"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "fish"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "raku"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "perl6"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "cue"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "nushell"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "nu"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -243,5 +257,17 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.scm"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.lisp"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "init.el"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.d"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.cr"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "Main.elm"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "Main.hx"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "main.v"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "default.nix"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "config.fish"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.raku"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.p6"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "schema.cue"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "tool.nu"))
     }
 }
