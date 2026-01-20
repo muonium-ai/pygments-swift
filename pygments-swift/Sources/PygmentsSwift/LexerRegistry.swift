@@ -51,6 +51,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case zig
     case nim
     case solidity
+
+    case coffeescript
+    case scss
+    case less
+    case haml
+    case pug
+    case protobuf
+    case ocaml
+    case fsharp
+    case fortran
+    case assembly
 }
 
 public enum LexerRegistry {
@@ -154,6 +165,27 @@ public enum LexerRegistry {
             return NimLexer(options: options)
         case .solidity:
             return SolidityLexer(options: options)
+
+        case .coffeescript:
+            return CoffeeScriptLexer(options: options)
+        case .scss:
+            return ScssLexer(options: options)
+        case .less:
+            return LessLexer(options: options)
+        case .haml:
+            return HamlLexer(options: options)
+        case .pug:
+            return PugLexer(options: options)
+        case .protobuf:
+            return ProtobufLexer(options: options)
+        case .ocaml:
+            return OcamlLexer(options: options)
+        case .fsharp:
+            return FSharpLexer(options: options)
+        case .fortran:
+            return FortranLexer(options: options)
+        case .assembly:
+            return AssemblyLexer(options: options)
         }
     }
 
@@ -259,6 +291,27 @@ public enum LexerRegistry {
             return makeLexer(language: .nim, options: options)
         case "solidity", "sol":
             return makeLexer(language: .solidity, options: options)
+
+        case "coffeescript", "coffee":
+            return makeLexer(language: .coffeescript, options: options)
+        case "scss", "sass":
+            return makeLexer(language: .scss, options: options)
+        case "less":
+            return makeLexer(language: .less, options: options)
+        case "haml":
+            return makeLexer(language: .haml, options: options)
+        case "pug", "jade":
+            return makeLexer(language: .pug, options: options)
+        case "protobuf", "proto":
+            return makeLexer(language: .protobuf, options: options)
+        case "ocaml", "ml":
+            return makeLexer(language: .ocaml, options: options)
+        case "fsharp", "f#", "fs":
+            return makeLexer(language: .fsharp, options: options)
+        case "fortran", "f90":
+            return makeLexer(language: .fortran, options: options)
+        case "assembly", "asm":
+            return makeLexer(language: .assembly, options: options)
         default:
             return nil
         }
@@ -373,6 +426,27 @@ public enum LexerRegistry {
             return makeLexer(language: .nim, options: options)
         case "sol":
             return makeLexer(language: .solidity, options: options)
+
+        case "coffee", "litcoffee":
+            return makeLexer(language: .coffeescript, options: options)
+        case "scss", "sass":
+            return makeLexer(language: .scss, options: options)
+        case "less":
+            return makeLexer(language: .less, options: options)
+        case "haml":
+            return makeLexer(language: .haml, options: options)
+        case "pug", "jade":
+            return makeLexer(language: .pug, options: options)
+        case "proto":
+            return makeLexer(language: .protobuf, options: options)
+        case "ml", "mli":
+            return makeLexer(language: .ocaml, options: options)
+        case "fs", "fsx", "fsi":
+            return makeLexer(language: .fsharp, options: options)
+        case "f", "for", "ftn", "f77", "f90", "f95":
+            return makeLexer(language: .fortran, options: options)
+        case "s", "asm":
+            return makeLexer(language: .assembly, options: options)
         default:
             return nil
         }

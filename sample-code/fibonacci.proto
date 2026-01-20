@@ -1,0 +1,11 @@
+// Protobuf sample
+syntax = "proto3";
+package demo;
+
+message FibRequest {
+  int32 n = 1;
+}
+
+message FibResponse {
+  int64 value = 1;
+}

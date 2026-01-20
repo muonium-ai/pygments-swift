@@ -1,0 +1,12 @@
+// SCSS Fibonacci-ish (variables + mixins)
+$base: 10;
+
+@mixin badge($n) {
+  content: "n=#{$n}";
+}
+
+.fib {
+  color: #ff00aa;
+  padding: $base * 1px;
+  @include badge($base);
+}
