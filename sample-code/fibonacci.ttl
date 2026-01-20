@@ -1,0 +1,4 @@
+# Fibonacci Turtle
+@prefix ex: <http://example.com/> .
+ex:item ex:n 10 ;
+  ex:label "fib" .

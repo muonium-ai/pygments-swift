@@ -39,6 +39,7 @@ Pragmatic (smoke-test level highlighting for common code):
 - Ada, COBOL, Prolog, Smalltalk, Eiffel, Visual Basic
 - SystemVerilog, VHDL, LLVM IR, GLSL
 - JSON5, Jsonnet, YARA, YANG, WGSL, WebAssembly (WAT), WebIDL, Meson, GDScript, Teal
+- AsciiDoc, Org-mode, Kconfig, Caddyfile, SPARQL, Turtle, Thrift, Cap'n Proto, QML, HLSL
 
 ## Quick start
 

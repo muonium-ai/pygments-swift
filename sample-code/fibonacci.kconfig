@@ -1,0 +1,10 @@
+# Fibonacci Kconfig
+mainmenu "Fibonacci"
+
+config FIB
+    bool "Enable Fibonacci"
+    default y
+
+if FIB
+comment "ok"
+endif

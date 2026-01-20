@@ -160,6 +160,20 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "meson"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "gdscript"))
         XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "teal"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "asciidoc"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "adoc"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "org"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "kconfig"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "caddyfile"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "caddy"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "sparql"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "turtle"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "ttl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "thrift"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "capnp"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "qml"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(languageName: "hlsl"))
         XCTAssertNil(LexerRegistry.makeLexer(languageName: "unknown"))
     }
 
@@ -324,5 +338,18 @@ final class LexerRegistryTests: XCTestCase {
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "package.wrap"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "player.gd"))
         XCTAssertNotNil(LexerRegistry.makeLexer(filename: "script.tl"))
+
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "README.adoc"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "notes.org"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "settings.kconfig"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "Caddyfile"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "fibonacci.caddyfile"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "Kconfig"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "query.rq"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "data.ttl"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "service.thrift"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "schema.capnp"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "Main.qml"))
+        XCTAssertNotNil(LexerRegistry.makeLexer(filename: "shader.hlsl"))
     }
 }

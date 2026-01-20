@@ -1,0 +1,4 @@
+# Minimal Kconfig
+config FIB
+    bool "Enable Fibonacci"
+    default y

@@ -1,0 +1,4 @@
+# Fibonacci Caddyfile
+example.com {
+  respond "ok"
+}

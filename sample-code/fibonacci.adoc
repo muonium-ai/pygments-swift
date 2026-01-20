@@ -1,0 +1,11 @@
+= Fibonacci (AsciiDoc)
+:toc:
+
+// comment
+
+[source]
+----
+`fib(10)`
+----
+
+Link: https://example.com

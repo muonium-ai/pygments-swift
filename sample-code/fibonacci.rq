@@ -1,0 +1,6 @@
+# Fibonacci SPARQL
+PREFIX ex: <http://example.com/>
+SELECT ?s WHERE {
+  ?s ex:n 10 .
+  FILTER(?s != <http://example.com/x>)
+}

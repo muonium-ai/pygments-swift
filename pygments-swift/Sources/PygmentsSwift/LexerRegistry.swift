@@ -117,6 +117,17 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case meson
     case gdscript
     case teal
+
+    case asciidoc
+    case org
+    case kconfig
+    case caddyfile
+    case sparql
+    case turtle
+    case thrift
+    case capnproto
+    case qml
+    case hlsl
 }
 
 public enum LexerRegistry {
@@ -346,6 +357,27 @@ public enum LexerRegistry {
             return GdscriptLexer(options: options)
         case .teal:
             return TealLexer(options: options)
+
+        case .asciidoc:
+            return AsciiDocLexer(options: options)
+        case .org:
+            return OrgLexer(options: options)
+        case .kconfig:
+            return KconfigLexer(options: options)
+        case .caddyfile:
+            return CaddyfileLexer(options: options)
+        case .sparql:
+            return SparqlLexer(options: options)
+        case .turtle:
+            return TurtleLexer(options: options)
+        case .thrift:
+            return ThriftLexer(options: options)
+        case .capnproto:
+            return CapnProtoLexer(options: options)
+        case .qml:
+            return QmlLexer(options: options)
+        case .hlsl:
+            return HlslLexer(options: options)
         }
     }
 
@@ -576,6 +608,26 @@ public enum LexerRegistry {
             return makeLexer(language: .gdscript, options: options)
         case "teal", "tl":
             return makeLexer(language: .teal, options: options)
+        case "asciidoc", "adoc":
+            return makeLexer(language: .asciidoc, options: options)
+        case "org", "orgmode", "org-mode":
+            return makeLexer(language: .org, options: options)
+        case "kconfig", "kconfiglang":
+            return makeLexer(language: .kconfig, options: options)
+        case "caddyfile", "caddy":
+            return makeLexer(language: .caddyfile, options: options)
+        case "sparql":
+            return makeLexer(language: .sparql, options: options)
+        case "turtle", "ttl":
+            return makeLexer(language: .turtle, options: options)
+        case "thrift":
+            return makeLexer(language: .thrift, options: options)
+        case "capnp", "capnproto", "capn-proto":
+            return makeLexer(language: .capnproto, options: options)
+        case "qml":
+            return makeLexer(language: .qml, options: options)
+        case "hlsl":
+            return makeLexer(language: .hlsl, options: options)
         default:
             return nil
         }
@@ -601,6 +653,10 @@ public enum LexerRegistry {
             return makeLexer(language: .nginx, options: options)
         case "meson.build", "meson_options.txt":
             return makeLexer(language: .meson, options: options)
+        case "caddyfile":
+            return makeLexer(language: .caddyfile, options: options)
+        case "kconfig":
+            return makeLexer(language: .kconfig, options: options)
         default:
             break
         }
@@ -823,6 +879,26 @@ public enum LexerRegistry {
             return makeLexer(language: .gdscript, options: options)
         case "tl":
             return makeLexer(language: .teal, options: options)
+        case "adoc", "asciidoc":
+            return makeLexer(language: .asciidoc, options: options)
+        case "org":
+            return makeLexer(language: .org, options: options)
+        case "kconfig":
+            return makeLexer(language: .kconfig, options: options)
+        case "caddyfile":
+            return makeLexer(language: .caddyfile, options: options)
+        case "rq", "sparql":
+            return makeLexer(language: .sparql, options: options)
+        case "ttl":
+            return makeLexer(language: .turtle, options: options)
+        case "thrift":
+            return makeLexer(language: .thrift, options: options)
+        case "capnp":
+            return makeLexer(language: .capnproto, options: options)
+        case "qml":
+            return makeLexer(language: .qml, options: options)
+        case "hlsl", "hlsli", "fx":
+            return makeLexer(language: .hlsl, options: options)
         default:
             return nil
         }

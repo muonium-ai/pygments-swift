@@ -1,0 +1,4 @@
+# Minimal Caddyfile
+localhost {
+  respond "ok"
+}
