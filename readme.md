@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="assets/assets/pygments_swift_code_highlighter_logo.png" alt="PygmentsSwift logo" width="420" />
+	<img src="assets/pygments_swift_code_highlighter_logo.png" alt="PygmentsSwift logo" width="420" />
 </p>
 
 # Pygments Port
