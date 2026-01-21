@@ -15,3 +15,10 @@ fib <- function(n) {
 
 n <- 12
 cat(paste(fib(n), collapse = ", "), "\n")
+
+# End of fibonacci sample
+# End of fibonacci sample line 2
+# End of fibonacci sample line 3
+# End of fibonacci sample line 4
+# End of fibonacci sample line 5
+# End of fibonacci sample line 6

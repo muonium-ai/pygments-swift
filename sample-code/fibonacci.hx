@@ -10,3 +10,5 @@ class Main {
     trace(fib(10));
   }
 }
+
+// End of fibonacci sample

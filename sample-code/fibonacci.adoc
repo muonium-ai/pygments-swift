@@ -1,11 +1,12 @@
 = Fibonacci (AsciiDoc)
-:toc:
 
-// comment
+Fibonacci sample output for n = 10:
+fib(10) = 55
+sequence: 0 1 1 2 3 5 8 13 21 34 55
 
-[source]
-----
-`fib(10)`
-----
-
-Link: https://example.com
+End of fibonacci sample.
+End of fibonacci sample line 2.
+End of fibonacci sample line 3.
+End of fibonacci sample line 4.
+End of fibonacci sample line 5.
+End of fibonacci sample line 6.
