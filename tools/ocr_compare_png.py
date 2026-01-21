@@ -24,6 +24,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, List, Optional, Tuple
@@ -309,6 +310,8 @@ def main(argv: List[str]) -> int:
     )
     args = ap.parse_args(argv)
 
+    start_time = time.perf_counter()
+
     tesseract = _tesseract_path(args.tesseract)
     if not tesseract:
         print("Error: tesseract not found on PATH (or via --tesseract)", file=sys.stderr)
@@ -390,13 +393,30 @@ def main(argv: List[str]) -> int:
     print(f"pdf count:  {len(pdfs)}")
     print("")
 
+    total_inputs = len(pngs) + len(pdfs)
+    label = args.theme or (Path(args.dir).name if args.dir else None) or "(selection)"
+
+    def _progress(processed_now: int) -> None:
+        # Print progress to stderr so it remains visible even when stdout is captured by Make.
+        # Keep this quiet for small runs.
+        if total_inputs < 50:
+            return
+        elapsed = time.perf_counter() - start_time
+        print(f"progress: {label}  {processed_now}/{total_inputs}  elapsed={elapsed:.1f}s", file=sys.stderr)
+
     cropped = 0
     processed = 0
     printed = 0
 
+    next_progress_at = 25
+
     for p in pngs:
         r = compare_one(p, samples_dir=samples_dir, tesseract=tesseract)
         processed += 1
+
+        if processed >= next_progress_at:
+            _progress(processed)
+            next_progress_at += 25
 
         if r.cropped_likely:
             cropped += 1
@@ -423,6 +443,10 @@ def main(argv: List[str]) -> int:
             if pdf_path.exists():
                 rr = compare_one_pdf(pdf_path, samples_dir=samples_dir, tesseract=tesseract, sips=sips)
                 processed += 1
+
+                if processed >= next_progress_at:
+                    _progress(processed)
+                    next_progress_at += 25
                 if rr.cropped_likely:
                     cropped += 1
 
@@ -434,6 +458,10 @@ def main(argv: List[str]) -> int:
     for p in pdfs:
         rr = compare_one_pdf(p, samples_dir=samples_dir, tesseract=tesseract, sips=sips)
         processed += 1
+
+        if processed >= next_progress_at:
+            _progress(processed)
+            next_progress_at += 25
 
         if rr.cropped_likely:
             cropped += 1
@@ -456,6 +484,9 @@ def main(argv: List[str]) -> int:
 
     print("")
     print(f"Summary: cropped_likely={cropped}/{processed} (printed={printed})")
+
+    elapsed = time.perf_counter() - start_time
+    print(f"Time: {elapsed:.2f}s")
 
     return 0
 
