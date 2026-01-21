@@ -11,9 +11,48 @@ private func cssLikeRGBA(_ color: NSColor) -> String {
                   c.alphaComponent)
 }
 
+private func hexRGBA(_ color: NSColor) -> String {
+    let c = color.usingColorSpace(.deviceRGB) ?? color
+    let r = Int((c.redComponent * 255.0).rounded())
+    let g = Int((c.greenComponent * 255.0).rounded())
+    let b = Int((c.blueComponent * 255.0).rounded())
+    let a = Int((c.alphaComponent * 255.0).rounded())
+    return String(format: "#%02X%02X%02X%02X", r, g, b, a)
+}
+
 do {
     let opts = try CLIOptions.parse(CommandLine.arguments)
-    let inputURL = URL(fileURLWithPath: opts.inputPath)
+
+    let theme: CodeTheme = try {
+        if let themeFile = opts.themeFile {
+            if themeFile == "-" {
+                let data = FileHandle.standardInput.readDataToEndOfFile()
+                if data.isEmpty {
+                    throw CLIError("--theme-file - expects theme JSON on stdin")
+                }
+                let ht = try UserThemeFile.load(data: data, nameHint: "stdin-theme")
+                return CodeTheme(theme: ht)
+            } else {
+                let url = URL(fileURLWithPath: themeFile)
+                let ht = try UserThemeFile.load(url: url)
+                return CodeTheme(theme: ht)
+            }
+        }
+        return try CodeTheme.named(opts.theme)
+    }()
+
+    if opts.printThemeColors {
+        let bg = hexRGBA(theme.background)
+        let fg = hexRGBA(theme.defaultForeground)
+        print("{\"name\":\"\(theme.name)\",\"background\":\"\(bg)\",\"foreground\":\"\(fg)\"}")
+        exit(0)
+    }
+
+    guard let inputPath = opts.inputPath else {
+        throw CLIError("Missing <input-file>")
+    }
+
+    let inputURL = URL(fileURLWithPath: inputPath)
     let outDirURL = URL(fileURLWithPath: opts.outDir, isDirectory: true)
 
     let source = try String(contentsOf: inputURL, encoding: .utf8)
@@ -44,23 +83,6 @@ do {
 
     let tokens = lexer.getTokens(source)
 
-    let theme: CodeTheme = try {
-        if let themeFile = opts.themeFile {
-            if themeFile == "-" {
-                let data = FileHandle.standardInput.readDataToEndOfFile()
-                if data.isEmpty {
-                    throw CLIError("--theme-file - expects theme JSON on stdin")
-                }
-                let ht = try UserThemeFile.load(data: data, nameHint: "stdin-theme")
-                return CodeTheme(theme: ht)
-            } else {
-                let url = URL(fileURLWithPath: themeFile)
-                let ht = try UserThemeFile.load(url: url)
-                return CodeTheme(theme: ht)
-            }
-        }
-        return try CodeTheme.named(opts.theme)
-    }()
     let font = NSFont.monospacedSystemFont(ofSize: CGFloat(opts.fontSize), weight: .regular)
 
     if opts.dumpTokenSummary {

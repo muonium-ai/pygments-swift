@@ -1,7 +1,7 @@
 import Foundation
 
 struct CLIOptions {
-    var inputPath: String
+    var inputPath: String?
     var outDir: String
     var languageOverride: String?
     var theme: String
@@ -9,6 +9,7 @@ struct CLIOptions {
     var emitHTML: Bool
     var dumpTokenSummary: Bool
     var dumpAttributeSummary: Bool
+    var printThemeColors: Bool
     var fontSize: Double
     var width: Double?
 
@@ -18,6 +19,7 @@ struct CLIOptions {
                     \(program) <input-file> [--outdir <dir>] [--lang <name>] [--theme <name>] [--theme-file <path>] [--html] [--dump-token-summary] [--dump-attribute-summary] [--font-size <n>] [--width <n>]
                     \(program) --list-themes
                     \(program) --print-theme-template
+                    \(program) --print-theme-colors [--theme <name>] [--theme-file <path>]
 
         Examples:
           \(program) MyFile.swift
@@ -29,6 +31,7 @@ struct CLIOptions {
           \(program) unknown.txt --lang swift
                     \(program) --list-themes
                                         \(program) --print-theme-template > my-theme.json
+                                                    \(program) --print-theme-colors --theme github-dark
 
         Notes:
                     - Output files are written as <filename>.<ext>.pdf and <filename>.<ext>.png in --outdir (default: current directory)
@@ -59,6 +62,7 @@ struct CLIOptions {
         var emitHTML = false
         var dumpTokenSummary = false
         var dumpAttributeSummary = false
+        var printThemeColors = false
         var fontSize: Double = 13
         var width: Double?
 
@@ -70,6 +74,8 @@ struct CLIOptions {
                 throw CLIHelp(CodeTheme.allNames.joined(separator: "\n"))
             case "--print-theme-template":
                 throw CLIHelp(UserThemeFile.template())
+            case "--print-theme-colors":
+                printThemeColors = true
             case "--outdir":
                 outDir = try requireValue(a)
             case "--lang":
@@ -104,8 +110,10 @@ struct CLIOptions {
             }
         }
 
-        guard let inputPath else {
-            throw CLIError("Missing <input-file>\n\n\(usage(program: program))")
+        if !printThemeColors {
+            guard inputPath != nil else {
+                throw CLIError("Missing <input-file>\n\n\(usage(program: program))")
+            }
         }
 
         if themeFile != nil {
@@ -121,6 +129,7 @@ struct CLIOptions {
             emitHTML: emitHTML,
             dumpTokenSummary: dumpTokenSummary,
             dumpAttributeSummary: dumpAttributeSummary,
+            printThemeColors: printThemeColors,
             fontSize: fontSize,
             width: width
         )

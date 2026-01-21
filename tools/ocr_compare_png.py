@@ -22,6 +22,7 @@ import difflib
 import os
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import time
@@ -308,6 +309,11 @@ def main(argv: List[str]) -> int:
         action="store_true",
         help="If a matching .pdf exists for each selected .png, also OCR-check the PDF.",
     )
+    ap.add_argument(
+        "--fail-if-cropped",
+        action="store_true",
+        help="Exit with code 1 if any inputs are flagged as CROPPED? (useful for CI/parallel runs).",
+    )
     args = ap.parse_args(argv)
 
     start_time = time.perf_counter()
@@ -382,6 +388,17 @@ def main(argv: List[str]) -> int:
         if pdfs:
             pdfs = pdfs[: args.limit]
 
+    # Total work units for progress reporting. When --also-pdf is enabled we
+    # effectively do up to 2 checks per PNG (PNG + matching PDF if present).
+    pdf_matches = 0
+    if args.also_pdf and pngs:
+        for p in pngs:
+            if p.with_suffix(".pdf").exists():
+                pdf_matches += 1
+
+    total_inputs = len(pngs) + len(pdfs) + pdf_matches
+    label = args.theme or (Path(args.dir).name if args.dir else None) or "(selection)"
+
     print(f"tesseract: {tesseract}")
     if args.pdf or args.also_pdf:
         if not sips:
@@ -391,10 +408,12 @@ def main(argv: List[str]) -> int:
     print(f"samples:   {samples_dir}")
     print(f"png count:  {len(pngs)}")
     print(f"pdf count:  {len(pdfs)}")
+    if args.also_pdf:
+        print(f"pdf matches: {pdf_matches}")
+        print(f"work units:  {total_inputs}")
     print("")
 
-    total_inputs = len(pngs) + len(pdfs)
-    label = args.theme or (Path(args.dir).name if args.dir else None) or "(selection)"
+    did_print_progress = False
 
     def _progress(processed_now: int) -> None:
         # Print progress to stderr so it remains visible even when stdout is captured by Make.
@@ -402,6 +421,8 @@ def main(argv: List[str]) -> int:
         if total_inputs < 50:
             return
         elapsed = time.perf_counter() - start_time
+        nonlocal did_print_progress
+        did_print_progress = True
         print(f"progress: {label}  {processed_now}/{total_inputs}  elapsed={elapsed:.1f}s", file=sys.stderr)
 
     cropped = 0
@@ -482,14 +503,37 @@ def main(argv: List[str]) -> int:
                 for ln in rr.ocr_tail:
                     print(f"    {ln}")
 
+    elapsed = time.perf_counter() - start_time
+
+    # Ensure the last progress line reaches N/N (helps avoid the appearance of skipped work).
+    if total_inputs >= 50:
+        # Even if we didn't hit the next checkpoint, print a final line.
+        # Print to stderr so it stays visible in the Makefile's per-theme banner.
+        print(f"progress: {label}  {processed}/{total_inputs}  elapsed={elapsed:.1f}s", file=sys.stderr)
+
     print("")
     print(f"Summary: cropped_likely={cropped}/{processed} (printed={printed})")
-
-    elapsed = time.perf_counter() - start_time
     print(f"Time: {elapsed:.2f}s")
+
+    if args.fail_if_cropped and cropped > 0:
+        return 1
 
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(sys.argv[1:]))
+    # Avoid noisy BrokenPipeError tracebacks when output is piped (e.g. `| head`).
+    # Python ignores SIGPIPE by default and raises BrokenPipeError on writes.
+    try:
+        signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+    except Exception:
+        pass
+
+    try:
+        raise SystemExit(main(sys.argv[1:]))
+    except BrokenPipeError:
+        try:
+            sys.stdout.close()
+        except Exception:
+            pass
+        raise SystemExit(0)
