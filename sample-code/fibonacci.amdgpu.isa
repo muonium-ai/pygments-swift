@@ -1,0 +1,23 @@
+; Fibonacci sequence (AMDGPU ISA - illustrative)
+; Readable placeholder for syntax highlighting.
+
+.text
+.globl fib
+fib:
+  ; a=0, b=1, loop 10 times
+  s_mov_b32 s0, 0
+  s_mov_b32 s1, 1
+  s_mov_b32 s2, 10
+loop:
+  ; (print s0)
+  s_add_u32 s3, s0, s1
+  s_mov_b32 s0, s1
+  s_mov_b32 s1, s3
+  s_sub_u32 s2, s2, 1
+  s_cmp_eq_u32 s2, 0
+  s_cbranch_scc0 loop
+  s_endpgm
+
+; END OF FIBONACCI SAMPLE
+; END OF FIBONACCI SAMPLE
+; END OF FIBONACCI SAMPLE

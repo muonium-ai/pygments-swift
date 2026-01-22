@@ -1,0 +1,11 @@
+<!-- Fibonacci (DTD) -->
+
+<!ELEMENT fibonacci (case+)>
+<!ELEMENT case (n, value)>
+<!ELEMENT n (#PCDATA)>
+<!ELEMENT value (#PCDATA)>
+<!ATTLIST case index CDATA #REQUIRED>
+
+<!-- END OF FIBONACCI SAMPLE -->
+<!-- END OF FIBONACCI SAMPLE -->
+<!-- END OF FIBONACCI SAMPLE -->

@@ -1,0 +1,13 @@
+/ Fibonacci (Slim)
+doctype html
+html
+  head
+    title Fibonacci
+  body
+    - a = 0
+    - b = 1
+    h1 Fibonacci
+    ul
+      - 10.times do
+        li= a
+        - a, b = b, a + b

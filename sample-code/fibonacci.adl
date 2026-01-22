@@ -1,0 +1,18 @@
+// Fibonacci sequence (ADL)
+// Note: ADL dialects vary; this is a readable placeholder.
+
+module Fibonacci {
+  const n = 10;
+  let a = 0;
+  let b = 1;
+  for i in 0..n {
+    print(a);
+    let next = a + b;
+    a = b;
+    b = next;
+  }
+}
+
+// END OF FIBONACCI SAMPLE
+// END OF FIBONACCI SAMPLE
+// END OF FIBONACCI SAMPLE

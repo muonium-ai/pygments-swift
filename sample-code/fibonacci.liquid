@@ -1,0 +1,17 @@
+{% comment %}Fibonacci (Liquid){% endcomment %}
+<h1>Fibonacci</h1>
+
+{% assign a = 0 %}
+{% assign b = 1 %}
+<ul>
+  {% for i in (1..10) %}
+    <li>{{ a }}</li>
+    {% assign t = a | plus: b %}
+    {% assign a = b %}
+    {% assign b = t %}
+  {% endfor %}
+</ul>
+
+{# END OF FIBONACCI SAMPLE #}
+{# END OF FIBONACCI SAMPLE #}
+{# END OF FIBONACCI SAMPLE #}

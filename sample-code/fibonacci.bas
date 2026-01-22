@@ -1,0 +1,17 @@
+' Fibonacci (BASIC)
+DIM a AS INTEGER
+DIM b AS INTEGER
+DIM t AS INTEGER
+a = 0
+b = 1
+
+FOR i = 1 TO 10
+  PRINT a
+  t = a + b
+  a = b
+  b = t
+NEXT i
+
+' END OF FIBONACCI SAMPLE
+' END OF FIBONACCI SAMPLE
+' END OF FIBONACCI SAMPLE

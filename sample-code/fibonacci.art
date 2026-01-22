@@ -1,0 +1,13 @@
+# Fibonacci sequence (Arturo)
+fib := function n {
+  if n <= 1 { return n }
+  return fib(n - 1) + fib(n - 2)
+}
+
+loop 0..10 'i {
+  print fib(i)
+}
+
+# END OF FIBONACCI SAMPLE
+# END OF FIBONACCI SAMPLE
+# END OF FIBONACCI SAMPLE

@@ -1,0 +1,20 @@
+# Base Makefile (illustrative)
+# Fibonacci sequence encoded as variables.
+
+F0 = 0
+F1 = 1
+F2 = 1
+F3 = 2
+F4 = 3
+F5 = 5
+F6 = 8
+F7 = 13
+F8 = 21
+F9 = 34
+
+all:
+  @echo $(F0) $(F1) $(F2) $(F3) $(F4) $(F5) $(F6) $(F7) $(F8) $(F9)
+
+# END OF FIBONACCI SAMPLE
+# END OF FIBONACCI SAMPLE
+# END OF FIBONACCI SAMPLE

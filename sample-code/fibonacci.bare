@@ -1,0 +1,14 @@
+# Fibonacci sequence (BARE placeholder)
+LET n = 10
+LET a = 0
+LET b = 1
+FOR i = 1 TO n
+  PRINT a
+  LET next = a + b
+  LET a = b
+  LET b = next
+NEXT i
+
+# END OF FIBONACCI SAMPLE
+# END OF FIBONACCI SAMPLE
+# END OF FIBONACCI SAMPLE

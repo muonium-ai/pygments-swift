@@ -1,0 +1,13 @@
+// Fibonacci sequence (AmbientTalk)
+def fib(n) {
+  if: (n <= 1) then: { n } else: { fib(n-1) + fib(n-2) }
+};
+
+def n := 10;
+for (i in 0..n) {
+  system.println(fib(i));
+};
+
+// END OF FIBONACCI SAMPLE
+// END OF FIBONACCI SAMPLE
+// END OF FIBONACCI SAMPLE

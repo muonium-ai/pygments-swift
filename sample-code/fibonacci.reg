@@ -1,0 +1,11 @@
+Windows Registry Editor Version 5.00
+
+; Fibonacci (reg)
+[HKEY_CURRENT_USER\Software\Fibonacci]
+"Name"="Fibonacci"
+"N"=dword:0000000a
+"Value"=dword:00000022
+
+; END OF FIBONACCI SAMPLE
+; END OF FIBONACCI SAMPLE
+; END OF FIBONACCI SAMPLE

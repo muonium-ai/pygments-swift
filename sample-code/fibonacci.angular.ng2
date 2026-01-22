@@ -1,0 +1,10 @@
+// Fibonacci sequence (Angular2 template-like placeholder)
+
+<h1>Fibonacci</h1>
+<ul>
+  <li *ngFor="let n of [0,1,1,2,3,5,8,13,21,34]">{{ n }}</li>
+</ul>
+
+<!-- END OF FIBONACCI SAMPLE -->
+<!-- END OF FIBONACCI SAMPLE -->
+<!-- END OF FIBONACCI SAMPLE -->

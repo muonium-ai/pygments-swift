@@ -161,6 +161,33 @@ public enum BuiltinLanguage: String, CaseIterable, Sendable {
     case alloy
     case augeas
     case codeql
+
+    // Additional pragmatic lexers (driven by Swift port coverage work)
+    case procfile
+    case psql
+    case applescript
+    case abap
+    case apl
+    case aspectj
+    case autoit
+    case antlr
+    case angular2
+    case bashsession
+    case reg
+    case slim
+    case dtd
+    case cfml
+    case chaiscript
+    case aspx
+    case gnuplot
+    case foxpro
+    case basic
+    case povray
+    case plpgsql
+    case openscad
+    case mojo
+    case liquid
+    case text
 }
 
 public enum LexerRegistry {
@@ -474,6 +501,57 @@ public enum LexerRegistry {
             return AugeasLexer(options: options)
         case .codeql:
             return CodeQLLexer(options: options)
+
+        case .procfile:
+            return ProcfileLexer(options: options)
+        case .psql:
+            return PsqlLexer(options: options)
+        case .applescript:
+            return AppleScriptLexer(options: options)
+        case .abap:
+            return AbapLexer(options: options)
+        case .apl:
+            return AplLexer(options: options)
+        case .aspectj:
+            return AspectJLexer(options: options)
+        case .autoit:
+            return AutoItLexer(options: options)
+        case .antlr:
+            return AntlrLexer(options: options)
+        case .angular2:
+            return Angular2Lexer(options: options)
+        case .bashsession:
+            return BashSessionLexer(options: options)
+        case .reg:
+            return RegLexer(options: options)
+        case .slim:
+            return SlimLexer(options: options)
+        case .dtd:
+            return DtdLexer(options: options)
+        case .cfml:
+            return CfmlLexer(options: options)
+        case .chaiscript:
+            return ChaiScriptLexer(options: options)
+        case .aspx:
+            return AspxLexer(options: options)
+        case .gnuplot:
+            return GnuplotLexer(options: options)
+        case .foxpro:
+            return FoxProLexer(options: options)
+        case .basic:
+            return BasicLexer(options: options)
+        case .povray:
+            return PovrayLexer(options: options)
+        case .plpgsql:
+            return PlPgsqlLexer(options: options)
+        case .openscad:
+            return OpenScadLexer(options: options)
+        case .mojo:
+            return MojoLexer(options: options)
+        case .liquid:
+            return LiquidLexer(options: options)
+        case .text:
+            return TextLexer(options: options)
         }
     }
 
@@ -787,6 +865,65 @@ public enum LexerRegistry {
             return makeLexer(language: .augeas, options: options)
         case "codeql", "ql":
             return makeLexer(language: .codeql, options: options)
+
+        case "procfile":
+            return makeLexer(language: .procfile, options: options)
+        case "psql", "postgresql-console", "postgres-console":
+            return makeLexer(language: .psql, options: options)
+        case "applescript":
+            return makeLexer(language: .applescript, options: options)
+        case "abap":
+            return makeLexer(language: .abap, options: options)
+        case "apl":
+            return makeLexer(language: .apl, options: options)
+        case "aspectj", "aj":
+            return makeLexer(language: .aspectj, options: options)
+        case "autoit", "au3":
+            return makeLexer(language: .autoit, options: options)
+        case "antlr",
+             "antlr-actionscript", "antlr-as",
+             "antlr-csharp", "antlr-c#",
+             "antlr-cpp",
+             "antlr-java",
+             "antlr-objc",
+             "antlr-perl",
+             "antlr-python",
+             "antlr-ruby", "antlr-rb":
+            return makeLexer(language: .antlr, options: options)
+        case "angular2", "ng2":
+            return makeLexer(language: .angular2, options: options)
+        case "shell-session", "sh-session", "console":
+            return makeLexer(language: .bashsession, options: options)
+        case "reg", "registry", "windows-registry":
+            return makeLexer(language: .reg, options: options)
+        case "slim":
+            return makeLexer(language: .slim, options: options)
+        case "dtd":
+            return makeLexer(language: .dtd, options: options)
+        case "cfml", "cfm":
+            return makeLexer(language: .cfml, options: options)
+        case "chai", "chaiscript":
+            return makeLexer(language: .chaiscript, options: options)
+        case "aspx", "aspx-cs", "aspx-vb", "aspx-gen":
+            return makeLexer(language: .aspx, options: options)
+        case "gnuplot":
+            return makeLexer(language: .gnuplot, options: options)
+        case "foxpro", "vfp", "clipper", "xbase":
+            return makeLexer(language: .foxpro, options: options)
+        case "basic", "qbasic":
+            return makeLexer(language: .basic, options: options)
+        case "pov", "povray":
+            return makeLexer(language: .povray, options: options)
+        case "plpgsql":
+            return makeLexer(language: .plpgsql, options: options)
+        case "openscad":
+            return makeLexer(language: .openscad, options: options)
+        case "mojo", "🔥":
+            return makeLexer(language: .mojo, options: options)
+        case "liquid":
+            return makeLexer(language: .liquid, options: options)
+        case "text", "txt", "plaintext", "plain":
+            return makeLexer(language: .text, options: options)
         default:
             return nil
         }
@@ -818,6 +955,8 @@ public enum LexerRegistry {
             return makeLexer(language: .dotenv, options: options)
         case "kconfig":
             return makeLexer(language: .kconfig, options: options)
+        case "procfile":
+            return makeLexer(language: .procfile, options: options)
         default:
             break
         }
@@ -876,6 +1015,55 @@ public enum LexerRegistry {
             return makeLexer(language: .sql, options: options)
         case "diff", "patch":
             return makeLexer(language: .diff, options: options)
+
+        case "applescript":
+            return makeLexer(language: .applescript, options: options)
+        case "abap":
+            return makeLexer(language: .abap, options: options)
+        case "apl", "aplf", "aplo", "apln", "aplc", "apli", "dyalog":
+            return makeLexer(language: .apl, options: options)
+        case "aj":
+            return makeLexer(language: .aspectj, options: options)
+        case "au3":
+            return makeLexer(language: .autoit, options: options)
+        case "g":
+            return makeLexer(language: .antlr, options: options)
+        case "ng2":
+            return makeLexer(language: .angular2, options: options)
+        case "sh-session", "shell-session":
+            return makeLexer(language: .bashsession, options: options)
+        case "reg":
+            return makeLexer(language: .reg, options: options)
+        case "slim":
+            return makeLexer(language: .slim, options: options)
+        case "dtd":
+            return makeLexer(language: .dtd, options: options)
+        case "cfm", "cfml":
+            return makeLexer(language: .cfml, options: options)
+        case "chai":
+            return makeLexer(language: .chaiscript, options: options)
+        case "aspx", "asax", "ascx", "ashx", "asmx", "axd":
+            return makeLexer(language: .aspx, options: options)
+        case "plot", "plt":
+            return makeLexer(language: .gnuplot, options: options)
+        case "prg":
+            return makeLexer(language: .foxpro, options: options)
+        case "bas":
+            return makeLexer(language: .basic, options: options)
+        case "pov":
+            return makeLexer(language: .povray, options: options)
+        case "plpgsql":
+            return makeLexer(language: .plpgsql, options: options)
+        case "scad":
+            return makeLexer(language: .openscad, options: options)
+        case "mojo", "🔥":
+            return makeLexer(language: .mojo, options: options)
+        case "liquid":
+            return makeLexer(language: .liquid, options: options)
+        case "psql":
+            return makeLexer(language: .psql, options: options)
+        case "txt", "text":
+            return makeLexer(language: .text, options: options)
 
         case "ini", "cfg":
             return makeLexer(language: .ini, options: options)

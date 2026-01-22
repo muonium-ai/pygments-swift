@@ -1,0 +1,21 @@
+! Fibonacci sequence (ANSYS APDL)
+/PREP7
+
+*SET,N,10
+*SET,A,0
+*SET,B,1
+
+*VWRITE,'Fibonacci:'
+(A)
+
+*DO,I,1,N
+  *VWRITE,A
+  (I10)
+  *SET,NEXT,A+B
+  *SET,A,B
+  *SET,B,NEXT
+*ENDDO
+
+! END OF FIBONACCI SAMPLE
+! END OF FIBONACCI SAMPLE
+! END OF FIBONACCI SAMPLE

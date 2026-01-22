@@ -1,0 +1,24 @@
+psql (14.11)
+Type "help" for help.
+
+mydb=> -- Fibonacci (psql session)
+mydb=> SELECT 0 AS n, 0 AS fib UNION ALL
+mydb-> SELECT 1, 1 UNION ALL
+mydb-> SELECT 10, 55;
+ n  | fib
+----+-----
+  0 |   0
+  1 |   1
+ 10 |  55
+(3 rows)
+
+mydb=> \dt
+           List of relations
+ Schema |    Name    | Type  | Owner
+--------+------------+-------+-------
+ public | fib_case   | table | me
+(1 row)
+
+-- END OF FIBONACCI SAMPLE
+-- END OF FIBONACCI SAMPLE
+-- END OF FIBONACCI SAMPLE

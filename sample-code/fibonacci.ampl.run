@@ -1,0 +1,17 @@
+# Fibonacci sequence (AMPL .run)
+param N := 10;
+
+let a := 0;
+let b := 1;
+
+printf "Fibonacci:\n";
+for {i in 1..N} {
+  printf "%d\n", a;
+  let next := a + b;
+  let a := b;
+  let b := next;
+}
+
+# END OF FIBONACCI SAMPLE
+# END OF FIBONACCI SAMPLE
+# END OF FIBONACCI SAMPLE

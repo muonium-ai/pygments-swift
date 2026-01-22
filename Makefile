@@ -16,7 +16,7 @@ WIDTH ?=
 # Custom theme file (checked in)
 CUSTOM_THEME_FILE ?= themes/custom-theme.json
 
-.PHONY: help clean build test clean-samples codeviewer-build render-samples render-samples-all render-samples-custom code-stats code-stats-full
+.PHONY: help clean build test clean-samples codeviewer-build render-samples render-samples-all render-samples-custom code-stats code-stats-full pending-languages
 
 # OCR tooling (system python3 + tesseract)
 OCR_SCRIPT ?= python3 tools/ocr_compare_png.py
@@ -48,6 +48,7 @@ help:
 	@echo "  make code-stats       - Print first/last commit dates"
 	@echo "  make code-stats-full  - Print repo stats (commits + total lines)"
 	@echo "  make clean-samples    - Remove generated sample renders"
+	@echo "  make pending-languages - Compare Swift lexer coverage vs vendored Python Pygments"
 	@echo "  make clean   - Clean Swift build artifacts"
 
 build:
@@ -62,6 +63,11 @@ clean:
 clean-samples:
 	@rm -rf out/samples
 	@echo "Removed out/samples"
+
+pending-languages:
+
+pending-languages: test
+	@python3 tools/list_pending_languages.py --out out/language-coverage
 
 themebook: codeviewer-build
 	@test -d "$(OCR_DIR)/$(THEME)" || (echo "Missing $(OCR_DIR)/$(THEME). Run 'make render-samples THEME=$(THEME)' (or render-samples-all) first."; exit 2)

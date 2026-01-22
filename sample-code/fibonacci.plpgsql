@@ -1,0 +1,27 @@
+-- Fibonacci (PL/pgSQL)
+CREATE OR REPLACE FUNCTION fib(n integer)
+RETURNS integer AS $$
+DECLARE
+  a integer := 0;
+  b integer := 1;
+  i integer := 0;
+  t integer;
+BEGIN
+  IF n < 2 THEN
+    RETURN n;
+  END IF;
+
+  WHILE i < n LOOP
+    t := a + b;
+    a := b;
+    b := t;
+    i := i + 1;
+  END LOOP;
+
+  RETURN a;
+END;
+$$ LANGUAGE plpgsql;
+
+-- END OF FIBONACCI SAMPLE
+-- END OF FIBONACCI SAMPLE
+-- END OF FIBONACCI SAMPLE
