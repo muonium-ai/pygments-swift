@@ -64,8 +64,6 @@ clean-samples:
 	@rm -rf out/samples
 	@echo "Removed out/samples"
 
-pending-languages:
-
 pending-languages: test
 	@python3 tools/list_pending_languages.py --out out/language-coverage
 

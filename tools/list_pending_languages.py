@@ -21,22 +21,27 @@ def _load_python_pygments_lexers(repo_root: Path) -> List[PythonLexerInfo]:
     if not vendored.exists():
         raise SystemExit(f"Missing vendored pygments-master at {vendored}")
 
-    sys.path.insert(0, str(vendored))
+    vendored_str = str(vendored)
+    sys.path.insert(0, vendored_str)
     try:
-        from pygments.lexers import get_all_lexers  # type: ignore
-    except Exception as e:
-        raise SystemExit(f"Failed to import vendored pygments: {e}")
+        try:
+            from pygments.lexers import get_all_lexers  # type: ignore
+        except Exception as e:
+            raise SystemExit(f"Failed to import vendored pygments: {e}")
 
-    out: List[PythonLexerInfo] = []
-    for (name, aliases, filenames, _mimetypes) in get_all_lexers():
-        out.append(
-            PythonLexerInfo(
-                name=str(name),
-                aliases=tuple(str(a) for a in aliases),
-                filenames=tuple(str(f) for f in filenames),
+        out: List[PythonLexerInfo] = []
+        for (name, aliases, filenames, _mimetypes) in get_all_lexers():
+            out.append(
+                PythonLexerInfo(
+                    name=str(name),
+                    aliases=tuple(str(a) for a in aliases),
+                    filenames=tuple(str(f) for f in filenames),
+                )
             )
-        )
-    return out
+        return out
+    finally:
+        if sys.path and sys.path[0] == vendored_str:
+            sys.path.pop(0)
 
 
 def _extract_swift_builtin_languages(lexer_registry_swift: str) -> Set[str]:
@@ -134,7 +139,7 @@ def compute_pending(
 def main(argv: Sequence[str]) -> int:
     p = argparse.ArgumentParser(
         description=(
-            "Compare Swift lexer support vs vendored Python Pygments and list pending languages." \
+            "Compare Swift lexer support vs vendored Python Pygments and list pending languages."
             "\nSupported is determined by matching any Python lexer alias against Swift BuiltinLanguage raw values and makeLexer(languageName:) aliases."
         )
     )
