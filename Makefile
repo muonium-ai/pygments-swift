@@ -49,7 +49,7 @@ help:
 	@echo "  make code-stats-full  - Print repo stats (commits + total lines)"
 	@echo "  make clean-samples    - Remove generated sample renders"
 	@echo "  make pending-languages - Compare Swift lexer coverage vs vendored Python Pygments"
-	@echo "  make clean   - Clean Swift build artifacts"
+	@echo "  make clean   - Clean Swift build artifacts (pygments-swift + codeviewer)"
 
 build:
 	swift build --package-path "$(SWIFT_PACKAGE_DIR)"
@@ -59,6 +59,7 @@ test:
 
 clean:
 	swift package clean --package-path "$(SWIFT_PACKAGE_DIR)"
+	swift package clean --package-path "$(CODEVIEWER_PACKAGE_DIR)"
 
 clean-samples:
 	@rm -rf out/samples
